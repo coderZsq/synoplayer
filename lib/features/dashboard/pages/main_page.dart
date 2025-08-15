@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../credentials_service.dart';
+import '../../../core/services/index.dart';
 import '../../../shared/widgets/log_display_widget.dart';
 import '../../authentication/pages/login_page.dart';
 import '../widgets/welcome_card_widget.dart';
@@ -123,7 +123,8 @@ class _MainPageState extends ConsumerState<MainPage> {
       _appendLog('🚪 正在退出登录...');
       
       // 清除所有保存的凭据
-      await CredentialsService.clearCredentials();
+      final credentialsService = CredentialsService();
+      await credentialsService.clearCredentials();
       _appendLog('🗑️ 已清除保存的登录凭据');
       _appendLog('✅ 退出登录成功');
       

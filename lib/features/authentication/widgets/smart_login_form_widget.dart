@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../services/quickconnect/index.dart';
-import '../../../credentials_service.dart';
+import '../../../core/services/index.dart';
 
 /// 智能登录表单组件
 /// 
@@ -51,12 +52,13 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
   /// 加载已保存的凭据
   Future<void> _loadSavedCredentials() async {
     try {
-      final credentials = await CredentialsService.autoLogin();
-      if (credentials.isNotEmpty) {
+      final credentialsService = CredentialsService();
+      final credentials = await credentialsService.getCredentials();
+      if (credentials != null) {
         setState(() {
-          _quickConnectIdCtrl.text = credentials['quickConnectId'] ?? '';
-          _usernameCtrl.text = credentials['username'] ?? '';
-          _passwordCtrl.text = credentials['password'] ?? '';
+          _quickConnectIdCtrl.text = credentials.quickConnectId;
+          _usernameCtrl.text = credentials.username;
+          _passwordCtrl.text = credentials.password;
           _hasAutoFilledCredentials = true;
         });
         
@@ -95,11 +97,15 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
 
       if (result.isSuccess) {
         widget.onLog('🎉 智能登录成功! SID: ${result.sid}');
+        widget.onLog('🔧 _rememberCredentials = $_rememberCredentials');
         
         // 保存登录凭据
         if (_rememberCredentials) {
+          widget.onLog('💾 开始保存登录凭据...');
           await _saveCredentials(result.sid!, result.availableAddress ?? '');
-          widget.onLog('💾 登录凭据已保存');
+          widget.onLog('💾 登录凭据保存流程完成');
+        } else {
+          widget.onLog('⚠️ 未选择记住凭据，不会保存登录信息');
         }
         
         widget.onLoginSuccess(
@@ -129,14 +135,30 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
   /// 保存登录凭据
   Future<void> _saveCredentials(String sid, String workingAddress) async {
     try {
-      await CredentialsService.saveCredentials(
+      final credentialsService = CredentialsService();
+      final credentials = LoginCredentials(
         quickConnectId: _quickConnectIdCtrl.text.trim(),
         username: _usernameCtrl.text.trim(),
         password: _passwordCtrl.text.trim(),
-        workingAddress: workingAddress, // 保存实际的工作地址
+        workingAddress: workingAddress,
         sid: sid,
+        loginTime: DateTime.now(),
         rememberCredentials: _rememberCredentials,
       );
+      
+      widget.onLog('🔧 准备保存凭据: rememberCredentials=$_rememberCredentials');
+      widget.onLog('🔧 SID: $sid');
+      widget.onLog('🔧 工作地址: $workingAddress');
+      
+      await credentialsService.saveCredentials(credentials);
+      
+      // 验证保存是否成功
+      final savedCredentials = await credentialsService.getCredentials();
+      if (savedCredentials != null) {
+        widget.onLog('✅ 凭据保存成功，SID: ${savedCredentials.sid}');
+      } else {
+        widget.onLog('❌ 凭据保存失败：未能读取保存的凭据');
+      }
     } catch (e) {
       widget.onLog('❌ 保存凭据失败: $e');
     }
@@ -145,7 +167,8 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
   /// 清除保存的凭据
   Future<void> _clearCredentials() async {
     try {
-      await CredentialsService.clearCredentials();
+      final credentialsService = CredentialsService();
+      await credentialsService.clearCredentials();
       setState(() {
         _quickConnectIdCtrl.clear();
         _usernameCtrl.clear();

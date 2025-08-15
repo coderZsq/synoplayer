@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'constants/quickconnect_constants.dart';
 import './models/quickconnect_models.dart';
-import '../../core/utils/logger.dart';
-import '../../core/network/index.dart';
+import '../../core/index.dart';
 import 'utils/serialization_helper.dart';
 
 /// QuickConnect 地址解析服务

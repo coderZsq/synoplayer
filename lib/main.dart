@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'credentials_service.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'core/index.dart';
 import 'features/dashboard/pages/main_page.dart';
 import 'features/authentication/pages/login_page.dart';
-import 'theme_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +21,12 @@ class QuickConnectApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeProvider);
+    final themeMode = ref.watch(currentThemeModeProvider);
     
     return MaterialApp(
       title: '群晖 QuickConnect 登录',
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       home: const LoginCheckPage(),
     );
@@ -41,9 +42,6 @@ class LoginCheckPage extends StatefulWidget {
 }
 
 class _LoginCheckPageState extends State<LoginCheckPage> {
-  bool isLoading = true;
-  Map<String, String?>? credentials;
-
   @override
   void initState() {
     super.initState();
@@ -52,64 +50,107 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
 
   Future<void> _checkLoginStatus() async {
     try {
+      final credentialsService = CredentialsService();
+
+      // 首先测试存储功能
+      final storageTest = await credentialsService.testStorage();
+      AppLogger.debug('🧪 存储功能测试结果: $storageTest');
+      
+      // 测试凭据保存功能
+      final credentialsTest = await credentialsService.testCredentialsSave();
+      AppLogger.debug('🧪 凭据保存测试结果: $credentialsTest');
+      
+      // 显示存储的所有键（调试用）
+      await _debugShowAllStoredKeys(credentialsService);
+
+      // 先检查是否有保存的凭据
+      final credentials = await credentialsService.getCredentials();
+      AppLogger.debug('🔍 检查保存的凭据: $credentials');
+      
+      if (credentials == null) {
+        AppLogger.info('📝 没有找到保存的凭据，跳转到登录页面');
+        _navigateToLogin();
+        return;
+      }
+
+      // 检查会话状态
+      final sessionStatus = await credentialsService.checkSessionStatus();
+      AppLogger.debug('🔍 会话状态: $sessionStatus');
+      
       // 检查是否有有效的会话
-      final hasSession = await CredentialsService.hasValidSession();
+      final hasSession = await credentialsService.hasValidSession();
+      AppLogger.debug('🔍 有效会话: $hasSession');
       
       if (hasSession) {
-        // 获取保存的凭据
-        credentials = await CredentialsService.getCredentials();
-        
-        if (credentials != null && 
-            credentials!['sid'] != null && 
-            credentials!['username'] != null &&
-            credentials!['quickConnectId'] != null) {
-          // 如果没有workingAddress，尝试使用quickConnectId构建默认地址
-          String workingAddress = credentials!['workingAddress'] ?? 
-              'https://${credentials!['quickConnectId']}.quickconnect.to';
+        AppLogger.debug('✅ 找到有效会话，准备自动登录');
+        if (credentials.sid != null && 
+            credentials.username.isNotEmpty &&
+            credentials.quickConnectId.isNotEmpty) {
+          // 构建工作地址
+          final workingAddress = credentials.workingAddress ?? 
+              'https://${credentials.quickConnectId}.quickconnect.to';
           
-          // 验证会话是否有效
-          final isValid = await CredentialsService.validateSession(workingAddress);
-          
-          if (isValid) {
-            // 会话有效，直接跳转到主页面
-            if (mounted) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => MainPage(
-                    sid: credentials!['sid']!,
-                    username: credentials!['username']!,
-                    quickConnectId: credentials!['quickConnectId']!,
-                    workingAddress: workingAddress,
-                  ),
+          // 会话有效，直接跳转到主页面
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => MainPage(
+                  sid: credentials.sid!,
+                  username: credentials.username,
+                  quickConnectId: credentials.quickConnectId,
+                  workingAddress: workingAddress,
                 ),
-              );
-              return;
-            }
+              ),
+            );
+            return;
           }
         }
+      } else {
+        AppLogger.warning('⚠️ 会话无效或已过期，跳转到登录页面');
+        _navigateToLogin();
       }
+    } catch (e, stackTrace) {
+      AppLogger.error('🚨 检查登录状态失败', error: e, stackTrace: stackTrace);
+      _navigateToLogin();
+    }
+  }
+
+  /// 跳转到登录页面
+  void _navigateToLogin() {
+    if (mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ),
+      );
+    }
+  }
+
+  /// 调试：显示所有存储的键
+  Future<void> _debugShowAllStoredKeys(CredentialsService service) async {
+    try {
+      // 尝试读取所有可能的键
+      const keys = [
+        'quickconnect_id',
+        'username', 
+        'password',
+        'working_address',
+        'session_id',
+        'login_time',
+        'remember_credentials',
+      ];
       
-      // 没有有效会话，跳转到登录页面
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
-        );
+      AppLogger.debug('🔑 检查所有存储的键:');
+      for (final key in keys) {
+        try {
+          final value = await const FlutterSecureStorage().read(key: key);
+          AppLogger.debug('  $key: ${value ?? "null"}');
+        } catch (e) {
+          AppLogger.debug('  $key: 读取失败 - $e');
+        }
       }
     } catch (e) {
-      // 出错时跳转到登录页面
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
-        );
-      }
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+      AppLogger.error('调试键检查失败', error: e);
     }
   }
 

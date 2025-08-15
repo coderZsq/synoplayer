@@ -8,6 +8,7 @@ part 'login_result.g.dart';
 class LoginResult with _$LoginResult {
   const factory LoginResult.success({
     required String sid,
+    String? availableAddress,
   }) = LoginResultSuccess;
 
   const factory LoginResult.failure({
@@ -37,7 +38,7 @@ class LoginResult with _$LoginResult {
   /// 获取错误信息
   String? get errorMessage {
     return when(
-      success: (_) => null,
+      success: (_, __) => null,
       failure: (errorMessage) => errorMessage,
       requireOTP: (errorMessage) => errorMessage,
       requireOTPWithAddress: (errorMessage, _) => errorMessage,
@@ -47,7 +48,7 @@ class LoginResult with _$LoginResult {
   /// 获取会话ID
   String? get sid {
     return when(
-      success: (sid) => sid,
+      success: (sid, _) => sid,
       failure: (_) => null,
       requireOTP: (_) => null,
       requireOTPWithAddress: (_, __) => null,
@@ -57,7 +58,7 @@ class LoginResult with _$LoginResult {
   /// 获取可用地址
   String? get availableAddress {
     return when(
-      success: (_) => null,
+      success: (_, address) => address,
       failure: (_) => null,
       requireOTP: (_) => null,
       requireOTPWithAddress: (_, address) => address,

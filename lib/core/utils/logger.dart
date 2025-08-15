@@ -61,17 +61,17 @@ class AppLogger {
     final timestamp = DateTime.now().toIso8601String();
     final formattedMessage = '[$timestamp] [$tag] $message';
 
-    // 使用 developer.log 进行输出
-    developer.log(
-      formattedMessage,
-      name: tag,
-      level: level.value,
-      time: DateTime.now(),
-    );
-
-    // 在调试模式下同时使用 print 输出到控制台
+    // 在调试模式下使用 print 输出到控制台
     if (kDebugMode) {
       print(formattedMessage);
+    } else {
+      // 在发布模式下使用 developer.log
+      developer.log(
+        formattedMessage,
+        name: tag,
+        level: level.value,
+        time: DateTime.now(),
+      );
     }
   }
 }

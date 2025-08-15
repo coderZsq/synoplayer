@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../../core/utils/logger.dart';
+import '../../../core/index.dart';
 import '../models/quickconnect_models.dart';
 
 /// JSON 序列化辅助工具类

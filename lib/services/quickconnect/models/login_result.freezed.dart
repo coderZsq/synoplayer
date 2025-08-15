@@ -40,7 +40,7 @@ LoginResult _$LoginResultFromJson(Map<String, dynamic> json) {
 mixin _$LoginResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String sid) success,
+    required TResult Function(String sid, String? availableAddress) success,
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
@@ -48,7 +48,7 @@ mixin _$LoginResult {
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String sid)? success,
+    TResult? Function(String sid, String? availableAddress)? success,
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
@@ -56,7 +56,7 @@ mixin _$LoginResult {
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String sid)? success,
+    TResult Function(String sid, String? availableAddress)? success,
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
@@ -122,7 +122,7 @@ abstract class _$$LoginResultSuccessImplCopyWith<$Res> {
     $Res Function(_$LoginResultSuccessImpl) then,
   ) = __$$LoginResultSuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String sid});
+  $Res call({String sid, String? availableAddress});
 }
 
 /// @nodoc
@@ -138,13 +138,17 @@ class __$$LoginResultSuccessImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? sid = null}) {
+  $Res call({Object? sid = null, Object? availableAddress = freezed}) {
     return _then(
       _$LoginResultSuccessImpl(
         sid: null == sid
             ? _value.sid
             : sid // ignore: cast_nullable_to_non_nullable
                   as String,
+        availableAddress: freezed == availableAddress
+            ? _value.availableAddress
+            : availableAddress // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -153,22 +157,27 @@ class __$$LoginResultSuccessImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LoginResultSuccessImpl extends LoginResultSuccess {
-  const _$LoginResultSuccessImpl({required this.sid, final String? $type})
-    : $type = $type ?? 'success',
-      super._();
+  const _$LoginResultSuccessImpl({
+    required this.sid,
+    this.availableAddress,
+    final String? $type,
+  }) : $type = $type ?? 'success',
+       super._();
 
   factory _$LoginResultSuccessImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginResultSuccessImplFromJson(json);
 
   @override
   final String sid;
+  @override
+  final String? availableAddress;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'LoginResult.success(sid: $sid)';
+    return 'LoginResult.success(sid: $sid, availableAddress: $availableAddress)';
   }
 
   @override
@@ -176,12 +185,14 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginResultSuccessImpl &&
-            (identical(other.sid, sid) || other.sid == sid));
+            (identical(other.sid, sid) || other.sid == sid) &&
+            (identical(other.availableAddress, availableAddress) ||
+                other.availableAddress == availableAddress));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, sid);
+  int get hashCode => Object.hash(runtimeType, sid, availableAddress);
 
   /// Create a copy of LoginResult
   /// with the given fields replaced by the non-null parameter values.
@@ -197,31 +208,31 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String sid) success,
+    required TResult Function(String sid, String? availableAddress) success,
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
     requireOTPWithAddress,
   }) {
-    return success(sid);
+    return success(sid, availableAddress);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String sid)? success,
+    TResult? Function(String sid, String? availableAddress)? success,
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
     requireOTPWithAddress,
   }) {
-    return success?.call(sid);
+    return success?.call(sid, availableAddress);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String sid)? success,
+    TResult Function(String sid, String? availableAddress)? success,
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
@@ -229,7 +240,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success(sid);
+      return success(sid, availableAddress);
     }
     return orElse();
   }
@@ -281,14 +292,17 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
 }
 
 abstract class LoginResultSuccess extends LoginResult {
-  const factory LoginResultSuccess({required final String sid}) =
-      _$LoginResultSuccessImpl;
+  const factory LoginResultSuccess({
+    required final String sid,
+    final String? availableAddress,
+  }) = _$LoginResultSuccessImpl;
   const LoginResultSuccess._() : super._();
 
   factory LoginResultSuccess.fromJson(Map<String, dynamic> json) =
       _$LoginResultSuccessImpl.fromJson;
 
   String get sid;
+  String? get availableAddress;
 
   /// Create a copy of LoginResult
   /// with the given fields replaced by the non-null parameter values.
@@ -382,7 +396,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String sid) success,
+    required TResult Function(String sid, String? availableAddress) success,
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
@@ -394,7 +408,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String sid)? success,
+    TResult? Function(String sid, String? availableAddress)? success,
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
@@ -406,7 +420,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String sid)? success,
+    TResult Function(String sid, String? availableAddress)? success,
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
@@ -568,7 +582,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String sid) success,
+    required TResult Function(String sid, String? availableAddress) success,
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
@@ -580,7 +594,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String sid)? success,
+    TResult? Function(String sid, String? availableAddress)? success,
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
@@ -592,7 +606,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String sid)? success,
+    TResult Function(String sid, String? availableAddress)? success,
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
@@ -767,7 +781,7 @@ class _$LoginResultRequireOTPWithAddressImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String sid) success,
+    required TResult Function(String sid, String? availableAddress) success,
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
@@ -779,7 +793,7 @@ class _$LoginResultRequireOTPWithAddressImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String sid)? success,
+    TResult? Function(String sid, String? availableAddress)? success,
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
@@ -791,7 +805,7 @@ class _$LoginResultRequireOTPWithAddressImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String sid)? success,
+    TResult Function(String sid, String? availableAddress)? success,
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?

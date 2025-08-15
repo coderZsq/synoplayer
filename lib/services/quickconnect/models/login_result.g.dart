@@ -10,12 +10,17 @@ _$LoginResultSuccessImpl _$$LoginResultSuccessImplFromJson(
   Map<String, dynamic> json,
 ) => _$LoginResultSuccessImpl(
   sid: json['sid'] as String,
+  availableAddress: json['availableAddress'] as String?,
   $type: json['runtimeType'] as String?,
 );
 
 Map<String, dynamic> _$$LoginResultSuccessImplToJson(
   _$LoginResultSuccessImpl instance,
-) => <String, dynamic>{'sid': instance.sid, 'runtimeType': instance.$type};
+) => <String, dynamic>{
+  'sid': instance.sid,
+  'availableAddress': instance.availableAddress,
+  'runtimeType': instance.$type,
+};
 
 _$LoginResultFailureImpl _$$LoginResultFailureImplFromJson(
   Map<String, dynamic> json,

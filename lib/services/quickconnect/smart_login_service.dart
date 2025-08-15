@@ -62,7 +62,11 @@ class QuickConnectSmartLoginService {
           if (result.isSuccess) {
             AppLogger.success('登录成功！使用地址: ${addressInfo.url}', tag: _tag);
             AppLogger.info('地址类型: ${addressInfo.type.description}', tag: _tag);
-            return result;
+            // 返回包含实际使用地址的结果
+            return LoginResult.success(
+              sid: result.sid!,
+              availableAddress: addressInfo.url,
+            );
           } else if (result.requireOTP) {
             AppLogger.warning('需要二次验证，地址可用: ${addressInfo.url}', tag: _tag);
             AppLogger.info('地址类型: ${addressInfo.type.description}', tag: _tag);

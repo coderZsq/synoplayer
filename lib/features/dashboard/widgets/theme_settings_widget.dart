@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../theme_service.dart';
+import '../../../core/services/index.dart';
 
 /// 主题设置组件
 /// 
@@ -17,8 +17,8 @@ class ThemeSettingsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final themeMode = ref.watch(themeProvider);
-    final themeNotifier = ref.read(themeProvider.notifier);
+    final themeAsync = ref.watch(themeNotifierProvider);
+    final themeNotifier = ref.read(themeNotifierProvider.notifier);
     
     return Container(
       padding: const EdgeInsets.all(20),
@@ -64,41 +64,39 @@ class ThemeSettingsWidget extends ConsumerWidget {
           const SizedBox(height: 16),
           
           // 主题选择按钮
-          Row(
-            children: [
-              Expanded(
-                child: _buildThemeButton(
-                  context,
-                  themeMode,
-                  themeNotifier,
-                  ThemeMode.light,
-                  Icons.light_mode,
-                  '亮色',
+          themeAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, _) => Text('主题加载失败: $error'),
+            data: (currentTheme) => Row(
+              children: [
+                Expanded(
+                  child: _buildThemeButton(
+                    context,
+                    currentTheme,
+                    themeNotifier,
+                    AppThemeMode.light,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildThemeButton(
-                  context,
-                  themeMode,
-                  themeNotifier,
-                  ThemeMode.dark,
-                  Icons.dark_mode,
-                  '暗黑',
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildThemeButton(
+                    context,
+                    currentTheme,
+                    themeNotifier,
+                    AppThemeMode.dark,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildThemeButton(
-                  context,
-                  themeMode,
-                  themeNotifier,
-                  ThemeMode.system,
-                  Icons.auto_mode,
-                  '自动',
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildThemeButton(
+                    context,
+                    currentTheme,
+                    themeNotifier,
+                    AppThemeMode.system,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -107,11 +105,9 @@ class ThemeSettingsWidget extends ConsumerWidget {
 
   Widget _buildThemeButton(
     BuildContext context,
-    ThemeMode currentMode,
+    AppThemeMode currentMode,
     ThemeNotifier themeNotifier,
-    ThemeMode mode,
-    IconData icon,
-    String label,
+    AppThemeMode mode,
   ) {
     final isSelected = currentMode == mode;
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -120,18 +116,8 @@ class ThemeSettingsWidget extends ConsumerWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
-          switch (mode) {
-            case ThemeMode.light:
-              await themeNotifier.setLightMode();
-              break;
-            case ThemeMode.dark:
-              await themeNotifier.setDarkMode();
-              break;
-            case ThemeMode.system:
-              await themeNotifier.setSystemMode();
-              break;
-          }
-          onThemeChanged(ThemeService.getThemeModeDescription(mode));
+          await themeNotifier.setThemeMode(mode);
+          onThemeChanged(mode.description);
         },
         borderRadius: BorderRadius.circular(8),
         child: Container(
@@ -151,7 +137,7 @@ class ThemeSettingsWidget extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                icon,
+                mode.icon,
                 color: isSelected
                     ? (isDark ? Colors.blue.shade200 : Colors.blue.shade700)
                     : (isDark ? Colors.grey.shade400 : Colors.grey.shade600),
@@ -159,7 +145,7 @@ class ThemeSettingsWidget extends ConsumerWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                label,
+                mode.description.replaceAll('模式', ''),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
