@@ -1,77 +1,29 @@
-import 'dart:convert';
-import 'package:dio/dio.dart';
-import 'constants/quickconnect_constants.dart';
+import 'api/quickconnect_api_interface.dart';
 import './models/quickconnect_models.dart';
 import '../../core/utils/logger.dart';
-import '../../core/network/index.dart';
 import 'address_resolver.dart';
 
 /// QuickConnect 连接服务
 class QuickConnectConnectionService {
-  QuickConnectConnectionService(this._apiClient);
+  QuickConnectConnectionService(this._api);
   
-  final ApiClient _apiClient;
+  final QuickConnectApiInterface _api;
   static const String _tag = 'ConnectionService';
 
   /// 测试连接是否可用
   Future<ConnectionTestResult> testConnection(String baseUrl) async {
-    final stopwatch = Stopwatch()..start();
-    
     try {
       AppLogger.info('测试连接可用性: $baseUrl', tag: _tag);
       
-      final url = '$baseUrl/webapi/query.cgi';
-      final queryParams = {
-        'api': 'SYNO.API.Info',
-        'version': '1',
-        'method': 'query',
-        'query': 'SYNO.API.Auth',
-      };
+      // 使用抽象 API 接口进行连接测试
+      return await _api.testConnection(baseUrl);
       
-      final response = await _apiClient.get<Map<String, dynamic>>(
-        url,
-        queryParameters: queryParams,
-        options: Options(
-          receiveTimeout: QuickConnectConstants.connectionTestTimeout,
-          sendTimeout: QuickConnectConstants.connectionTestTimeout,
-        ),
-        fromJson: (data) {
-          // data 可能是 String 或已经解析的 Map
-          if (data is String) {
-            return jsonDecode(data) as Map<String, dynamic>;
-          } else {
-            return data as Map<String, dynamic>;
-          }
-        },
-      );
-      
-      stopwatch.stop();
-      
-      return response.when(
-        success: (data, statusCode, message, extra) {
-          AppLogger.success('连接测试成功', tag: _tag);
-          return ConnectionTestResult.success(
-            baseUrl, 
-            statusCode, 
-            stopwatch.elapsed
-          );
-        },
-        error: (message, statusCode, errorCode, error, extra) {
-          AppLogger.error('连接测试失败: $message', tag: _tag);
-          return ConnectionTestResult.failure(
-            baseUrl, 
-            message, 
-            stopwatch.elapsed
-          );
-        },
-      );
     } catch (e) {
-      stopwatch.stop();
       AppLogger.error('连接测试异常: $e', tag: _tag);
       return ConnectionTestResult.failure(
         baseUrl, 
         '连接异常: $e', 
-        stopwatch.elapsed
+        Duration.zero
       );
     }
   }
@@ -81,7 +33,7 @@ class QuickConnectConnectionService {
     try {
       AppLogger.info('获取 QuickConnect ID 的所有可用地址: $quickConnectId', tag: _tag);
       
-      final addressResolver = QuickConnectAddressResolver(_apiClient);
+      final addressResolver = QuickConnectAddressResolver(_api);
       final addresses = await addressResolver.getAllAddressesWithDetails(quickConnectId);
       return addresses.map((addr) => addr.url).toList();
       
@@ -96,7 +48,7 @@ class QuickConnectConnectionService {
     try {
       AppLogger.info('获取 QuickConnect ID 的所有地址详细信息: $quickConnectId', tag: _tag);
       
-      final addressResolver = QuickConnectAddressResolver(_apiClient);
+      final addressResolver = QuickConnectAddressResolver(_api);
       return await addressResolver.getAllAddressesWithDetails(quickConnectId);
       
     } catch (e) {
@@ -107,19 +59,16 @@ class QuickConnectConnectionService {
 
   /// 批量测试连接
   Future<List<ConnectionTestResult>> testMultipleConnections(List<String> urls) async {
-    final results = <ConnectionTestResult>[];
-    
-    for (final url in urls) {
-      final result = await testConnection(url);
-      results.add(result);
+    try {
+      AppLogger.info('批量测试连接，共 ${urls.length} 个地址', tag: _tag);
       
-      // 如果连接成功，可以提前返回（可选）
-      if (result.isConnected) {
-        AppLogger.info('找到可用连接: $url', tag: _tag);
-      }
+      // 使用抽象 API 接口进行批量连接测试
+      return await _api.testMultipleConnections(urls);
+      
+    } catch (e) {
+      AppLogger.error('批量连接测试异常: $e', tag: _tag);
+      return [];
     }
-    
-    return results;
   }
 
   /// 测试连接并返回最佳地址

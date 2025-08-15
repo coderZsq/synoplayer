@@ -1,15 +1,13 @@
-import 'dart:convert';
-import 'package:dio/dio.dart';
-import 'constants/quickconnect_constants.dart';
+import 'api/quickconnect_api_interface.dart';
 import './models/quickconnect_models.dart';
-import '../../core/index.dart';
-import 'utils/serialization_helper.dart';
+import 'constants/quickconnect_constants.dart';
+import '../../core/utils/logger.dart';
 
 /// QuickConnect 地址解析服务
 class QuickConnectAddressResolver {
-  QuickConnectAddressResolver(this._apiClient);
+  QuickConnectAddressResolver(this._api);
   
-  final ApiClient _apiClient;
+  final QuickConnectApiInterface _api;
   static const String _tag = 'AddressResolver';
 
   /// 解析 QuickConnect ID 获取可用地址
@@ -18,17 +16,23 @@ class QuickConnectAddressResolver {
       AppLogger.info('开始解析 QuickConnect ID: $quickConnectId', tag: _tag);
       
       // 1. 尝试隧道请求
-      final tunnelAddress = await _tryTunnelRequest(quickConnectId);
-      if (tunnelAddress != null) {
-        AppLogger.success('隧道请求成功，地址: $tunnelAddress', tag: _tag);
-        return tunnelAddress;
+      final tunnelResponse = await _api.requestTunnel(quickConnectId);
+      if (tunnelResponse != null && tunnelResponse.success) {
+        final tunnelAddress = _parseTunnelAddresses(tunnelResponse.tunnelData);
+        if (tunnelAddress != null) {
+          AppLogger.success('隧道请求成功，地址: $tunnelAddress', tag: _tag);
+          return tunnelAddress;
+        }
       }
       
       // 2. 尝试服务器信息请求
-      final serverInfoAddress = await _tryServerInfoRequest(quickConnectId);
-      if (serverInfoAddress != null) {
-        AppLogger.success('服务器信息请求成功，地址: $serverInfoAddress', tag: _tag);
-        return serverInfoAddress;
+      final serverInfoResponse = await _api.requestServerInfo(quickConnectId);
+      if (serverInfoResponse != null) {
+        final serverInfoAddress = _trySmartDnsAddress(serverInfoResponse);
+        if (serverInfoAddress != null) {
+          AppLogger.success('服务器信息请求成功，地址: $serverInfoAddress', tag: _tag);
+          return serverInfoAddress;
+        }
       }
       
       AppLogger.error('无法解析 QuickConnect ID: $quickConnectId', tag: _tag);
@@ -51,19 +55,25 @@ class QuickConnectAddressResolver {
       final addresses = <AddressInfo>[];
       
       // 1. 尝试隧道请求获取地址
-      final tunnelAddress = await _tryTunnelRequest(quickConnectId);
-      if (tunnelAddress != null) {
-        addresses.add(AddressInfo(
-          url: tunnelAddress,
-          type: AddressType.relay,
-          description: '隧道中继地址',
-          priority: 1,
-        ));
+      final tunnelResponse = await _api.requestTunnel(quickConnectId);
+      if (tunnelResponse != null && tunnelResponse.success) {
+        final tunnelAddress = _parseTunnelAddresses(tunnelResponse.tunnelData);
+        if (tunnelAddress != null) {
+          addresses.add(AddressInfo(
+            url: tunnelAddress,
+            type: AddressType.relay,
+            description: '隧道中继地址',
+            priority: 1,
+          ));
+        }
       }
       
       // 2. 获取服务器信息中的所有地址
-      final serverInfoAddresses = await _getServerInfoAddresses(quickConnectId);
-      addresses.addAll(serverInfoAddresses);
+      final serverInfoResponse = await _api.requestServerInfo(quickConnectId);
+      if (serverInfoResponse != null) {
+        final serverInfoAddresses = _extractAllAddresses(serverInfoResponse);
+        addresses.addAll(serverInfoAddresses);
+      }
       
       // 按优先级排序
       addresses.sort((a, b) => a.priority.compareTo(b.priority));
@@ -77,175 +87,7 @@ class QuickConnectAddressResolver {
     }
   }
 
-  /// 尝试隧道请求
-  Future<String?> _tryTunnelRequest(String quickConnectId) async {
-    try {
-      final tunnelUrl = Uri.parse(QuickConnectConstants.tunnelServiceUrl);
-      final tunnelBody = jsonEncode({
-        "id": QuickConnectConstants.serverIdDsmHttps,
-        "serverID": quickConnectId.trim(),
-        "command": QuickConnectConstants.commandGetTunnel,
-        "version": QuickConnectConstants.apiVersion1
-      });
 
-      AppLogger.network('发送隧道请求: $tunnelBody', tag: _tag);
-      
-      final response = await _apiClient.post<Map<String, dynamic>>(
-        tunnelUrl.toString(),
-        data: tunnelBody,
-        options: Options(
-          headers: QuickConnectConstants.defaultHeaders,
-          sendTimeout: QuickConnectConstants.tunnelTimeout,
-          receiveTimeout: QuickConnectConstants.tunnelTimeout,
-        ),
-        fromJson: (data) {
-          // data 可能是 String 或已经解析的 Map
-          if (data is String) {
-            return jsonDecode(data) as Map<String, dynamic>;
-          } else {
-            return data as Map<String, dynamic>;
-          }
-        },
-      );
-
-      return response.when(
-        success: (data, statusCode, message, extra) {
-          final tunnelResponse = SerializationHelper.safeFromMap(
-            data,
-            TunnelResponse.fromJson,
-          );
-          
-          if (tunnelResponse != null && tunnelResponse.success) {
-            return _parseTunnelAddresses(tunnelResponse.tunnelData);
-          } else if (tunnelResponse != null) {
-            AppLogger.error('QuickConnect 隧道请求失败', tag: _tag);
-            AppLogger.error('错误代码: ${tunnelResponse.errorCode}', tag: _tag);
-            AppLogger.error('错误信息: ${tunnelResponse.errorInfo}', tag: _tag);
-          }
-          return null;
-        },
-        error: (message, statusCode, errorCode, error, extra) {
-          AppLogger.error('隧道请求失败: $message', tag: _tag);
-          return null;
-        },
-      );
-    } catch (e) {
-      AppLogger.error('隧道请求异常: $e', tag: _tag);
-      return null;
-    }
-  }
-
-  /// 尝试服务器信息请求
-  Future<String?> _tryServerInfoRequest(String quickConnectId) async {
-    try {
-      final serverInfoUrl = Uri.parse(QuickConnectConstants.serverInfoUrl);
-      final serverInfoBody = jsonEncode({
-        "get_ca_fingerprints": true,
-        "id": QuickConnectConstants.serverIdDsmHttps,
-        "serverID": quickConnectId.trim(),
-        "command": QuickConnectConstants.commandGetServerInfo,
-        "version": QuickConnectConstants.apiVersion1
-      });
-
-      AppLogger.network('发送服务器信息请求: $serverInfoBody', tag: _tag);
-      
-      final response = await _apiClient.post<Map<String, dynamic>>(
-        serverInfoUrl.toString(),
-        data: serverInfoBody,
-        options: Options(
-          headers: QuickConnectConstants.defaultHeaders,
-          sendTimeout: QuickConnectConstants.serverInfoTimeout,
-          receiveTimeout: QuickConnectConstants.serverInfoTimeout,
-        ),
-        fromJson: (data) {
-          // data 可能是 String 或已经解析的 Map
-          if (data is String) {
-            return jsonDecode(data) as Map<String, dynamic>;
-          } else {
-            return data as Map<String, dynamic>;
-          }
-        },
-      );
-
-      return response.when(
-        success: (data, statusCode, message, extra) {
-          final serverInfoResponse = SerializationHelper.safeFromMap(
-            data,
-            ServerInfoResponse.fromJson,
-          );
-          
-          if (serverInfoResponse != null) {
-            // 调试：记录原始 JSON 数据
-            AppLogger.debug('原始 JSON 数据: $data', tag: _tag);
-            AppLogger.debug('解析后的 ServerInfoResponse: $serverInfoResponse', tag: _tag);
-            
-            return _trySmartDnsAddress(serverInfoResponse);
-          }
-          return null;
-        },
-        error: (message, statusCode, errorCode, error, extra) {
-          AppLogger.error('服务器信息请求失败: $message', tag: _tag);
-          return null;
-        },
-      );
-    } catch (e) {
-      AppLogger.error('服务器信息请求异常: $e', tag: _tag);
-      return null;
-    }
-  }
-
-  /// 获取服务器信息中的所有地址
-  Future<List<AddressInfo>> _getServerInfoAddresses(String quickConnectId) async {
-    try {
-      final serverInfoUrl = Uri.parse(QuickConnectConstants.serverInfoUrl);
-      final serverInfoBody = jsonEncode({
-        "get_ca_fingerprints": true,
-        "id": QuickConnectConstants.serverIdDsmHttps,
-        "serverID": quickConnectId.trim(),
-        "command": QuickConnectConstants.commandGetServerInfo,
-        "version": QuickConnectConstants.apiVersion1
-      });
-
-      final response = await _apiClient.post<Map<String, dynamic>>(
-        serverInfoUrl.toString(),
-        data: serverInfoBody,
-        options: Options(
-          headers: QuickConnectConstants.defaultHeaders,
-          sendTimeout: QuickConnectConstants.serverInfoTimeout,
-          receiveTimeout: QuickConnectConstants.serverInfoTimeout,
-        ),
-        fromJson: (data) {
-          // data 可能是 String 或已经解析的 Map
-          if (data is String) {
-            return jsonDecode(data) as Map<String, dynamic>;
-          } else {
-            return data as Map<String, dynamic>;
-          }
-        },
-      );
-
-      return response.when(
-        success: (data, statusCode, message, extra) {
-          final serverInfoResponse = SerializationHelper.safeFromMap(
-            data,
-            ServerInfoResponse.fromJson,
-          );
-          
-          if (serverInfoResponse != null) {
-            return _extractAllAddresses(serverInfoResponse);
-          }
-          return [];
-        },
-        error: (message, statusCode, errorCode, error, extra) {
-          AppLogger.error('获取服务器信息地址失败: $message', tag: _tag);
-          return [];
-        },
-      );
-    } catch (e) {
-      AppLogger.error('获取服务器信息地址异常: $e', tag: _tag);
-      return [];
-    }
-  }
 
   /// 解析隧道地址
   String? _parseTunnelAddresses(TunnelData? tunnelData) {
