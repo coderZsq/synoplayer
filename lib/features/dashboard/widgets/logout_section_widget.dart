@@ -22,7 +22,7 @@ class LogoutSectionWidget extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: isDark 
-            ? Colors.red.shade900.withOpacity(0.3)
+            ? Colors.red.shade900.withValues(alpha: 0.3)
             : Colors.red.shade50,
         border: Border.all(
           color: isDark 

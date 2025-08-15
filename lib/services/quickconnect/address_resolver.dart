@@ -130,8 +130,6 @@ class QuickConnectAddressResolver {
           return null;
         },
       );
-      
-      return null;
     } catch (e) {
       AppLogger.error('隧道请求异常: $e', tag: _tag);
       return null;
@@ -191,8 +189,6 @@ class QuickConnectAddressResolver {
           return null;
         },
       );
-      
-      return null;
     } catch (e) {
       AppLogger.error('服务器信息请求异常: $e', tag: _tag);
       return null;
@@ -246,8 +242,6 @@ class QuickConnectAddressResolver {
           return [];
         },
       );
-      
-      return [];
     } catch (e) {
       AppLogger.error('获取服务器信息地址异常: $e', tag: _tag);
       return [];

@@ -166,7 +166,7 @@ class _MainPageState extends ConsumerState<MainPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -174,7 +174,7 @@ class _MainPageState extends ConsumerState<MainPage> {
               WelcomeCardWidget(
                 username: widget.username,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               
               // 连接信息
               ConnectionInfoWidget(
@@ -184,7 +184,7 @@ class _MainPageState extends ConsumerState<MainPage> {
                 sessionId: widget.sid,
                 loginTime: _loginTime,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               
               // 功能按钮
               FeatureButtonsWidget(
@@ -194,30 +194,30 @@ class _MainPageState extends ConsumerState<MainPage> {
                 onSettings: _openSettings,
                 isLoading: _isLoading,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               
               // 主题设置
               ThemeSettingsWidget(
                 onThemeChanged: _onThemeChanged,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               
               // 退出登录区域
               LogoutSectionWidget(
                 onLogout: _logout,
                 isLoading: _isLoading,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               
               // 日志显示
               LogDisplayWidget(
                 log: _log,
                 isLoading: _isLoading,
-                height: 200,
+                height: 180,
                 onClear: _clearLog,
               ),
               
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
             ],
           ),
         ),

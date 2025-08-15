@@ -26,7 +26,7 @@ class WelcomeCardWidget extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : Colors.grey).withOpacity(0.1),
+            color: (isDark ? Colors.black : Colors.grey).withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -38,7 +38,7 @@ class WelcomeCardWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(50),
             ),
             child: Icon(
@@ -63,7 +63,7 @@ class WelcomeCardWidget extends StatelessWidget {
           Text(
             '您已成功连接到群晖 NAS',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -80,10 +80,10 @@ class WelcomeCardWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.1),
+        color: Colors.green.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.green.withOpacity(0.3),
+          color: Colors.green.withValues(alpha: 0.3),
         ),
       ),
       child: Row(

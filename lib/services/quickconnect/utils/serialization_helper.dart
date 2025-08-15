@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import '../../../core/utils/logger.dart';
 import '../models/quickconnect_models.dart';
 
 /// JSON 序列化辅助工具类
 /// 
 /// 提供统一的序列化/反序列化方法，包含错误处理和数据验证
 class SerializationHelper {
-  static const String _tag = 'SerializationHelper';
 
   /// 安全地从 JSON 字符串反序列化对象
   /// 
@@ -22,13 +22,13 @@ class SerializationHelper {
       final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
       return fromJson(jsonMap);
     } on FormatException catch (e) {
-      print('JSON 格式错误: $e');
+      AppLogger.error('JSON 格式错误: $e');
       return fallback;
     } on TypeError catch (e) {
-      print('类型转换错误: $e');
+      AppLogger.error('类型转换错误: $e');
       return fallback;
     } catch (e) {
-      print('反序列化异常: $e');
+      AppLogger.error('反序列化异常: $e');
       return fallback;
     }
   }
@@ -46,10 +46,10 @@ class SerializationHelper {
     try {
       return fromJson(jsonMap);
     } on TypeError catch (e) {
-      print('类型转换错误: $e');
+      AppLogger.error('类型转换错误: $e');
       return fallback;
     } catch (e) {
-      print('反序列化异常: $e');
+      AppLogger.error('反序列化异常: $e');
       return fallback;
     }
   }
@@ -68,7 +68,7 @@ class SerializationHelper {
       final jsonMap = toJson(object);
       return jsonEncode(jsonMap);
     } catch (e) {
-      print('序列化异常: $e');
+      AppLogger.error('序列化异常: $e');
       return fallback;
     }
   }
@@ -91,7 +91,7 @@ class SerializationHelper {
           final result = fromJson(item);
           results.add(result);
         } catch (e) {
-          print('列表项反序列化失败: $e');
+          AppLogger.error('列表项反序列化失败: $e');
           if (!filterNull) {
             // 如果不过滤 null，可以添加一个默认值或跳过
             continue;
@@ -116,12 +116,12 @@ class SerializationHelper {
     // 检查必需字段
     for (final field in requiredFields) {
       if (!jsonMap.containsKey(field)) {
-        print('缺少必需字段: $field');
+        AppLogger.error('缺少必需字段: $field');
         return false;
       }
       
       if (jsonMap[field] == null) {
-        print('必需字段为空: $field');
+        AppLogger.error('必需字段为空: $field');
         return false;
       }
     }
@@ -130,7 +130,7 @@ class SerializationHelper {
     for (final field in requiredFields) {
       final value = jsonMap[field];
       if (value is String && value.isEmpty) {
-        print('必需字段为空字符串: $field');
+        AppLogger.error('必需字段为空字符串: $field');
         return false;
       }
     }
@@ -152,7 +152,7 @@ class SerializationHelper {
       final jsonMap = toJson(object);
       return fromJson(jsonMap);
     } catch (e) {
-      print('深度克隆失败: $e');
+      AppLogger.error('深度克隆失败: $e');
       return null;
     }
   }
@@ -241,7 +241,7 @@ class SerializationHelper {
       final jsonMap = jsonDecode(jsonString);
       return JsonEncoder.withIndent(indent).convert(jsonMap);
     } catch (e) {
-      print('JSON 格式化失败: $e');
+      AppLogger.error('JSON 格式化失败: $e');
       return jsonString;
     }
   }
@@ -284,7 +284,7 @@ class SerializationHelper {
       
       return current as T?;
     } catch (e) {
-      print('提取嵌套值失败: $e');
+      AppLogger.error('提取嵌套值失败: $e');
       return fallback;
     }
   }
@@ -317,7 +317,7 @@ class SerializationHelper {
       current[lastKey] = value;
       return true;
     } catch (e) {
-      print('设置嵌套值失败: $e');
+      AppLogger.error('设置嵌套值失败: $e');
       return false;
     }
   }
@@ -353,7 +353,7 @@ extension StringSerialization on String {
     try {
       return jsonDecode(this) as Map<String, dynamic>;
     } catch (e) {
-      print('字符串转 JSON Map 失败: $e');
+      AppLogger.error('字符串转 JSON Map 失败: $e');
       return null;
     }
   }

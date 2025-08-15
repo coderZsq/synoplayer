@@ -98,7 +98,7 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
         
         // 保存登录凭据
         if (_rememberCredentials) {
-          await _saveCredentials(result.sid!);
+          await _saveCredentials(result.sid!, result.availableAddress ?? '');
           widget.onLog('💾 登录凭据已保存');
         }
         
@@ -127,13 +127,13 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
   }
 
   /// 保存登录凭据
-  Future<void> _saveCredentials(String sid) async {
+  Future<void> _saveCredentials(String sid, String workingAddress) async {
     try {
       await CredentialsService.saveCredentials(
         quickConnectId: _quickConnectIdCtrl.text.trim(),
         username: _usernameCtrl.text.trim(),
         password: _passwordCtrl.text.trim(),
-        workingAddress: null, // 智能登录会自动选择最佳地址
+        workingAddress: workingAddress, // 保存实际的工作地址
         sid: sid,
         rememberCredentials: _rememberCredentials,
       );
@@ -176,7 +176,7 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -200,7 +200,7 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
                       Text(
                         '自动解析地址并选择最佳连接方式',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -325,7 +325,7 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isDark ? Colors.blue.shade900.withOpacity(0.3) : Colors.blue.shade50,
+                color: isDark ? Colors.blue.shade900.withValues(alpha: 0.3) : Colors.blue.shade50,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: isDark ? Colors.blue.shade700 : Colors.blue.shade200,

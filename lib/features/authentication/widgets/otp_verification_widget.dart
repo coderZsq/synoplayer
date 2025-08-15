@@ -151,7 +151,7 @@ class _OtpVerificationWidgetState extends ConsumerState<OtpVerificationWidget>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -175,7 +175,7 @@ class _OtpVerificationWidgetState extends ConsumerState<OtpVerificationWidget>
               Text(
                 '需要输入 OTP 验证码',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSecondaryContainer.withOpacity(0.7),
+                  color: theme.colorScheme.onSecondaryContainer.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -194,10 +194,10 @@ class _OtpVerificationWidgetState extends ConsumerState<OtpVerificationWidget>
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withOpacity(0.5),
+        color: theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.3),
+          color: theme.colorScheme.outline.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -226,7 +226,7 @@ class _OtpVerificationWidgetState extends ConsumerState<OtpVerificationWidget>
             '• 找到群晖账户对应的6位数字验证码\n'
             '• 在下方输入框中输入验证码',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.8),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -263,7 +263,7 @@ class _OtpVerificationWidgetState extends ConsumerState<OtpVerificationWidget>
             hintText: '000000',
             hintStyle: theme.textTheme.headlineSmall?.copyWith(
               letterSpacing: 8,
-              color: theme.colorScheme.onSurface.withOpacity(0.3),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
             ),
             prefixIcon: const Icon(Icons.security),
             border: OutlineInputBorder(

@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'core/utils/logger.dart';
 
 class CredentialsService {
   static const _storage = FlutterSecureStorage();
@@ -39,7 +40,7 @@ class CredentialsService {
         await clearCredentials();
       }
     } catch (e) {
-      print('保存凭据失败: $e');
+      AppLogger.error('保存凭据失败: $e');
     }
   }
   
@@ -64,7 +65,7 @@ class CredentialsService {
         'loginTime': loginTime, // 新增：登录时间
       };
     } catch (e) {
-      print('获取凭据失败: $e');
+      AppLogger.error('获取凭据失败: $e');
       return {};
     }
   }
@@ -117,7 +118,7 @@ class CredentialsService {
       await _storage.delete(key: _sidKey); // 新增：清除会话ID
       await _storage.delete(key: _loginTimeKey); // 新增：清除登录时间
     } catch (e) {
-      print('清除凭据失败: $e');
+      AppLogger.error('清除凭据失败: $e');
     }
   }
   
@@ -129,7 +130,7 @@ class CredentialsService {
       }
       return {};
     } catch (e) {
-      print('自动登录失败: $e');
+      AppLogger.error('自动登录失败: $e');
       return {};
     }
   }
@@ -140,15 +141,17 @@ class CredentialsService {
       final credentials = await getCredentials();
       final sid = credentials['sid'];
       
-      if (sid == null) {
+      if (sid == null || sid.isEmpty) {
+        AppLogger.error('会话ID为空');
         return false;
       }
       
-      // 这里可以添加实际的会话验证逻辑
+      // TODO: 这里应该添加实际的会话验证逻辑
       // 例如调用群晖API验证SID是否有效
-      // 暂时返回true，表示会话有效
-      return true;
+      // 暂时基于时间验证会话是否过期
+      return await hasValidSession();
     } catch (e) {
+      AppLogger.error('验证会话失败: $e');
       return false;
     }
   }

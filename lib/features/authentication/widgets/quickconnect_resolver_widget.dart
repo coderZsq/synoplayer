@@ -178,7 +178,7 @@ class _QuickConnectResolverWidgetState extends ConsumerState<QuickConnectResolve
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark ? Colors.blue.shade900.withOpacity(0.3) : Colors.blue.shade50,
+        color: isDark ? Colors.blue.shade900.withValues(alpha: 0.3) : Colors.blue.shade50,
         border: Border.all(
           color: isDark ? Colors.blue.shade700 : Colors.blue.shade200,
         ),
@@ -254,7 +254,7 @@ class _QuickConnectResolverWidgetState extends ConsumerState<QuickConnectResolve
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? Colors.green.shade900.withOpacity(0.3) : Colors.green.shade50,
+        color: isDark ? Colors.green.shade900.withValues(alpha: 0.3) : Colors.green.shade50,
         border: Border.all(
           color: isDark ? Colors.green.shade700 : Colors.green.shade200,
         ),
@@ -317,7 +317,7 @@ class _QuickConnectResolverWidgetState extends ConsumerState<QuickConnectResolve
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: isDark ? Colors.green.shade800.withOpacity(0.3) : Colors.green.shade100,
+              color: isDark ? Colors.green.shade800.withValues(alpha: 0.3) : Colors.green.shade100,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
@@ -350,8 +350,8 @@ class _QuickConnectResolverWidgetState extends ConsumerState<QuickConnectResolve
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: isCurrent 
-                      ? (isDark ? Colors.green.shade700.withOpacity(0.5) : Colors.green.shade200)
-                      : (isDark ? Colors.grey.shade800.withOpacity(0.5) : Colors.grey.shade100),
+                      ? (isDark ? Colors.green.shade700.withValues(alpha: 0.5) : Colors.green.shade200)
+                      : (isDark ? Colors.grey.shade800.withValues(alpha: 0.5) : Colors.grey.shade100),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Row(
@@ -391,7 +391,7 @@ class _QuickConnectResolverWidgetState extends ConsumerState<QuickConnectResolve
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: isDark ? Colors.blue.shade900.withOpacity(0.3) : Colors.blue.shade50,
+              color: isDark ? Colors.blue.shade900.withValues(alpha: 0.3) : Colors.blue.shade50,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(

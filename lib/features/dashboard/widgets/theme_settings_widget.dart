@@ -23,7 +23,7 @@ class ThemeSettingsWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? Colors.blue.shade900.withOpacity(0.3) : Colors.blue.shade50,
+        color: isDark ? Colors.blue.shade900.withValues(alpha: 0.3) : Colors.blue.shade50,
         border: Border.all(
           color: isDark ? Colors.blue.shade700 : Colors.blue.shade200,
         ),

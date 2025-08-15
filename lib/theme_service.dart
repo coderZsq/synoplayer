@@ -8,7 +8,7 @@ class ThemeService {
   static const _storage = FlutterSecureStorage();
   static const _themeKey = 'theme_mode';
   
-  ThemeMode _themeMode = ThemeMode.system;
+  final ThemeMode _themeMode = ThemeMode.system;
   
   ThemeMode get themeMode => _themeMode;
   
@@ -173,12 +173,12 @@ class AppThemes {
         primary: Colors.black87,
         secondary: Colors.grey[600]!,
         surface: Colors.white,
-        background: Colors.white,
+
       ),
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 2,
-        shadowColor: Colors.grey.withOpacity(0.2),
+        shadowColor: Colors.grey.withValues(alpha: 0.2),
       ),
       textTheme: const TextTheme(
         headlineLarge: TextStyle(color: Colors.black87),
@@ -216,12 +216,12 @@ class AppThemes {
         primary: Colors.white,
         secondary: Colors.grey[400]!,
         surface: Colors.grey[850]!,
-        background: Colors.grey[900]!,
+
       ),
       cardTheme: CardThemeData(
         color: Colors.grey[850],
         elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.3),
+        shadowColor: Colors.black.withValues(alpha: 0.3),
       ),
       textTheme: const TextTheme(
         headlineLarge: TextStyle(color: Colors.white),

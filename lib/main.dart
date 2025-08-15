@@ -61,11 +61,14 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
         
         if (credentials != null && 
             credentials!['sid'] != null && 
-            credentials!['workingAddress'] != null) {
+            credentials!['username'] != null &&
+            credentials!['quickConnectId'] != null) {
+          // 如果没有workingAddress，尝试使用quickConnectId构建默认地址
+          String workingAddress = credentials!['workingAddress'] ?? 
+              'https://${credentials!['quickConnectId']}.quickconnect.to';
+          
           // 验证会话是否有效
-          final isValid = await CredentialsService.validateSession(
-            credentials!['workingAddress']!
-          );
+          final isValid = await CredentialsService.validateSession(workingAddress);
           
           if (isValid) {
             // 会话有效，直接跳转到主页面
@@ -76,7 +79,7 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
                     sid: credentials!['sid']!,
                     username: credentials!['username']!,
                     quickConnectId: credentials!['quickConnectId']!,
-                    workingAddress: credentials!['workingAddress']!,
+                    workingAddress: workingAddress,
                   ),
                 ),
               );
@@ -132,7 +135,7 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: (isDark ? Colors.black : Colors.grey).withOpacity(0.3),
+                      color: (isDark ? Colors.black : Colors.grey).withValues(alpha: 0.3),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),

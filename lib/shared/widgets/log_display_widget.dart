@@ -157,13 +157,13 @@ class _LogDisplayWidgetState extends State<LogDisplayWidget> {
           Icon(
             Icons.notes,
             size: 32,
-            color: theme.colorScheme.onSurface.withOpacity(0.3),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
           ),
           const SizedBox(height: 8),
           Text(
             '等待操作...',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           ),
         ],
