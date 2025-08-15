@@ -112,6 +112,89 @@ class QuickConnectApiImpl implements QuickConnectApiInterface {
     }
   }
 
+  @override
+  Future<QuickConnectServerInfoResponse?> requestQuickConnectServerInfo({
+    required String quickConnectId,
+    bool getCaFingerprints = true,
+  }) async {
+    try {
+      AppLogger.network('发送 QuickConnect 全球服务器信息请求: $quickConnectId', tag: _tag);
+      
+      // 使用全球 QuickConnect 服务 URL (基于抓包分析)
+      const globalServiceUrl = 'https://global.quickconnect.to/Serv.php';
+      
+      final requestBody = {
+        "get_ca_fingerprints": getCaFingerprints,
+        "id": QuickConnectConstants.serverIdDsmHttps,
+        "serverID": quickConnectId.trim(),
+        "command": QuickConnectConstants.commandGetServerInfo,
+        "version": QuickConnectConstants.apiVersion1
+      };
+
+      AppLogger.network('全球服务器信息请求体: $requestBody', tag: _tag);
+      
+      final response = await _apiClient.post<Map<String, dynamic>>(
+        globalServiceUrl,
+        data: requestBody,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Connection': 'keep-alive',
+            'Accept': '*/*',
+            'User-Agent': 'DSfile/12 CFNetwork/3826.600.41 Darwin/24.6.0',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+          },
+          sendTimeout: QuickConnectConstants.serverInfoTimeout,
+          receiveTimeout: QuickConnectConstants.serverInfoTimeout,
+        ),
+        fromJson: _parseJsonResponse,
+      );
+
+      return response.when(
+        success: (data, statusCode, message, extra) {
+          AppLogger.success('全球服务器信息请求成功', tag: _tag);
+          AppLogger.network('全球服务器响应数据: $data', tag: _tag);
+          
+          try {
+            final serverInfoResponse = QuickConnectServerInfoResponse.fromJson(data);
+            
+            // 记录详细的响应分析
+            AppLogger.info('响应分析: ${serverInfoResponse.debugInfo}', tag: _tag);
+            
+            if (serverInfoResponse.isError) {
+              AppLogger.warning(
+                '服务器返回错误 - errno: ${serverInfoResponse.errorCode}, '
+                'errinfo: ${serverInfoResponse.errorMessage}',
+                tag: _tag
+              );
+              
+              // 即使有错误，也可能包含有用的 sites 信息
+              if (serverInfoResponse.hasSites) {
+                AppLogger.info('可用站点: ${serverInfoResponse.sites}', tag: _tag);
+              }
+            } else {
+              AppLogger.success('服务器信息解析成功', tag: _tag);
+            }
+            
+            return serverInfoResponse;
+          } catch (parseError) {
+            AppLogger.error('解析全球服务器信息响应失败: $parseError', tag: _tag);
+            AppLogger.error('原始响应数据: $data', tag: _tag);
+            return null;
+          }
+        },
+        error: (message, statusCode, errorCode, error, extra) {
+          AppLogger.error('全球服务器信息请求失败: $message (状态码: $statusCode)', tag: _tag);
+          return null;
+        },
+      );
+    } catch (e) {
+      AppLogger.error('全球服务器信息请求异常: $e', tag: _tag);
+      return null;
+    }
+  }
+
   // ==================== 认证登录 API 实现 ====================
   
   @override

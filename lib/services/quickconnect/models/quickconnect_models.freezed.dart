@@ -1693,6 +1693,428 @@ abstract class _ServerInfoResponse extends ServerInfoResponse {
 }
 
 /// @nodoc
+mixin _$QuickConnectServerInfoResponse {
+  String get command => throw _privateConstructorUsedError;
+  String? get errinfo => throw _privateConstructorUsedError;
+  int? get errno => throw _privateConstructorUsedError;
+  List<String>? get sites => throw _privateConstructorUsedError;
+  int? get suberrno => throw _privateConstructorUsedError;
+  int? get version => throw _privateConstructorUsedError;
+  bool? get getCaFingerprints => throw _privateConstructorUsedError;
+  ServerInfo? get server => throw _privateConstructorUsedError;
+  SmartDnsInfo? get smartdns => throw _privateConstructorUsedError;
+  ServiceInfo? get service => throw _privateConstructorUsedError;
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $QuickConnectServerInfoResponseCopyWith<QuickConnectServerInfoResponse>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $QuickConnectServerInfoResponseCopyWith<$Res> {
+  factory $QuickConnectServerInfoResponseCopyWith(
+    QuickConnectServerInfoResponse value,
+    $Res Function(QuickConnectServerInfoResponse) then,
+  ) =
+      _$QuickConnectServerInfoResponseCopyWithImpl<
+        $Res,
+        QuickConnectServerInfoResponse
+      >;
+  @useResult
+  $Res call({
+    String command,
+    String? errinfo,
+    int? errno,
+    List<String>? sites,
+    int? suberrno,
+    int? version,
+    bool? getCaFingerprints,
+    ServerInfo? server,
+    SmartDnsInfo? smartdns,
+    ServiceInfo? service,
+  });
+
+  $ServerInfoCopyWith<$Res>? get server;
+  $SmartDnsInfoCopyWith<$Res>? get smartdns;
+  $ServiceInfoCopyWith<$Res>? get service;
+}
+
+/// @nodoc
+class _$QuickConnectServerInfoResponseCopyWithImpl<
+  $Res,
+  $Val extends QuickConnectServerInfoResponse
+>
+    implements $QuickConnectServerInfoResponseCopyWith<$Res> {
+  _$QuickConnectServerInfoResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? command = null,
+    Object? errinfo = freezed,
+    Object? errno = freezed,
+    Object? sites = freezed,
+    Object? suberrno = freezed,
+    Object? version = freezed,
+    Object? getCaFingerprints = freezed,
+    Object? server = freezed,
+    Object? smartdns = freezed,
+    Object? service = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            command: null == command
+                ? _value.command
+                : command // ignore: cast_nullable_to_non_nullable
+                      as String,
+            errinfo: freezed == errinfo
+                ? _value.errinfo
+                : errinfo // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            errno: freezed == errno
+                ? _value.errno
+                : errno // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            sites: freezed == sites
+                ? _value.sites
+                : sites // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            suberrno: freezed == suberrno
+                ? _value.suberrno
+                : suberrno // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            version: freezed == version
+                ? _value.version
+                : version // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            getCaFingerprints: freezed == getCaFingerprints
+                ? _value.getCaFingerprints
+                : getCaFingerprints // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            server: freezed == server
+                ? _value.server
+                : server // ignore: cast_nullable_to_non_nullable
+                      as ServerInfo?,
+            smartdns: freezed == smartdns
+                ? _value.smartdns
+                : smartdns // ignore: cast_nullable_to_non_nullable
+                      as SmartDnsInfo?,
+            service: freezed == service
+                ? _value.service
+                : service // ignore: cast_nullable_to_non_nullable
+                      as ServiceInfo?,
+          )
+          as $Val,
+    );
+  }
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ServerInfoCopyWith<$Res>? get server {
+    if (_value.server == null) {
+      return null;
+    }
+
+    return $ServerInfoCopyWith<$Res>(_value.server!, (value) {
+      return _then(_value.copyWith(server: value) as $Val);
+    });
+  }
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SmartDnsInfoCopyWith<$Res>? get smartdns {
+    if (_value.smartdns == null) {
+      return null;
+    }
+
+    return $SmartDnsInfoCopyWith<$Res>(_value.smartdns!, (value) {
+      return _then(_value.copyWith(smartdns: value) as $Val);
+    });
+  }
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ServiceInfoCopyWith<$Res>? get service {
+    if (_value.service == null) {
+      return null;
+    }
+
+    return $ServiceInfoCopyWith<$Res>(_value.service!, (value) {
+      return _then(_value.copyWith(service: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$QuickConnectServerInfoResponseImplCopyWith<$Res>
+    implements $QuickConnectServerInfoResponseCopyWith<$Res> {
+  factory _$$QuickConnectServerInfoResponseImplCopyWith(
+    _$QuickConnectServerInfoResponseImpl value,
+    $Res Function(_$QuickConnectServerInfoResponseImpl) then,
+  ) = __$$QuickConnectServerInfoResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String command,
+    String? errinfo,
+    int? errno,
+    List<String>? sites,
+    int? suberrno,
+    int? version,
+    bool? getCaFingerprints,
+    ServerInfo? server,
+    SmartDnsInfo? smartdns,
+    ServiceInfo? service,
+  });
+
+  @override
+  $ServerInfoCopyWith<$Res>? get server;
+  @override
+  $SmartDnsInfoCopyWith<$Res>? get smartdns;
+  @override
+  $ServiceInfoCopyWith<$Res>? get service;
+}
+
+/// @nodoc
+class __$$QuickConnectServerInfoResponseImplCopyWithImpl<$Res>
+    extends
+        _$QuickConnectServerInfoResponseCopyWithImpl<
+          $Res,
+          _$QuickConnectServerInfoResponseImpl
+        >
+    implements _$$QuickConnectServerInfoResponseImplCopyWith<$Res> {
+  __$$QuickConnectServerInfoResponseImplCopyWithImpl(
+    _$QuickConnectServerInfoResponseImpl _value,
+    $Res Function(_$QuickConnectServerInfoResponseImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? command = null,
+    Object? errinfo = freezed,
+    Object? errno = freezed,
+    Object? sites = freezed,
+    Object? suberrno = freezed,
+    Object? version = freezed,
+    Object? getCaFingerprints = freezed,
+    Object? server = freezed,
+    Object? smartdns = freezed,
+    Object? service = freezed,
+  }) {
+    return _then(
+      _$QuickConnectServerInfoResponseImpl(
+        command: null == command
+            ? _value.command
+            : command // ignore: cast_nullable_to_non_nullable
+                  as String,
+        errinfo: freezed == errinfo
+            ? _value.errinfo
+            : errinfo // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errno: freezed == errno
+            ? _value.errno
+            : errno // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        sites: freezed == sites
+            ? _value._sites
+            : sites // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        suberrno: freezed == suberrno
+            ? _value.suberrno
+            : suberrno // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        version: freezed == version
+            ? _value.version
+            : version // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        getCaFingerprints: freezed == getCaFingerprints
+            ? _value.getCaFingerprints
+            : getCaFingerprints // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        server: freezed == server
+            ? _value.server
+            : server // ignore: cast_nullable_to_non_nullable
+                  as ServerInfo?,
+        smartdns: freezed == smartdns
+            ? _value.smartdns
+            : smartdns // ignore: cast_nullable_to_non_nullable
+                  as SmartDnsInfo?,
+        service: freezed == service
+            ? _value.service
+            : service // ignore: cast_nullable_to_non_nullable
+                  as ServiceInfo?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$QuickConnectServerInfoResponseImpl
+    extends _QuickConnectServerInfoResponse {
+  const _$QuickConnectServerInfoResponseImpl({
+    required this.command,
+    this.errinfo,
+    this.errno,
+    final List<String>? sites,
+    this.suberrno,
+    this.version,
+    this.getCaFingerprints,
+    this.server,
+    this.smartdns,
+    this.service,
+  }) : _sites = sites,
+       super._();
+
+  @override
+  final String command;
+  @override
+  final String? errinfo;
+  @override
+  final int? errno;
+  final List<String>? _sites;
+  @override
+  List<String>? get sites {
+    final value = _sites;
+    if (value == null) return null;
+    if (_sites is EqualUnmodifiableListView) return _sites;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final int? suberrno;
+  @override
+  final int? version;
+  @override
+  final bool? getCaFingerprints;
+  @override
+  final ServerInfo? server;
+  @override
+  final SmartDnsInfo? smartdns;
+  @override
+  final ServiceInfo? service;
+
+  @override
+  String toString() {
+    return 'QuickConnectServerInfoResponse(command: $command, errinfo: $errinfo, errno: $errno, sites: $sites, suberrno: $suberrno, version: $version, getCaFingerprints: $getCaFingerprints, server: $server, smartdns: $smartdns, service: $service)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$QuickConnectServerInfoResponseImpl &&
+            (identical(other.command, command) || other.command == command) &&
+            (identical(other.errinfo, errinfo) || other.errinfo == errinfo) &&
+            (identical(other.errno, errno) || other.errno == errno) &&
+            const DeepCollectionEquality().equals(other._sites, _sites) &&
+            (identical(other.suberrno, suberrno) ||
+                other.suberrno == suberrno) &&
+            (identical(other.version, version) || other.version == version) &&
+            (identical(other.getCaFingerprints, getCaFingerprints) ||
+                other.getCaFingerprints == getCaFingerprints) &&
+            (identical(other.server, server) || other.server == server) &&
+            (identical(other.smartdns, smartdns) ||
+                other.smartdns == smartdns) &&
+            (identical(other.service, service) || other.service == service));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    command,
+    errinfo,
+    errno,
+    const DeepCollectionEquality().hash(_sites),
+    suberrno,
+    version,
+    getCaFingerprints,
+    server,
+    smartdns,
+    service,
+  );
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$QuickConnectServerInfoResponseImplCopyWith<
+    _$QuickConnectServerInfoResponseImpl
+  >
+  get copyWith =>
+      __$$QuickConnectServerInfoResponseImplCopyWithImpl<
+        _$QuickConnectServerInfoResponseImpl
+      >(this, _$identity);
+}
+
+abstract class _QuickConnectServerInfoResponse
+    extends QuickConnectServerInfoResponse {
+  const factory _QuickConnectServerInfoResponse({
+    required final String command,
+    final String? errinfo,
+    final int? errno,
+    final List<String>? sites,
+    final int? suberrno,
+    final int? version,
+    final bool? getCaFingerprints,
+    final ServerInfo? server,
+    final SmartDnsInfo? smartdns,
+    final ServiceInfo? service,
+  }) = _$QuickConnectServerInfoResponseImpl;
+  const _QuickConnectServerInfoResponse._() : super._();
+
+  @override
+  String get command;
+  @override
+  String? get errinfo;
+  @override
+  int? get errno;
+  @override
+  List<String>? get sites;
+  @override
+  int? get suberrno;
+  @override
+  int? get version;
+  @override
+  bool? get getCaFingerprints;
+  @override
+  ServerInfo? get server;
+  @override
+  SmartDnsInfo? get smartdns;
+  @override
+  ServiceInfo? get service;
+
+  /// Create a copy of QuickConnectServerInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$QuickConnectServerInfoResponseImplCopyWith<
+    _$QuickConnectServerInfoResponseImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$ServerInfo {
   ExternalServerInfo? get external => throw _privateConstructorUsedError;
   List<InterfaceInfo>? get interfaces => throw _privateConstructorUsedError;

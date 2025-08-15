@@ -232,6 +232,99 @@ class ServerInfoResponse with _$ServerInfoResponse {
   }
 }
 
+/// QuickConnect 全球服务器信息响应模型（基于抓包分析）
+@freezed
+class QuickConnectServerInfoResponse with _$QuickConnectServerInfoResponse {
+  const factory QuickConnectServerInfoResponse({
+    required String command,
+    String? errinfo,
+    int? errno,
+    List<String>? sites,
+    int? suberrno,
+    int? version,
+    bool? getCaFingerprints,
+    ServerInfo? server,
+    SmartDnsInfo? smartdns,
+    ServiceInfo? service,
+  }) = _QuickConnectServerInfoResponse;
+
+  const QuickConnectServerInfoResponse._();
+
+  factory QuickConnectServerInfoResponse.fromJson(Map<String, dynamic> json) {
+    return QuickConnectServerInfoResponse(
+      command: json['command'] ?? '',
+      errinfo: json['errinfo'],
+      errno: json['errno'],
+      sites: json['sites'] != null ? List<String>.from(json['sites']) : null,
+      suberrno: json['suberrno'],
+      version: json['version'],
+      getCaFingerprints: json['get_ca_fingerprints'],
+      server: json['server'] != null ? ServerInfo.fromJson(json['server']) : null,
+      smartdns: json['smartdns'] != null ? SmartDnsInfo.fromJson(json['smartdns']) : null,
+      service: json['service'] != null ? ServiceInfo.fromJson(json['service']) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{
+      'command': command,
+    };
+    
+    if (errinfo != null) data['errinfo'] = errinfo;
+    if (errno != null) data['errno'] = errno;
+    if (sites != null) data['sites'] = sites;
+    if (suberrno != null) data['suberrno'] = suberrno;
+    if (version != null) data['version'] = version;
+    if (getCaFingerprints != null) data['get_ca_fingerprints'] = getCaFingerprints;
+    if (server != null) data['server'] = server!.toJson();
+    if (smartdns != null) data['smartdns'] = smartdns!.toJson();
+    if (service != null) data['service'] = service!.toJson();
+    
+    return data;
+  }
+
+  /// 检查是否为成功响应
+  bool get isSuccess => errno == null || errno == 0;
+  
+  /// 检查是否为错误响应
+  bool get isError => errno != null && errno != 0;
+  
+  /// 获取错误信息
+  String? get errorMessage => isError ? errinfo : null;
+  
+  /// 获取错误代码
+  int? get errorCode => errno;
+  
+  /// 获取子错误代码
+  int? get subErrorCode => suberrno;
+  
+  /// 是否有可用站点
+  bool get hasSites => sites != null && sites!.isNotEmpty;
+  
+  /// 是否有服务器信息
+  bool get hasServerInfo => server != null;
+  
+  /// 是否有 SmartDNS 信息
+  bool get hasSmartDns => smartdns != null;
+  
+  /// 是否有服务信息
+  bool get hasServiceInfo => service != null;
+  
+  /// 调试信息
+  String get debugInfo {
+    return 'QuickConnectServerInfoResponse(\n'
+           '  command: $command,\n'
+           '  isSuccess: $isSuccess,\n'
+           '  errno: $errno,\n'
+           '  errinfo: $errinfo,\n'
+           '  sites: $sites,\n'
+           '  hasServerInfo: $hasServerInfo,\n'
+           '  hasSmartDns: $hasSmartDns,\n'
+           '  hasServiceInfo: $hasServiceInfo\n'
+           ')';
+  }
+}
+
 /// 服务器信息模型
 @freezed
 class ServerInfo with _$ServerInfo {

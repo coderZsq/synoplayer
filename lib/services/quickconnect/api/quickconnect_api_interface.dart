@@ -22,6 +22,17 @@ abstract class QuickConnectApiInterface {
   /// Returns: 服务器信息响应数据
   Future<ServerInfoResponse?> requestServerInfo(String quickConnectId);
   
+  /// 发送 QuickConnect 全球服务器信息请求（基于抓包分析）
+  /// 
+  /// [quickConnectId] QuickConnect ID
+  /// [getCaFingerprints] 是否获取 CA 指纹
+  /// 
+  /// Returns: QuickConnect 服务器信息响应数据
+  Future<QuickConnectServerInfoResponse?> requestQuickConnectServerInfo({
+    required String quickConnectId,
+    bool getCaFingerprints = true,
+  });
+  
   // ==================== 认证登录 API ====================
   
   /// 发送登录请求到群晖 Auth API

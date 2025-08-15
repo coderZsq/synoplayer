@@ -6,7 +6,7 @@ part of 'quickconnect_api_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$quickConnectApiHash() => r'96c2260e6f61e93a3424aad5737bbc1cccc4abe2';
+String _$quickConnectApiHash() => r'57967c02f3e5c2bb5bf5e4c53e5cccc1de49faed';
 
 /// QuickConnect API 提供者
 ///
@@ -29,7 +29,7 @@ final quickConnectApiProvider =
 // ignore: unused_element
 typedef QuickConnectApiRef = AutoDisposeProviderRef<QuickConnectApiInterface>;
 String _$quickConnectApiImplHash() =>
-    r'e2ce979d0a10c442b2287660800ee758fe0a11b6';
+    r'ff26f16ef09afebcf79d087b4e07d0383a17cddf';
 
 /// QuickConnect API 实现提供者
 ///

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'core/index.dart';
 import 'features/dashboard/pages/main_page.dart';
@@ -115,33 +114,7 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
     }
   }
 
-  /// 调试：显示所有存储的键
-  Future<void> _debugShowAllStoredKeys(CredentialsService service) async {
-    try {
-      // 尝试读取所有可能的键
-      const keys = [
-        'quickconnect_id',
-        'username', 
-        'password',
-        'working_address',
-        'session_id',
-        'login_time',
-        'remember_credentials',
-      ];
-      
-      AppLogger.debug('🔑 检查所有存储的键:');
-      for (final key in keys) {
-        try {
-          final value = await const FlutterSecureStorage().read(key: key);
-          AppLogger.debug('  $key: ${value ?? "null"}');
-        } catch (e) {
-          AppLogger.debug('  $key: 读取失败 - $e');
-        }
-      }
-    } catch (e) {
-      AppLogger.error('调试键检查失败', error: e);
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {

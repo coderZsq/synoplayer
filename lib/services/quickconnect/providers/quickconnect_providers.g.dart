@@ -7,7 +7,7 @@ part of 'quickconnect_providers.dart';
 // **************************************************************************
 
 String _$quickConnectAuthServiceHash() =>
-    r'3737c0a1215b0cdddbd80d637951d01f65b3a773';
+    r'71db318803e146f7a8e440cbcf4d93ab10ab7cc3';
 
 /// QuickConnect 认证服务 Provider
 ///
@@ -29,7 +29,7 @@ final quickConnectAuthServiceProvider =
 typedef QuickConnectAuthServiceRef =
     AutoDisposeProviderRef<QuickConnectAuthService>;
 String _$quickConnectConnectionServiceHash() =>
-    r'f14e93ab4a94923dadb3c32df4b07f765e3e4ced';
+    r'b99e824b68d450b3a48454b00f0087007a6e1ba2';
 
 /// QuickConnect 连接服务 Provider
 ///
@@ -51,7 +51,7 @@ final quickConnectConnectionServiceProvider =
 typedef QuickConnectConnectionServiceRef =
     AutoDisposeProviderRef<QuickConnectConnectionService>;
 String _$quickConnectAddressResolverHash() =>
-    r'bdd9b3ca42c7e04c6da76aadd09e263034159003';
+    r'92d239a4eb91a7d78445d1617166eac947e8dd0b';
 
 /// QuickConnect 地址解析服务 Provider
 ///
@@ -73,7 +73,7 @@ final quickConnectAddressResolverProvider =
 typedef QuickConnectAddressResolverRef =
     AutoDisposeProviderRef<QuickConnectAddressResolver>;
 String _$quickConnectSmartLoginServiceHash() =>
-    r'05849511b2c0a76a6cf40d5e3146d2f762ea6be1';
+    r'f1935015239283ec4943fca3dbf72cde1fa3cc74';
 
 /// QuickConnect 智能登录服务 Provider
 ///
@@ -95,7 +95,7 @@ final quickConnectSmartLoginServiceProvider =
 typedef QuickConnectSmartLoginServiceRef =
     AutoDisposeProviderRef<QuickConnectSmartLoginService>;
 String _$quickConnectServiceHash() =>
-    r'0f18c42839ead6213354cf1b44272220804ddb64';
+    r'311cfdacd3461d07172f74f88ca99686ad84db47';
 
 /// QuickConnect 主服务 Provider - 统一入口
 ///

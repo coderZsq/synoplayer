@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../core/network/providers/network_providers.dart';
-import '../api/quickconnect_api_interface.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../auth_service.dart';
 import '../connection_service.dart';
 import '../address_resolver.dart';
@@ -12,28 +11,28 @@ part 'quickconnect_providers.g.dart';
 
 /// QuickConnect 认证服务 Provider
 @riverpod
-QuickConnectAuthService quickConnectAuthService(QuickConnectAuthServiceRef ref) {
+QuickConnectAuthService quickConnectAuthService(Ref ref) {
   final api = ref.watch(quickConnectApiProvider);
   return QuickConnectAuthService(api);
 }
 
 /// QuickConnect 连接服务 Provider
 @riverpod
-QuickConnectConnectionService quickConnectConnectionService(QuickConnectConnectionServiceRef ref) {
+QuickConnectConnectionService quickConnectConnectionService(Ref ref) {
   final api = ref.watch(quickConnectApiProvider);
   return QuickConnectConnectionService(api);
 }
 
 /// QuickConnect 地址解析服务 Provider
 @riverpod
-QuickConnectAddressResolver quickConnectAddressResolver(QuickConnectAddressResolverRef ref) {
+QuickConnectAddressResolver quickConnectAddressResolver(Ref ref) {
   final api = ref.watch(quickConnectApiProvider);
   return QuickConnectAddressResolver(api);
 }
 
 /// QuickConnect 智能登录服务 Provider
 @riverpod
-QuickConnectSmartLoginService quickConnectSmartLoginService(QuickConnectSmartLoginServiceRef ref) {
+QuickConnectSmartLoginService quickConnectSmartLoginService(Ref ref) {
   final connectionService = ref.watch(quickConnectConnectionServiceProvider);
   final authService = ref.watch(quickConnectAuthServiceProvider);
   return QuickConnectSmartLoginService(connectionService, authService);
@@ -41,7 +40,7 @@ QuickConnectSmartLoginService quickConnectSmartLoginService(QuickConnectSmartLog
 
 /// QuickConnect 主服务 Provider - 统一入口
 @riverpod
-QuickConnectService quickConnectService(QuickConnectServiceRef ref) {
+QuickConnectService quickConnectService(Ref ref) {
   return QuickConnectService(
     addressResolver: ref.watch(quickConnectAddressResolverProvider),
     authService: ref.watch(quickConnectAuthServiceProvider),

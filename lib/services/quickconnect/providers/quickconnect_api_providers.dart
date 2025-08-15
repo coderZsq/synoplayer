@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/network/providers/network_providers.dart';
 import '../api/quickconnect_api_interface.dart';
 import '../api/quickconnect_api_impl.dart';
@@ -9,7 +10,7 @@ part 'quickconnect_api_providers.g.dart';
 /// 
 /// 负责创建和管理 QuickConnect API 实例
 @riverpod
-QuickConnectApiInterface quickConnectApi(QuickConnectApiRef ref) {
+QuickConnectApiInterface quickConnectApi(Ref ref) {
   final apiClient = ref.watch(apiClientProvider);
   return QuickConnectApiImpl(apiClient);
 }
@@ -18,7 +19,7 @@ QuickConnectApiInterface quickConnectApi(QuickConnectApiRef ref) {
 /// 
 /// 直接提供具体实现，用于需要访问实现特定功能的场景
 @riverpod
-QuickConnectApiImpl quickConnectApiImpl(QuickConnectApiImplRef ref) {
+QuickConnectApiImpl quickConnectApiImpl(Ref ref) {
   final apiClient = ref.watch(apiClientProvider);
   return QuickConnectApiImpl(apiClient);
 }
