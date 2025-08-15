@@ -38,6 +38,10 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   flutter_riverpod: ^2.4.9
   
+  # 网络请求框架
+  dio: ^5.4.0
+  connectivity_plus: ^5.0.2
+  
   # JSON serialization
   json_annotation: ^4.9.0
   

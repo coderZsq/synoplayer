@@ -1,15 +1,19 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'constants/quickconnect_constants.dart';
 import 'models/login_result.dart';
-import 'utils/logger.dart';
+import '../../core/network/index.dart';
+import '../../core/utils/logger.dart';
 
 /// QuickConnect 认证服务
 class QuickConnectAuthService {
+  QuickConnectAuthService(this._apiClient);
+  
+  final ApiClient _apiClient;
   static const String _tag = 'AuthService';
 
   /// 登录群晖 Auth API 获取 SID
-  static Future<LoginResult> login({
+  Future<LoginResult> login({
     required String baseUrl,
     required String username,
     required String password,
@@ -33,11 +37,6 @@ class QuickConnectAuthService {
 
       // 3. 发送登录请求
       final response = await _sendLoginRequest(baseUrl, params);
-      if (response == null) {
-        return LoginResult.failure(errorMessage: '网络请求失败');
-      }
-
-      // 4. 处理登录响应
       return _handleLoginResponse(response);
       
     } catch (e) {
@@ -47,7 +46,7 @@ class QuickConnectAuthService {
   }
 
   /// 验证登录输入参数
-  static LoginResult? _validateLoginInputs(String username, String password) {
+  LoginResult? _validateLoginInputs(String username, String password) {
     if (username.trim().isEmpty || password.trim().isEmpty) {
       AppLogger.error('用户名或密码不能为空', tag: _tag);
       return LoginResult.failure(errorMessage: '用户名或密码不能为空');
@@ -56,7 +55,7 @@ class QuickConnectAuthService {
   }
 
   /// 构建登录请求参数
-  static Map<String, String> _buildLoginParams(String username, String password, String? otpCode) {
+  Map<String, String> _buildLoginParams(String username, String password, String? otpCode) {
     final params = <String, String>{
       'api': 'SYNO.API.Auth',
       'version': QuickConnectConstants.apiVersion3.toString(),
@@ -76,54 +75,74 @@ class QuickConnectAuthService {
   }
 
   /// 发送登录请求
-  static Future<http.Response?> _sendLoginRequest(String baseUrl, Map<String, String> params) async {
+  Future<ApiResponse<Map<String, dynamic>>> _sendLoginRequest(String baseUrl, Map<String, String> params) async {
     try {
-      final url = Uri.parse('$baseUrl/webapi/auth.cgi');
+      final url = '$baseUrl/webapi/auth.cgi';
       AppLogger.network('登录API地址: $url', tag: _tag);
 
-      final response = await http.post(url, body: params)
-          .timeout(QuickConnectConstants.loginTimeout);
-
-      AppLogger.network('收到登录响应，状态码: ${response.statusCode}', tag: _tag);
-      AppLogger.debug('响应内容: ${response.body}', tag: _tag);
+      // 使用新的网络层发送请求
+      final response = await _apiClient.post<Map<String, dynamic>>(
+        url,
+        data: params,
+        options: Options(
+          sendTimeout: QuickConnectConstants.loginTimeout,
+          receiveTimeout: QuickConnectConstants.loginTimeout,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        ),
+        fromJson: (data) {
+          // data 可能是 String 或已经解析的 Map
+          if (data is String) {
+            return jsonDecode(data) as Map<String, dynamic>;
+          } else {
+            return data as Map<String, dynamic>;
+          }
+        },
+      );
 
       return response;
     } catch (e) {
       AppLogger.error('发送登录请求失败: $e', tag: _tag);
-      return null;
+      return ApiResponse.error(
+        message: '登录请求失败: $e',
+        statusCode: 0,
+        error: e,
+      );
     }
   }
 
   /// 处理登录响应
-  static LoginResult _handleLoginResponse(http.Response response) {
-    if (response.statusCode != 200) {
-      AppLogger.error('HTTP 请求失败，状态码: ${response.statusCode}', tag: _tag);
-      return LoginResult.failure(errorMessage: '网络请求失败，状态码: ${response.statusCode}');
-    }
-
-    try {
-      final data = jsonDecode(response.body);
-      
-      if (data['success'] == true) {
-        return _handleSuccessfulLogin(data);
-      } else {
-        return _handleFailedLogin(data);
-      }
-    } catch (e) {
-      AppLogger.error('解析登录响应失败: $e', tag: _tag);
-      return LoginResult.failure(errorMessage: '响应格式错误');
-    }
+  LoginResult _handleLoginResponse(ApiResponse<Map<String, dynamic>> response) {
+    return response.when(
+      success: (data, statusCode, message, extra) {
+        try {
+          if (data['success'] == true) {
+            return _handleSuccessfulLogin(data);
+          } else {
+            return _handleFailedLogin(data);
+          }
+        } catch (e) {
+          AppLogger.error('解析登录响应失败: $e', tag: _tag);
+          return LoginResult.failure(errorMessage: '响应格式错误');
+        }
+      },
+      error: (message, statusCode, errorCode, error, extra) {
+        AppLogger.error('登录请求失败: $message', tag: _tag);
+        return LoginResult.failure(errorMessage: message);
+      },
+    );
   }
 
   /// 处理成功登录
-  static LoginResult _handleSuccessfulLogin(Map<String, dynamic> data) {
+  LoginResult _handleSuccessfulLogin(Map<String, dynamic> data) {
     final sid = data['data']['sid'];
     AppLogger.success('登录成功! SID: $sid', tag: _tag);
     return LoginResult.success(sid: sid);
   }
 
   /// 处理失败登录
-  static LoginResult _handleFailedLogin(Map<String, dynamic> data) {
+  LoginResult _handleFailedLogin(Map<String, dynamic> data) {
     final errorCode = data['error']?['code'];
     final errorInfo = data['error']?['errors'];
     
@@ -141,7 +160,7 @@ class QuickConnectAuthService {
   }
 
   /// 处理二次验证
-  static LoginResult _handleTwoFactorAuth(Map<String, dynamic> errorInfo) {
+  LoginResult _handleTwoFactorAuth(Map<String, dynamic> errorInfo) {
     final token = errorInfo['token'];
     final types = errorInfo['types'] as List<dynamic>?;
     
@@ -164,7 +183,7 @@ class QuickConnectAuthService {
   }
 
   /// 使用指定地址进行 OTP 登录
-  static Future<LoginResult> loginWithOTPAtAddress({
+  Future<LoginResult> loginWithOTPAtAddress({
     required String baseUrl,
     required String username,
     required String password,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'quickconnect_service.dart';
+import 'services/quickconnect/index.dart';
 import 'credentials_service.dart';
 import 'main_page.dart';
 import 'theme_service.dart';
@@ -180,14 +180,14 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
   }
 }
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final idCtrl = TextEditingController();
   final userCtrl = TextEditingController();
   final passCtrl = TextEditingController();
@@ -207,13 +207,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // 设置日志回调
-    QuickConnectService.setLogCallback((message) {
-      setState(() {
-        log += '$message\n';
-      });
-    });
-    
     // 自动登录
     _autoLogin();
   }
@@ -267,7 +260,9 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      final isConnected = await QuickConnectService.testConnection(resolvedUrl!);
+      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final result = await quickConnectService.testConnection(resolvedUrl!);
+      final isConnected = result.isConnected;
       setState(() {
         this.isConnected = isConnected;
       });
@@ -302,7 +297,8 @@ class _LoginPageState extends State<LoginPage> {
       appendLog('🔍 开始解析 QuickConnect 地址...');
       
       // 获取所有可用地址
-      final addresses = await QuickConnectService.getAllAvailableAddresses(idCtrl.text.trim());
+      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final addresses = await quickConnectService.getAllAvailableAddresses(idCtrl.text.trim());
       
       if (addresses.isNotEmpty) {
         setState(() {
@@ -344,7 +340,8 @@ class _LoginPageState extends State<LoginPage> {
     try {
       appendLog('🔐 开始登录流程...');
       
-      final result = await QuickConnectService.login(
+      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final result = await quickConnectService.login(
         baseUrl: resolvedUrl!,
         username: userCtrl.text.trim(),
         password: passCtrl.text.trim(),
@@ -415,7 +412,8 @@ class _LoginPageState extends State<LoginPage> {
       
       appendLog('📍 使用已验证的地址: $targetAddress');
       
-      final result = await QuickConnectService.loginWithOTPAtAddress(
+      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final result = await quickConnectService.loginWithOTPAtAddress(
         baseUrl: targetAddress,
         username: userCtrl.text.trim(),
         password: passCtrl.text.trim(),
@@ -475,7 +473,8 @@ class _LoginPageState extends State<LoginPage> {
       appendLog('🚀 开始智能登录流程...');
       appendLog('系统将自动尝试所有可用地址进行登录');
       
-      final result = await QuickConnectService.smartLogin(
+      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final result = await quickConnectService.smartLogin(
         quickConnectId: idCtrl.text.trim(),
         username: userCtrl.text.trim(),
         password: passCtrl.text.trim(),

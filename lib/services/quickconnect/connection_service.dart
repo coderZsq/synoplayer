@@ -1,40 +1,70 @@
-import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'constants/quickconnect_constants.dart';
 import './models/quickconnect_models.dart';
-import 'utils/logger.dart';
+import '../../core/utils/logger.dart';
+import '../../core/network/index.dart';
 import 'address_resolver.dart';
 
 /// QuickConnect 连接服务
 class QuickConnectConnectionService {
+  QuickConnectConnectionService(this._apiClient);
+  
+  final ApiClient _apiClient;
   static const String _tag = 'ConnectionService';
 
   /// 测试连接是否可用
-  static Future<ConnectionTestResult> testConnection(String baseUrl) async {
+  Future<ConnectionTestResult> testConnection(String baseUrl) async {
     final stopwatch = Stopwatch()..start();
     
     try {
       AppLogger.info('测试连接可用性: $baseUrl', tag: _tag);
       
-      final url = Uri.parse('$baseUrl/webapi/query.cgi?api=SYNO.API.Info&version=1&method=query&query=SYNO.API.Auth');
+      final url = '$baseUrl/webapi/query.cgi';
+      final queryParams = {
+        'api': 'SYNO.API.Info',
+        'version': '1',
+        'method': 'query',
+        'query': 'SYNO.API.Auth',
+      };
       
-      final response = await http.get(url).timeout(QuickConnectConstants.connectionTestTimeout);
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        url,
+        queryParameters: queryParams,
+        options: Options(
+          receiveTimeout: QuickConnectConstants.connectionTestTimeout,
+          sendTimeout: QuickConnectConstants.connectionTestTimeout,
+        ),
+        fromJson: (data) {
+          // data 可能是 String 或已经解析的 Map
+          if (data is String) {
+            return jsonDecode(data) as Map<String, dynamic>;
+          } else {
+            return data as Map<String, dynamic>;
+          }
+        },
+      );
+      
       stopwatch.stop();
       
-      if (response.statusCode == 200) {
-        AppLogger.success('连接测试成功', tag: _tag);
-        return ConnectionTestResult.success(
-          baseUrl, 
-          response.statusCode, 
-          stopwatch.elapsed
-        );
-      } else {
-        AppLogger.error('连接测试失败，状态码: ${response.statusCode}', tag: _tag);
-        return ConnectionTestResult.failure(
-          baseUrl, 
-          'HTTP状态码: ${response.statusCode}', 
-          stopwatch.elapsed
-        );
-      }
+      return response.when(
+        success: (data, statusCode, message, extra) {
+          AppLogger.success('连接测试成功', tag: _tag);
+          return ConnectionTestResult.success(
+            baseUrl, 
+            statusCode, 
+            stopwatch.elapsed
+          );
+        },
+        error: (message, statusCode, errorCode, error, extra) {
+          AppLogger.error('连接测试失败: $message', tag: _tag);
+          return ConnectionTestResult.failure(
+            baseUrl, 
+            message, 
+            stopwatch.elapsed
+          );
+        },
+      );
     } catch (e) {
       stopwatch.stop();
       AppLogger.error('连接测试异常: $e', tag: _tag);
@@ -47,11 +77,12 @@ class QuickConnectConnectionService {
   }
 
   /// 获取所有可用的连接地址
-  static Future<List<String>> getAllAvailableAddresses(String quickConnectId) async {
+  Future<List<String>> getAllAvailableAddresses(String quickConnectId) async {
     try {
       AppLogger.info('获取 QuickConnect ID 的所有可用地址: $quickConnectId', tag: _tag);
       
-      final addresses = await QuickConnectAddressResolver.getAllAddressesWithDetails(quickConnectId);
+      final addressResolver = QuickConnectAddressResolver(_apiClient);
+      final addresses = await addressResolver.getAllAddressesWithDetails(quickConnectId);
       return addresses.map((addr) => addr.url).toList();
       
     } catch (e) {
@@ -61,11 +92,12 @@ class QuickConnectConnectionService {
   }
 
   /// 获取所有可用的连接地址详细信息
-  static Future<List<AddressInfo>> getAllAvailableAddressesWithDetails(String quickConnectId) async {
+  Future<List<AddressInfo>> getAllAvailableAddressesWithDetails(String quickConnectId) async {
     try {
       AppLogger.info('获取 QuickConnect ID 的所有地址详细信息: $quickConnectId', tag: _tag);
       
-      return await QuickConnectAddressResolver.getAllAddressesWithDetails(quickConnectId);
+      final addressResolver = QuickConnectAddressResolver(_apiClient);
+      return await addressResolver.getAllAddressesWithDetails(quickConnectId);
       
     } catch (e) {
       AppLogger.error('获取地址详细信息时发生异常: $e', tag: _tag);
@@ -74,7 +106,7 @@ class QuickConnectConnectionService {
   }
 
   /// 批量测试连接
-  static Future<List<ConnectionTestResult>> testMultipleConnections(List<String> urls) async {
+  Future<List<ConnectionTestResult>> testMultipleConnections(List<String> urls) async {
     final results = <ConnectionTestResult>[];
     
     for (final url in urls) {
@@ -91,7 +123,7 @@ class QuickConnectConnectionService {
   }
 
   /// 测试连接并返回最佳地址
-  static Future<String?> findBestConnection(List<String> urls) async {
+  Future<String?> findBestConnection(List<String> urls) async {
     try {
       AppLogger.info('开始寻找最佳连接，共 ${urls.length} 个地址', tag: _tag);
       
@@ -119,7 +151,7 @@ class QuickConnectConnectionService {
   }
 
   /// 获取连接统计信息
-  static Map<String, dynamic> getConnectionStats(List<ConnectionTestResult> results) {
+  Map<String, dynamic> getConnectionStats(List<ConnectionTestResult> results) {
     final total = results.length;
     final successful = results.where((r) => r.isConnected).length;
     final failed = total - successful;

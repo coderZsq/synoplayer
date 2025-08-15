@@ -1,15 +1,19 @@
 import 'models/login_result.dart';
 import './models/quickconnect_models.dart';
-import 'utils/logger.dart';
+import '../../core/utils/logger.dart';
 import 'auth_service.dart';
 import 'connection_service.dart';
 
 /// QuickConnect 智能登录服务
 class QuickConnectSmartLoginService {
+  QuickConnectSmartLoginService(this._connectionService, this._authService);
+  
+  final QuickConnectConnectionService _connectionService;
+  final QuickConnectAuthService _authService;
   static const String _tag = 'SmartLoginService';
 
   /// 智能登录 - 自动尝试所有可用地址
-  static Future<LoginResult> smartLogin({
+  Future<LoginResult> smartLogin({
     required String quickConnectId,
     required String username,
     required String password,
@@ -21,7 +25,7 @@ class QuickConnectSmartLoginService {
       AppLogger.info('用户名: $username', tag: _tag);
       
       // 获取所有可用地址详细信息
-      final addresses = await QuickConnectConnectionService.getAllAvailableAddressesWithDetails(quickConnectId);
+      final addresses = await _connectionService.getAllAvailableAddressesWithDetails(quickConnectId);
       
       if (addresses.isEmpty) {
         return LoginResult.failure(errorMessage: '未找到可用的连接地址');
@@ -37,7 +41,7 @@ class QuickConnectSmartLoginService {
         
         try {
           // 测试连接
-          final connectionResult = await QuickConnectConnectionService.testConnection(addressInfo.url);
+          final connectionResult = await _connectionService.testConnection(addressInfo.url);
           
           if (connectionResult.isConnected) {
             AppLogger.success('连接测试成功，响应时间: ${connectionResult.responseTime.inMilliseconds}ms', tag: _tag);
@@ -48,7 +52,7 @@ class QuickConnectSmartLoginService {
           }
           
           // 尝试登录
-          final result = await QuickConnectAuthService.login(
+          final result = await _authService.login(
             baseUrl: addressInfo.url,
             username: username,
             password: password,
@@ -89,7 +93,7 @@ class QuickConnectSmartLoginService {
   }
 
   /// 智能登录并返回详细结果
-  static Future<SmartLoginResult> smartLoginWithDetails({
+  Future<SmartLoginResult> smartLoginWithDetails({
     required String quickConnectId,
     required String username,
     required String password,
@@ -99,7 +103,7 @@ class QuickConnectSmartLoginService {
       AppLogger.userAction('开始智能登录流程（详细模式）', tag: _tag);
       
       // 获取所有可用地址详细信息
-      final addresses = await QuickConnectConnectionService.getAllAvailableAddressesWithDetails(quickConnectId);
+      final addresses = await _connectionService.getAllAvailableAddressesWithDetails(quickConnectId);
       
       if (addresses.isEmpty) {
         return SmartLoginResult.failure(
@@ -125,12 +129,12 @@ class QuickConnectSmartLoginService {
         
         try {
           // 测试连接
-          final connectionResult = await QuickConnectConnectionService.testConnection(addressInfo.url);
+          final connectionResult = await _connectionService.testConnection(addressInfo.url);
           final attemptWithConnection = attempt.copyWith(connectionResult: connectionResult);
           
           if (connectionResult.isConnected) {
             // 尝试登录
-            final loginResult = await QuickConnectAuthService.login(
+            final loginResult = await _authService.login(
               baseUrl: addressInfo.url,
               username: username,
               password: password,
@@ -195,7 +199,7 @@ class QuickConnectSmartLoginService {
   }
 
   /// 生成登录统计信息
-  static Map<String, dynamic> _generateLoginStats(List<LoginAttempt> attempts) {
+  Map<String, dynamic> _generateLoginStats(List<LoginAttempt> attempts) {
     final total = attempts.length;
     final connected = attempts.where((a) => a.connectionResult?.isConnected == true).length;
     final loginSuccess = attempts.where((a) => a.loginResult?.isSuccess == true).length;
