@@ -51,18 +51,7 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
   Future<void> _checkLoginStatus() async {
     try {
       final credentialsService = CredentialsService();
-
-      // 首先测试存储功能
-      final storageTest = await credentialsService.testStorage();
-      AppLogger.debug('🧪 存储功能测试结果: $storageTest');
       
-      // 测试凭据保存功能
-      final credentialsTest = await credentialsService.testCredentialsSave();
-      AppLogger.debug('🧪 凭据保存测试结果: $credentialsTest');
-      
-      // 显示存储的所有键（调试用）
-      await _debugShowAllStoredKeys(credentialsService);
-
       // 先检查是否有保存的凭据
       final credentials = await credentialsService.getCredentials();
       AppLogger.debug('🔍 检查保存的凭据: $credentials');

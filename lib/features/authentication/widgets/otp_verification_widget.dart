@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../services/quickconnect/index.dart';
+import '../../../core/services/index.dart';
 
 /// OTP验证组件
 /// 
@@ -12,6 +13,8 @@ class OtpVerificationWidget extends ConsumerStatefulWidget {
     required this.workingAddress,
     required this.username,
     required this.password,
+    required this.quickConnectId,
+    required this.rememberCredentials,
     required this.onLoginSuccess,
     required this.onLog,
     required this.onCancel,
@@ -21,6 +24,8 @@ class OtpVerificationWidget extends ConsumerStatefulWidget {
   final String workingAddress;
   final String username;
   final String password;
+  final String quickConnectId;
+  final bool rememberCredentials;
   final Function(String sid) onLoginSuccess;
   final Function(String message) onLog;
   final VoidCallback onCancel;
@@ -86,6 +91,16 @@ class _OtpVerificationWidgetState extends ConsumerState<OtpVerificationWidget>
 
       if (result.isSuccess) {
         widget.onLog('🎉 OTP 验证成功，登录完成!');
+        
+        // 保存登录凭据
+        if (widget.rememberCredentials) {
+          widget.onLog('💾 开始保存登录凭据...');
+          await _saveCredentials(result.sid!);
+          widget.onLog('💾 登录凭据保存流程完成');
+        } else {
+          widget.onLog('⚠️ 未选择记住凭据，不会保存登录信息');
+        }
+        
         widget.onLoginSuccess(result.sid!);
       } else {
         widget.onLog('❌ OTP 验证失败: ${result.errorMessage}');
@@ -95,6 +110,38 @@ class _OtpVerificationWidgetState extends ConsumerState<OtpVerificationWidget>
     } catch (e) {
       widget.onLog('❌ OTP 验证异常: $e');
       _otpCtrl.clear();
+    }
+  }
+
+  /// 保存登录凭据
+  Future<void> _saveCredentials(String sid) async {
+    try {
+      final credentialsService = CredentialsService();
+      final credentials = LoginCredentials(
+        quickConnectId: widget.quickConnectId,
+        username: widget.username,
+        password: widget.password,
+        workingAddress: widget.workingAddress,
+        sid: sid,
+        loginTime: DateTime.now(),
+        rememberCredentials: widget.rememberCredentials,
+      );
+      
+      widget.onLog('🔧 准备保存凭据: rememberCredentials=${widget.rememberCredentials}');
+      widget.onLog('🔧 SID: $sid');
+      widget.onLog('🔧 工作地址: ${widget.workingAddress}');
+      
+      await credentialsService.saveCredentials(credentials);
+      
+      // 验证保存是否成功
+      final savedCredentials = await credentialsService.getCredentials();
+      if (savedCredentials != null) {
+        widget.onLog('✅ 凭据保存成功，SID: ${savedCredentials.sid}');
+      } else {
+        widget.onLog('❌ 凭据保存失败：未能读取保存的凭据');
+      }
+    } catch (e) {
+      widget.onLog('❌ 保存凭据失败: $e');
     }
   }
 

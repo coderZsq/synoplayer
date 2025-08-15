@@ -19,7 +19,7 @@ class SmartLoginFormWidget extends ConsumerStatefulWidget {
 
   final Function(String sid, String workingAddress, String username, String quickConnectId) onLoginSuccess;
   final Function(String message) onLog;
-  final Function(String? workingAddress, String username, String password) onOtpRequired;
+  final Function(String? workingAddress, String username, String password, String quickConnectId, bool rememberCredentials) onOtpRequired;
   final bool isLoading;
   final Function(bool loading) onLoadingChanged;
 
@@ -121,6 +121,8 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
           result.availableAddress, 
           _usernameCtrl.text.trim(), 
           _passwordCtrl.text.trim(),
+          _quickConnectIdCtrl.text.trim(),
+          _rememberCredentials,
         );
       } else {
         widget.onLog('❌ 智能登录失败: ${result.errorMessage}');

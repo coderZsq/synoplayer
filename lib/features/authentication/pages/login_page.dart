@@ -28,6 +28,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   // OTP相关
   bool _showOtpVerification = false;
   String? _otpWorkingAddress;
+  bool _rememberCredentials = true;
 
   @override
   void initState() {
@@ -84,12 +85,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   /// 需要OTP验证回调
-  void _onOtpRequired(String? workingAddress, String username, String password) {
+  void _onOtpRequired(String? workingAddress, String username, String password, String quickConnectId, bool rememberCredentials) {
     setState(() {
       _showOtpVerification = true;
       _otpWorkingAddress = workingAddress;
       _username = username;
       _password = password;
+      _quickConnectId = quickConnectId;
+      _rememberCredentials = rememberCredentials;
     });
   }
 
@@ -141,6 +144,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   workingAddress: _otpWorkingAddress!,
                   username: _username,
                   password: _password,
+                  quickConnectId: _quickConnectId,
+                  rememberCredentials: _rememberCredentials,
                   onLoginSuccess: (sid) => _onLoginSuccess(sid, _otpWorkingAddress!),
                   onLog: _appendLog,
                   onCancel: _onCancelOtp,
