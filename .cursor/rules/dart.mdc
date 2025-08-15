@@ -10,6 +10,15 @@ name: "Dart & Flutter Best Practices"
 description: "Dart 和 Flutter 开发的最佳实践规范"
 
 rules:
+  # ==== 硬性规定 ====
+  硬性规则：每个方法不得超过 50 行代码
+  Widget build 方法不超过 40 行
+  超过限制时必须提取为私有方法或独立 Widget
+  initState、dispose 等生命周期方法不超过 20 行
+  不要放过任何的警告，能修复尽量修复警告
+  执行编译时请用 ios 进行编译
+  必须代码可以编译通过
+
   # ==== 命名规范 ====
   naming_conventions:
     - rule: "使用 lowerCamelCase 命名变量、方法、参数"
