@@ -6,7 +6,7 @@ part of 'quickconnect_api_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$useRetrofitApiHash() => r'a9df44273dea8ed9fcee5ad805adabe30db8f815';
+String _$useRetrofitApiHash() => r'044fa5a679cd6855d7b35e4219e5f6aea18b9125';
 
 /// 功能开关 Provider - 控制是否使用 Retrofit
 ///
@@ -28,7 +28,7 @@ final useRetrofitApiProvider = AutoDisposeProvider<bool>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UseRetrofitApiRef = AutoDisposeProviderRef<bool>;
-String _$quickConnectApiHash() => r'41fdd6b045f6d692383051159275f1c735aae8b1';
+String _$quickConnectApiHash() => r'e4007bee53557d6671773106488c0c797f5c5c7a';
 
 /// QuickConnect API 提供者
 ///
@@ -96,7 +96,7 @@ final quickConnectRetrofitApiProvider =
 typedef QuickConnectRetrofitApiRef
     = AutoDisposeProviderRef<QuickConnectRetrofitApi>;
 String _$quickConnectApiAdapterHash() =>
-    r'1d03ab356a6880265638434b8fb474c135ca35bc';
+    r'84ebe9ace2e623cc973e10bf85e750acbc01036b';
 
 /// 适配器 API 提供者 (用于测试和调试)
 ///

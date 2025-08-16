@@ -1,9 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import '../models/quickconnect_models.dart';
-import '../models/login_result.dart';
 
 part 'quickconnect_retrofit_api.g.dart';
+
+/// 简单的 JSON 响应类型，避免 Retrofit 序列化问题
+class JsonResponse {
+  final Map<String, dynamic> data;
+  
+  JsonResponse(this.data);
+  
+  Map<String, dynamic> toJson() => data;
+  
+  factory JsonResponse.fromJson(Map<String, dynamic> json) => JsonResponse(json);
+}
 
 /// QuickConnect Retrofit API 接口
 /// 
@@ -16,19 +26,25 @@ abstract class QuickConnectRetrofitApi {
   // ==================== 地址解析 API ====================
   
   /// 发送隧道请求获取中继服务器信息
+  /// 使用 QuickConnect 隧道服务 URL
+  @RestApi(baseUrl: "https://global.quickconnect.to")
   @POST('/Serv.php')
   Future<TunnelResponse> requestTunnel(
     @Body() Map<String, dynamic> requestBody,
   );
   
   /// 发送服务器信息请求
+  /// 使用 QuickConnect 服务器信息服务 URL
+  @RestApi(baseUrl: "https://cnc.quickconnect.cn")
   @POST('/Serv.php')
   Future<ServerInfoResponse> requestServerInfo(
     @Body() Map<String, dynamic> requestBody,
   );
   
   /// 发送 QuickConnect 全球服务器信息请求
-  @POST('https://global.quickconnect.to/Serv.php')
+  /// 使用 QuickConnect 全球服务 URL
+  @RestApi(baseUrl: "https://global.quickconnect.to")
+  @POST('/Serv.php')
   Future<QuickConnectServerInfoResponse> requestQuickConnectServerInfo(
     @Body() Map<String, dynamic> requestBody,
   );
@@ -36,8 +52,9 @@ abstract class QuickConnectRetrofitApi {
   // ==================== 认证登录 API ====================
   
   /// 发送登录请求到群晖 Auth API
+  /// 使用动态 baseUrl
   @GET('/webapi/auth.cgi')
-  Future<Map<String, dynamic>> requestLogin(
+  Future<JsonResponse> requestLogin(
     @Query('api') String api,
     @Query('version') String version,
     @Query('method') String method,
@@ -51,8 +68,9 @@ abstract class QuickConnectRetrofitApi {
   // ==================== 连接测试 API ====================
   
   /// 测试连接可用性
+  /// 使用动态 baseUrl
   @GET('/webapi/query.cgi')
-  Future<Map<String, dynamic>> testConnection(
+  Future<JsonResponse> testConnection(
     @Query('api') String api,
     @Query('version') String version,
     @Query('method') String method,

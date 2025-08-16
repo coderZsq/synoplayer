@@ -23,11 +23,11 @@ bool useRetrofitApi(Ref ref) {
 /// 根据配置选择使用适配器或直接实现
 @riverpod
 QuickConnectApiInterface quickConnectApi(Ref ref) {
-  final useRetrofit = ref.watch(useRetrofitApiProvider);
   final apiClient = ref.watch(apiClientProvider);
-  
-  // 总是创建适配器，让适配器内部决定使用哪种实现
   final dio = ref.watch(dioProvider);
+  
+  // 创建 Retrofit API 实例，使用默认的 QuickConnect 服务 URL
+  // 注意：具体的 baseUrl 会在调用时动态设置
   final retrofitApi = QuickConnectRetrofitApi(dio);
   
   return QuickConnectApiAdapter(
@@ -40,21 +40,21 @@ QuickConnectApiInterface quickConnectApi(Ref ref) {
 /// 
 /// 直接提供具体实现，用于需要访问实现特定功能的场景
 @riverpod
-QuickConnectApiImpl quickConnectApiImpl(QuickConnectApiImplRef ref) {
+QuickConnectApiImpl quickConnectApiImpl(Ref ref) {
   final apiClient = ref.watch(apiClientProvider);
   return QuickConnectApiImpl(apiClient);
 }
 
 /// Retrofit API 提供者 (用于测试和调试)
 @riverpod
-QuickConnectRetrofitApi quickConnectRetrofitApi(QuickConnectRetrofitApiRef ref) {
+QuickConnectRetrofitApi quickConnectRetrofitApi(Ref ref) {
   final dio = ref.watch(dioProvider);
   return QuickConnectRetrofitApi(dio);
 }
 
 /// 适配器 API 提供者 (用于测试和调试)
 @riverpod
-QuickConnectApiAdapter quickConnectApiAdapter(QuickConnectApiAdapterRef ref) {
+QuickConnectApiAdapter quickConnectApiAdapter(Ref ref) {
   final apiClient = ref.watch(apiClientProvider);
   final dio = ref.watch(dioProvider);
   final retrofitApi = QuickConnectRetrofitApi(dio);

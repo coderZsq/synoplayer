@@ -105,7 +105,7 @@ class _QuickConnectRetrofitApi implements QuickConnectRetrofitApi {
     )
         .compose(
           _dio.options,
-          'https://global.quickconnect.to/Serv.php',
+          '/Serv.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -126,7 +126,7 @@ class _QuickConnectRetrofitApi implements QuickConnectRetrofitApi {
   }
 
   @override
-  Future<Map<String, dynamic>> requestLogin(
+  Future<JsonResponse> requestLogin(
     String api,
     String version,
     String method,
@@ -150,7 +150,7 @@ class _QuickConnectRetrofitApi implements QuickConnectRetrofitApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<Map<String, dynamic>>(Options(
+    final _options = _setStreamType<JsonResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -167,9 +167,9 @@ class _QuickConnectRetrofitApi implements QuickConnectRetrofitApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
+    late JsonResponse _value;
     try {
-      _value = _result.data!;
+      _value = JsonResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -178,7 +178,7 @@ class _QuickConnectRetrofitApi implements QuickConnectRetrofitApi {
   }
 
   @override
-  Future<Map<String, dynamic>> testConnection(
+  Future<JsonResponse> testConnection(
     String api,
     String version,
     String method,
@@ -193,7 +193,7 @@ class _QuickConnectRetrofitApi implements QuickConnectRetrofitApi {
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<Map<String, dynamic>>(Options(
+    final _options = _setStreamType<JsonResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -210,9 +210,9 @@ class _QuickConnectRetrofitApi implements QuickConnectRetrofitApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
+    late JsonResponse _value;
     try {
-      _value = _result.data!;
+      _value = JsonResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

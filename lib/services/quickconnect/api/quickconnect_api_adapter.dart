@@ -437,7 +437,15 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
         return LoginResult.failure(errorMessage: '用户名或密码不能为空');
       }
 
-      final response = await retrofitApi.requestLogin(
+      // 为登录请求创建新的 Retrofit 实例，设置正确的 baseUrl
+      // 从现有的 retrofitApi 中获取 Dio 实例
+      final dio = (retrofitApi as dynamic)._dio as Dio;
+      final loginRetrofitApi = QuickConnectRetrofitApi(
+        dio,
+        baseUrl: baseUrl,
+      );
+
+      final response = await loginRetrofitApi.requestLogin(
         'SYNO.API.Auth',
         QuickConnectConstants.apiVersion3.toString(),
         'login',
@@ -448,7 +456,7 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
         otpCode?.trim(),
       );
 
-      return _handleLoginResponse(response);
+      return _handleLoginResponse(response.data);
       
     } catch (e) {
       AppLogger.error('Retrofit 登录请求异常: $e', tag: _tag);
@@ -556,7 +564,15 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
     try {
       AppLogger.info('使用 Retrofit 测试连接: $baseUrl', tag: _tag);
       
-      await retrofitApi.testConnection(
+      // 为连接测试创建新的 Retrofit 实例，设置正确的 baseUrl
+      // 从现有的 retrofitApi 中获取 Dio 实例
+      final dio = (retrofitApi as dynamic)._dio as Dio;
+      final testRetrofitApi = QuickConnectRetrofitApi(
+        dio,
+        baseUrl: baseUrl,
+      );
+      
+      await testRetrofitApi.testConnection(
         'SYNO.API.Info',
         '1',
         'query',
