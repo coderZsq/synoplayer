@@ -161,33 +161,55 @@ class SplashPage extends ConsumerStatefulWidget {
   ConsumerState<SplashPage> createState() => _SplashPageState();
 }
 
+/// 启动页面状态管理
 class _SplashPageState extends ConsumerState<SplashPage> {
+  // ==== 私有字段 ====
+  
+  /// 超时定时器
   Timer? _timeoutTimer;
+  
+  /// 检查次数计数器
   int _checkCount = 0;
+  
+  /// 最大检查次数限制
   static const int _maxCheckCount = 3;
-  bool _isNavigating = false; // 防止重复导航
+  
+  /// 导航状态标志，防止重复导航
+  bool _isNavigating = false;
 
   @override
   void initState() {
     super.initState();
-    _checkLoginStatus();
     
-    // 设置超时定时器
-    _timeoutTimer = Timer(const Duration(seconds: 5), () async {
-      if (mounted) {
-        AppLogger.warning('⏰ 启动页即将超时，尝试直接检查凭据');
-        try {
-          await _checkCredentialsDirectly();
-        } catch (e) {
-          AppLogger.error('🚨 直接检查失败，强制跳转到登录页', error: e);
-          if (mounted) {
-            _stopAllOperations();
-            context.go(RoutePaths.login);
-            return;
-          }
+    _setupTimeoutTimer();
+    _startLoginCheck();
+  }
+
+  /// 设置超时定时器
+  void _setupTimeoutTimer() {
+    _timeoutTimer = Timer(const Duration(seconds: 5), _handleTimeout);
+  }
+
+  /// 处理超时情况
+  Future<void> _handleTimeout() async {
+    if (mounted) {
+      AppLogger.warning('⏰ 启动页即将超时，尝试直接检查凭据');
+      try {
+        await _checkCredentialsDirectly();
+      } catch (e) {
+        AppLogger.error('🚨 直接检查失败，强制跳转到登录页', error: e);
+        if (mounted) {
+          _stopAllOperations();
+          context.go(RoutePaths.login);
+          return;
         }
       }
-    });
+    }
+  }
+
+  /// 开始登录检查
+  void _startLoginCheck() {
+    _checkLoginStatus();
   }
 
   @override
@@ -207,9 +229,9 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   /// 检查是否可以继续操作
   bool get _canContinue => mounted && !_isNavigating;
 
+    /// 检查登录状态的核心逻辑
   Future<void> _checkLoginStatus() async {
     try {
-      // 检查是否可以继续操作
       if (!_canContinue) {
         AppLogger.info('🛑 操作已停止，跳过检查');
         return;
@@ -218,146 +240,194 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       _checkCount++;
       AppLogger.info('🔍 启动页第 $_checkCount 次检查认证状态');
       
-      // 检查次数限制
       if (_checkCount > _maxCheckCount) {
-        AppLogger.warning('⚠️ 检查次数超限，尝试直接检查凭据');
-        await _checkCredentialsDirectly();
+        await _handleMaxCheckCountReached();
         return;
       }
       
-      // 延迟 1 秒模拟检查过程
-      await Future.delayed(const Duration(seconds: 1));
-      
-      // 尝试强制刷新认证状态
-      if (_checkCount == 1) {
-        AppLogger.info('🔄 首次检查，尝试刷新认证状态');
-        try {
-          final authNotifier = ref.read(authNotifierProvider.notifier);
-          await authNotifier.refreshAuthStatus();
-          
-          // 等待状态更新
-          await Future.delayed(const Duration(milliseconds: 300));
-          
-          // 尝试强制刷新 Provider
-          AppLogger.info('🔄 尝试强制刷新 Provider 状态');
-          ref.invalidate(authNotifierProvider);
-          
-          // 再次等待
-          await Future.delayed(const Duration(milliseconds: 300));
-          
-          // 如果状态仍然是加载中，立即尝试直接检查
-          final currentAuthState = ref.read(authNotifierProvider);
-          if (currentAuthState.isLoading) {
-            AppLogger.info('🔄 Provider 状态仍为加载中，立即尝试直接检查');
-            await _checkCredentialsDirectly();
-            return;
-          }
-        } catch (e) {
-          AppLogger.warning('⚠️ 刷新认证状态失败: $e');
-        }
-      }
-      
-      // 使用新的认证状态管理
-      final authState = ref.read(authNotifierProvider);
-      
-      AppLogger.debug('🔍 当前认证状态: ${authState.runtimeType}');
-      
-      // 如果状态仍然是加载中，尝试直接检查凭据
-      if (authState.isLoading && _checkCount > 1) {
-        AppLogger.warning('⚠️ 状态持续加载中，尝试直接检查凭据');
-        await _checkCredentialsDirectly();
-        return;
-      }
-      
-      authState.when(
-        data: (state) {
-          AppLogger.info('📊 认证状态: ${state.runtimeType}');
-          
-          if (state.isAuthenticated) {
-            // 已认证，跳转到主页面
-            final credentials = state.credentials;
-            if (credentials != null) {
-              final dashboardUrl = '${RoutePaths.dashboard}?sid=${credentials.sid}&username=${credentials.username}&quickConnectId=${credentials.quickConnectId}&workingAddress=${credentials.workingAddress}';
-              AppLogger.info('🚀 跳转到主页面: $dashboardUrl');
-              if (mounted) {
-                // 跳转成功后立即停止所有操作
-                _stopAllOperations();
-                context.go(dashboardUrl);
-                return;
-              }
-            } else {
-              AppLogger.warning('⚠️ 凭据为空，跳转到登录页');
-              if (mounted) {
-                _stopAllOperations();
-                context.go(RoutePaths.login);
-                return;
-              }
-            }
-          } else {
-            // 未认证，跳转到登录页
-            AppLogger.info('📝 未认证，跳转到登录页');
-            if (mounted) {
-              _stopAllOperations();
-              context.go(RoutePaths.login);
-              return;
-            }
-          }
-        },
-        loading: () {
-          // 正在加载，等待状态更新
-          AppLogger.info('⏳ 认证状态加载中，等待...');
-          
-                // 如果是首次加载，等待更长时间
-      if (_checkCount == 1) {
-        AppLogger.info('⏳ 首次加载，等待状态初始化...');
-        Future.delayed(const Duration(seconds: 1), () {
-          if (_canContinue) {
-            _checkLoginStatus();
-          }
-        });
-      } else {
-        // 延迟后再次检查
-        Future.delayed(const Duration(milliseconds: 500), () {
-          if (_canContinue) {
-            _checkLoginStatus();
-          }
-        });
-      }
-        },
-        error: (error, stackTrace) {
-          // 出错时跳转到登录页
-          AppLogger.error('❌ 认证状态检查失败，跳转到登录页', error: error, stackTrace: stackTrace);
-          if (mounted) {
-            _stopAllOperations();
-            context.go(RoutePaths.login);
-            return;
-          }
-        },
-      );
+      await _performLoginCheck();
     } catch (e) {
-      // 出错时跳转到登录页
-      AppLogger.error('🚨 状态检查异常，跳转到登录页', error: e);
+      await _handleCheckError(e);
+    }
+  }
+
+  /// 处理达到最大检查次数的情况
+  Future<void> _handleMaxCheckCountReached() async {
+    AppLogger.warning('⚠️ 检查次数超限，尝试直接检查凭据');
+    await _checkCredentialsDirectly();
+  }
+
+  /// 执行登录检查
+  Future<void> _performLoginCheck() async {
+    await Future.delayed(const Duration(seconds: 1));
+    
+    if (_checkCount == 1) {
+      await _handleFirstCheck();
+    }
+    
+    await _checkAuthState();
+  }
+
+  /// 处理首次检查
+  Future<void> _handleFirstCheck() async {
+    AppLogger.info('🔄 首次检查，尝试刷新认证状态');
+    
+    try {
+      await _refreshAuthStatus();
+      await _forceRefreshProvider();
+      await _checkProviderState();
+    } catch (e) {
+      AppLogger.warning('⚠️ 刷新认证状态失败: $e');
+    }
+  }
+
+  /// 刷新认证状态
+  Future<void> _refreshAuthStatus() async {
+    final authNotifier = ref.read(authNotifierProvider.notifier);
+    await authNotifier.refreshAuthStatus();
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
+
+  /// 强制刷新 Provider
+  Future<void> _forceRefreshProvider() async {
+    AppLogger.info('🔄 尝试强制刷新 Provider 状态');
+    ref.invalidate(authNotifierProvider);
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
+
+  /// 检查 Provider 状态
+  Future<void> _checkProviderState() async {
+    final currentAuthState = ref.read(authNotifierProvider);
+    if (currentAuthState.isLoading) {
+      AppLogger.info('🔄 Provider 状态仍为加载中，立即尝试直接检查');
+      await _checkCredentialsDirectly();
+    }
+  }
+
+  /// 检查认证状态
+  Future<void> _checkAuthState() async {
+    final authState = ref.read(authNotifierProvider);
+    AppLogger.debug('🔍 当前认证状态: ${authState.runtimeType}');
+    
+    if (_shouldUseDirectCheck(authState)) {
+      await _checkCredentialsDirectly();
+      return;
+    }
+    
+    await _handleAuthStateResult(authState);
+  }
+
+  /// 判断是否应该使用直接检查
+  bool _shouldUseDirectCheck(AsyncValue<AuthState> authState) {
+    return authState.isLoading && _checkCount > 1;
+  }
+
+  /// 处理认证状态结果
+  Future<void> _handleAuthStateResult(AsyncValue<AuthState> authState) async {
+    authState.when(
+      data: _handleAuthenticatedState,
+      loading: _handleLoadingState,
+      error: _handleErrorState,
+    );
+  }
+
+  /// 处理已认证状态
+  Future<void> _handleAuthenticatedState(AuthState state) async {
+    AppLogger.info('📊 认证状态: ${state.runtimeType}');
+    
+    if (state.isAuthenticated) {
+      await _navigateToDashboard(state.credentials);
+    } else {
+      await _navigateToLogin();
+    }
+  }
+
+  /// 导航到主页面
+  Future<void> _navigateToDashboard(dynamic credentials) async {
+    if (credentials != null) {
+      final dashboardUrl = _buildDashboardUrl(credentials);
+      AppLogger.info('🚀 跳转到主页面: $dashboardUrl');
       
-      // 检查是否是 ref 被销毁的错误
-      if (e.toString().contains('Cannot use "ref" after the widget was disposed')) {
-        AppLogger.warning('⚠️ ref 已被销毁，尝试直接检查凭据');
-        try {
-          await _checkCredentialsDirectly();
-        } catch (directError) {
-          AppLogger.error('🚨 直接检查也失败，跳转到登录页', error: directError);
-          if (mounted) {
-            _stopAllOperations();
-            context.go(RoutePaths.login);
-            return;
-          }
-        }
-      } else {
-        if (mounted) {
-          _stopAllOperations();
-          context.go(RoutePaths.login);
-          return;
-        }
+      if (mounted) {
+        _stopAllOperations();
+        context.go(dashboardUrl);
+        return;
       }
+    } else {
+      AppLogger.warning('⚠️ 凭据为空，跳转到登录页');
+      await _navigateToLogin();
+    }
+  }
+
+  /// 构建主页面 URL
+  String _buildDashboardUrl(dynamic credentials) {
+    return '${RoutePaths.dashboard}?sid=${credentials.sid}&username=${credentials.username}&quickConnectId=${credentials.quickConnectId}&workingAddress=${credentials.workingAddress}';
+  }
+
+  /// 导航到登录页
+  Future<void> _navigateToLogin() async {
+    AppLogger.info('📝 未认证，跳转到登录页');
+    if (mounted) {
+      _stopAllOperations();
+      context.go(RoutePaths.login);
+      return;
+    }
+  }
+
+  /// 处理加载状态
+  void _handleLoadingState() {
+    AppLogger.info('⏳ 认证状态加载中，等待...');
+    
+    if (_checkCount == 1) {
+      _scheduleDelayedCheck(const Duration(seconds: 1));
+    } else {
+      _scheduleDelayedCheck(const Duration(milliseconds: 500));
+    }
+  }
+
+  /// 安排延迟检查
+  void _scheduleDelayedCheck(Duration delay) {
+    Future.delayed(delay, () {
+      if (_canContinue) {
+        _checkLoginStatus();
+      }
+    });
+  }
+
+  /// 处理错误状态
+  Future<void> _handleErrorState(Object error, StackTrace stackTrace) async {
+    AppLogger.error('❌ 认证状态检查失败，跳转到登录页', error: error, stackTrace: stackTrace);
+    if (mounted) {
+      _stopAllOperations();
+      context.go(RoutePaths.login);
+      return;
+    }
+  }
+
+  /// 处理检查错误
+  Future<void> _handleCheckError(Object error) async {
+    AppLogger.error('🚨 状态检查异常，跳转到登录页', error: error);
+    
+    if (_isRefDisposedError(error)) {
+      await _handleRefDisposedError();
+    } else {
+      await _navigateToLogin();
+    }
+  }
+
+  /// 检查是否是 ref 被销毁的错误
+  bool _isRefDisposedError(Object error) {
+    return error.toString().contains('Cannot use "ref" after the widget was disposed');
+  }
+
+  /// 处理 ref 被销毁的错误
+  Future<void> _handleRefDisposedError() async {
+    AppLogger.warning('⚠️ ref 已被销毁，尝试直接检查凭据');
+    try {
+      await _checkCredentialsDirectly();
+    } catch (directError) {
+      AppLogger.error('🚨 直接检查也失败，跳转到登录页', error: directError);
+      await _navigateToLogin();
     }
   }
 

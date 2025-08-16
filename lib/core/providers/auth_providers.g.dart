@@ -80,9 +80,15 @@ final userSessionProvider = AutoDisposeProvider<UserSession?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserSessionRef = AutoDisposeProviderRef<UserSession?>;
-String _$authNotifierHash() => r'b8247081ac0c245b9aade4118561b0d7e6f13f0f';
+String _$authNotifierHash() => r'5172a47794eff9f51fa66cbbdf4968f4ba5b87a6';
 
 /// 认证状态管理
+///
+/// 负责管理应用的认证状态，包括：
+/// - 用户登录状态管理
+/// - 凭据缓存和验证
+/// - 会话有效性检查
+/// - 认证状态刷新
 ///
 /// Copied from [AuthNotifier].
 @ProviderFor(AuthNotifier)
