@@ -28,7 +28,7 @@ final useRetrofitApiProvider = AutoDisposeProvider<bool>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UseRetrofitApiRef = AutoDisposeProviderRef<bool>;
-String _$quickConnectApiHash() => r'e4007bee53557d6671773106488c0c797f5c5c7a';
+String _$quickConnectApiHash() => r'fb7f156faa2c2f80821fb569e24d3c9c294bbb70';
 
 /// QuickConnect API 提供者
 ///
@@ -51,7 +51,7 @@ final quickConnectApiProvider =
 // ignore: unused_element
 typedef QuickConnectApiRef = AutoDisposeProviderRef<QuickConnectApiInterface>;
 String _$quickConnectApiImplHash() =>
-    r'e2ce979d0a10c442b2287660800ee758fe0a11b6';
+    r'ff26f16ef09afebcf79d087b4e07d0383a17cddf';
 
 /// QuickConnect API 实现提供者
 ///
@@ -74,7 +74,7 @@ final quickConnectApiImplProvider =
 // ignore: unused_element
 typedef QuickConnectApiImplRef = AutoDisposeProviderRef<QuickConnectApiImpl>;
 String _$quickConnectRetrofitApiHash() =>
-    r'bbab6fb8f8a7234d74236e9af5da76376288831e';
+    r'2f7fc509c83bd8fe5f5c789363a33c682257923f';
 
 /// Retrofit API 提供者 (用于测试和调试)
 ///
@@ -96,7 +96,7 @@ final quickConnectRetrofitApiProvider =
 typedef QuickConnectRetrofitApiRef
     = AutoDisposeProviderRef<QuickConnectRetrofitApi>;
 String _$quickConnectApiAdapterHash() =>
-    r'84ebe9ace2e623cc973e10bf85e750acbc01036b';
+    r'eae0dd9fec5482ea409b8bee4ba58ea33189ba15';
 
 /// 适配器 API 提供者 (用于测试和调试)
 ///

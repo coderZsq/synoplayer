@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../dashboard/pages/main_page.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../shared/widgets/log_display_widget.dart';
 import '../widgets/smart_login_form_widget.dart';
 import '../widgets/otp_verification_widget.dart';
@@ -71,17 +72,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (username != null) _username = username;
     if (quickConnectId != null) _quickConnectId = quickConnectId;
     
-    // 跳转到主页面
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => MainPage(
-          sid: sid,
-          username: _username,
-          quickConnectId: _quickConnectId,
-          workingAddress: workingAddress,
-        ),
-      ),
-    );
+    // 使用 GoRouter 跳转到主页面
+    context.go('/dashboard?sid=$sid&username=$_username&quickConnectId=$_quickConnectId&workingAddress=$workingAddress');
   }
 
   /// 需要OTP验证回调

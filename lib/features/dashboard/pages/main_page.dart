@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../core/services/index.dart';
 import '../../../shared/widgets/log_display_widget.dart';
-import '../../authentication/pages/login_page.dart';
 import '../widgets/retrofit_migration_widget.dart';
 import '../widgets/welcome_card_widget.dart';
 import '../widgets/connection_info_widget.dart';
@@ -134,11 +135,7 @@ class _MainPageState extends ConsumerState<MainPage> {
       
       // 返回登录页面
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
-        );
+        context.go('/login');
       }
     } catch (e) {
       _appendLog('❌ 退出登录时发生错误: $e');
