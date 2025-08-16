@@ -1,294 +1,305 @@
 # QuickConnect 服务
 
-这个模块提供了完整的群晖 QuickConnect 功能，包括地址解析、连接测试、认证登录等。
+## 概述
 
-## 服务组件
+QuickConnect 服务提供了与群晖 NAS 的 QuickConnect 功能交互的完整解决方案，包括地址解析、认证登录、连接测试等功能。
 
-### 1. QuickConnectAuthService
-处理群晖设备的认证登录。
+## 架构设计
 
-```dart
-final authService = ref.read(quickConnectAuthServiceProvider);
+### 核心组件
 
-final result = await authService.login(
-  baseUrl: 'https://your-synology.synology.me:5001',
-  username: 'admin',
-  password: 'password',
-  otpCode: '123456', // 可选的 OTP 验证码
-);
+1. **QuickConnectApiAdapter** - API 适配器，智能选择使用 Retrofit 或旧实现
+2. **QuickConnectService** - 主服务，统一入口
+3. **QuickConnectAuthService** - 认证服务
+4. **QuickConnectAddressResolver** - 地址解析服务
+5. **QuickConnectConnectionService** - 连接测试服务
+6. **QuickConnectSmartLoginService** - 智能登录服务
 
-result.when(
-  success: (sid) => print('登录成功，SID: $sid'),
-  failure: (message) => print('登录失败: $message'),
-  requireOTP: (message) => print('需要 OTP: $message'),
-);
-```
+### 设计模式
 
-### 2. QuickConnectConnectionService
-处理连接测试和地址管理。
+- **适配器模式**: `QuickConnectApiAdapter` 统一新旧 API 实现
+- **策略模式**: 根据配置动态选择 API 实现
+- **降级机制**: Retrofit 失败时自动降级到旧实现
+- **依赖注入**: 使用 Riverpod 进行依赖管理
 
-```dart
-final connectionService = ref.read(quickConnectConnectionServiceProvider);
+## QuickConnectApiAdapter 使用指南
 
-// 测试单个连接
-final result = await connectionService.testConnection(baseUrl);
-if (result.isConnected) {
-  print('连接成功，响应时间: ${result.responseTime.inMilliseconds}ms');
-}
-
-// 获取所有可用地址
-final addresses = await connectionService.getAllAvailableAddresses('your-quickconnect-id');
-```
-
-### 3. QuickConnectAddressResolver
-解析 QuickConnect ID 获取可用的连接地址。
+### 1. 基本使用
 
 ```dart
-final resolver = ref.read(quickConnectAddressResolverProvider);
+// 通过 Provider 获取适配器
+final api = ref.watch(quickConnectApiProvider);
 
-// 解析单个地址
-final address = await resolver.resolveAddress('your-quickconnect-id');
+// 使用适配器进行地址解析
+final tunnelResponse = await api.requestTunnel('your_quickconnect_id');
+final serverInfo = await api.requestServerInfo('your_quickconnect_id');
 
-// 获取所有地址详情
-final addressInfos = await resolver.getAllAddressesWithDetails('your-quickconnect-id');
-for (final info in addressInfos) {
-  print('地址: ${info.url}, 类型: ${info.type.description}, 优先级: ${info.priority}');
-}
-```
-
-### 4. QuickConnectSmartLoginService
-智能登录服务，自动尝试所有可用地址。
-
-```dart
-final smartLoginService = ref.read(quickConnectSmartLoginServiceProvider);
-
-// 简单智能登录
-final result = await smartLoginService.smartLogin(
-  quickConnectId: 'your-quickconnect-id',
-  username: 'admin',
+// 使用适配器进行登录
+final loginResult = await api.requestLogin(
+  baseUrl: 'https://your.nas.com',
+  username: 'username',
   password: 'password',
 );
 
-// 详细智能登录（包含统计信息）
-final detailedResult = await smartLoginService.smartLoginWithDetails(
-  quickConnectId: 'your-quickconnect-id',
-  username: 'admin',
-  password: 'password',
-);
-
-detailedResult.when(
-  success: (loginResult, bestAddress, attempts, stats) {
-    print('登录成功！');
-    print('最佳地址: $bestAddress');
-    print('尝试次数: ${attempts.length}');
-    print('统计信息: $stats');
-  },
-  failure: (error, attempts, stats) {
-    print('登录失败: $error');
-    print('统计信息: $stats');
-  },
-);
+// 使用适配器测试连接
+final connectionResult = await api.testConnection('https://your.nas.com');
 ```
 
-## 完整使用示例
+### 2. 智能降级机制
 
-### 1. 在 Widget 中使用
+`QuickConnectApiAdapter` 具有智能降级机制：
+
+1. **优先使用 Retrofit**: 如果配置启用，首先尝试使用 Retrofit 实现
+2. **自动降级**: 如果 Retrofit 失败，自动降级到旧实现
+3. **无缝切换**: 用户无需关心底层实现，适配器自动处理
+
 ```dart
-class QuickConnectLoginPage extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<QuickConnectLoginPage> createState() => _QuickConnectLoginPageState();
-}
-
-class _QuickConnectLoginPageState extends ConsumerState<QuickConnectLoginPage> {
-  final _quickConnectIdController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _otpController = TextEditingController();
-  
-  bool _showOtpField = false;
-  bool _isLoading = false;
-  String? _availableAddress;
-
-  Future<void> _performLogin() async {
-    setState(() => _isLoading = true);
+// 适配器内部逻辑
+@override
+Future<TunnelResponse?> requestTunnel(String quickConnectId) async {
+  try {
+    // 首先尝试使用 Retrofit 实现
+    final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('tunnel');
     
-    try {
-      final smartLoginService = ref.read(quickConnectSmartLoginServiceProvider);
-      
-      final result = await smartLoginService.smartLogin(
-        quickConnectId: _quickConnectIdController.text,
-        username: _usernameController.text,
-        password: _passwordController.text,
-        otpCode: _showOtpField ? _otpController.text : null,
-      );
-      
-      result.when(
-        success: (sid) {
-          // 保存登录信息
-          CredentialsService.saveCredentials(
-            quickConnectId: _quickConnectIdController.text,
-            username: _usernameController.text,
-            password: _passwordController.text,
-            sid: sid,
-          );
-          
-          // 导航到主页面
-          Navigator.pushReplacementNamed(context, '/home');
-        },
-        failure: (message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('登录失败: $message')),
-          );
-        },
-        requireOTP: (message) {
-          setState(() {
-            _showOtpField = true;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message)),
-          );
-        },
-        requireOTPWithAddress: (message, address) {
-          setState(() {
-            _showOtpField = true;
-            _availableAddress = address;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message)),
-          );
-        },
-      );
-    } finally {
-      setState(() => _isLoading = false);
+    if (shouldUseRetrofit) {
+      try {
+        final result = await _requestTunnelWithRetrofit(quickConnectId);
+        if (result != null) {
+          return result;
+        }
+      } catch (e) {
+        // Retrofit 失败，记录警告并降级
+        AppLogger.warning('Retrofit 隧道请求失败，降级到旧实现: $e');
+      }
     }
+    
+    // 降级到旧实现
+    return await _requestTunnelWithLegacy(quickConnectId);
+    
+  } catch (e) {
+    // 完全失败
+    AppLogger.error('隧道请求完全失败: $e');
+    return null;
   }
+}
+```
 
+### 3. 配置控制
+
+#### 功能开关
+
+```dart
+// 在 lib/core/config/feature_flags.dart 中配置
+class FeatureFlags {
+  static bool get useRetrofitApi {
+    if (kDebugMode) {
+      const useRetrofit = bool.fromEnvironment('USE_RETROFIT_API', defaultValue: true);
+      return useRetrofit;
+    }
+    return false;
+  }
+}
+```
+
+#### 迁移阶段
+
+```dart
+// 在 lib/core/config/retrofit_migration_config.dart 中配置
+enum MigrationPhase {
+  legacyOnly,           // 仅使用旧实现
+  tunnelRetrofit,       // 隧道请求使用 Retrofit
+  serverInfoRetrofit,   // 服务器信息使用 Retrofit
+  loginRetrofit,        // 登录请求使用 Retrofit
+  connectionTestRetrofit, // 连接测试使用 Retrofit
+  retrofitOnly,         // 完全使用 Retrofit
+}
+```
+
+### 4. Provider 配置
+
+```dart
+// 在 lib/services/quickconnect/providers/quickconnect_api_providers.dart 中
+@riverpod
+QuickConnectApiInterface quickConnectApi(Ref ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  final dio = ref.watch(dioProvider);
+  final retrofitApi = QuickConnectRetrofitApi(dio);
+  
+  // 总是创建适配器，让适配器内部决定使用哪种实现
+  return QuickConnectApiAdapter(
+    apiClient: apiClient,
+    retrofitApi: retrofitApi,
+  );
+}
+```
+
+### 5. 使用示例
+
+#### 在 Widget 中使用
+
+```dart
+class QuickConnectWidget extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('QuickConnect 登录')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _quickConnectIdController,
-              decoration: const InputDecoration(
-                labelText: 'QuickConnect ID',
-                hintText: 'your-synology-id',
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: '用户名'),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: '密码'),
-              obscureText: true,
-            ),
-            if (_showOtpField) ...[
-              const SizedBox(height: 16),
-              TextField(
-                controller: _otpController,
-                decoration: const InputDecoration(
-                  labelText: 'OTP 验证码',
-                  hintText: '6位数字验证码',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-            ],
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _performLogin,
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('登录'),
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quickConnectService = ref.watch(quickConnectServiceProvider);
+    
+    return ElevatedButton(
+      onPressed: () async {
+        try {
+          // 解析地址
+          final address = await quickConnectService.resolveAddress('demo');
+          
+          if (address != null) {
+            // 测试连接
+            final connectionResult = await quickConnectService.testConnection(address);
+            
+            if (connectionResult.isConnected) {
+              // 进行登录
+              final loginResult = await quickConnectService.login(
+                baseUrl: address,
+                username: 'username',
+                password: 'password',
+              );
+              
+              if (loginResult.isSuccess) {
+                print('登录成功: ${loginResult.sid}');
+              }
+            }
+          }
+        } catch (e) {
+          print('操作失败: $e');
+        }
+      },
+      child: const Text('连接 QuickConnect'),
     );
   }
 }
 ```
 
-### 2. 在 Repository 中使用
-```dart
-class SynologyRepository {
-  SynologyRepository(this._smartLoginService, this._credentialsService);
-  
-  final QuickConnectSmartLoginService _smartLoginService;
-  final CredentialsService _credentialsService;
+#### 在服务中使用
 
-  Future<Either<Failure, String>> autoLogin() async {
-    try {
-      final credentials = await _credentialsService.getCredentials();
-      
-      if (!await _credentialsService.hasSavedCredentials()) {
-        return const Left(AuthFailure('没有保存的登录凭据'));
-      }
-      
-      final result = await _smartLoginService.smartLogin(
-        quickConnectId: credentials['quickConnectId']!,
-        username: credentials['username']!,
-        password: credentials['password']!,
-      );
-      
-      return result.when(
-        success: (sid) => Right(sid),
-        failure: (message) => Left(AuthFailure(message)),
-        requireOTP: (message) => Left(AuthFailure('需要二次验证')),
-        requireOTPWithAddress: (message, address) => Left(AuthFailure('需要二次验证')),
-      );
-    } catch (e) {
-      return Left(UnknownFailure(e.toString()));
-    }
+```dart
+class MyService {
+  MyService(this._quickConnectApi);
+  
+  final QuickConnectApiInterface _quickConnectApi;
+  
+  Future<void> performQuickConnectOperation() async {
+    // 使用适配器进行各种操作
+    final tunnelResponse = await _quickConnectApi.requestTunnel('id');
+    final serverInfo = await _quickConnectApi.requestServerInfo('id');
+    
+    // 适配器会自动选择最佳实现
+    // 无需关心底层是使用 Retrofit 还是旧实现
   }
 }
 ```
 
-## 地址类型说明
+## 测试
 
-QuickConnect 支持多种连接地址类型，按优先级排序：
+### 运行测试
 
-1. **SmartDNS 直连** (优先级 1) - 最快的直连方式
-2. **中继服务器** (优先级 2) - 群晖官方中继
-3. **HTTPS 中继** (优先级 3) - HTTPS 协议中继
-4. **外部 IP** (优先级 4) - 公网 IP 直连
-5. **LAN 地址** (优先级 5) - 局域网内直连
-6. **站点地址** (优先级 6+) - 其他可用站点
+```bash
+# 运行所有 QuickConnect 相关测试
+flutter test test/services/quickconnect/
 
-## 错误处理
+# 运行特定测试文件
+flutter test test/services/quickconnect/api/quickconnect_api_adapter_test.dart
+```
 
-所有服务都使用统一的错误处理机制：
+### 测试覆盖
+
+- ✅ 适配器基本功能测试
+- ✅ 智能降级机制测试
+- ✅ Retrofit 和旧实现切换测试
+- ✅ 错误处理测试
+- ✅ 性能监控测试
+
+## 性能监控
+
+### 启用性能监控
 
 ```dart
-// LoginResult 的错误类型
-result.when(
-  success: (sid) => handleSuccess(sid),
-  failure: (message) => handleError(message),
-  requireOTP: (message) => handleOTPRequired(message),
-  requireOTPWithAddress: (message, address) => handleOTPWithAddress(message, address),
-);
-
-// ApiResponse 的错误类型
-response.when(
-  success: (data, statusCode, message, extra) => handleSuccess(data),
-  error: (message, statusCode, errorCode, error, extra) => handleError(message),
-);
+// 在配置中启用
+class FeatureFlags {
+  static bool get enableRetrofitPerformanceMonitoring {
+    return kDebugMode; // 开发环境启用
+  }
+}
 ```
+
+### 查看性能数据
+
+```dart
+// 在 UI 中查看性能数据
+class PerformanceWidget extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+      onPressed: () {
+        // 显示性能数据
+        _showPerformanceData(context);
+      },
+      child: const Text('查看性能数据'),
+    );
+  }
+}
+```
+
+## 故障排除
+
+### 常见问题
+
+1. **Retrofit 请求失败**
+   - 检查网络连接
+   - 验证 API 端点配置
+   - 查看日志中的错误信息
+
+2. **降级机制不工作**
+   - 确认 `enableRetrofitFallback` 已启用
+   - 检查旧实现是否正常工作
+   - 查看日志中的降级信息
+
+3. **性能问题**
+   - 启用性能监控查看详细数据
+   - 检查是否有重复请求
+   - 验证缓存策略
+
+### 调试技巧
+
+1. **启用详细日志**
+   ```dart
+   // 在开发环境中启用详细日志
+   if (kDebugMode) {
+     AppLogger.setLogLevel(LogLevel.debug);
+   }
+   ```
+
+2. **查看 Provider 状态**
+   ```dart
+   // 在调试模式下查看 Provider 状态
+   ref.listen(quickConnectApiProvider, (previous, next) {
+     print('API Provider 状态变化: $previous -> $next');
+   });
+   ```
+
+3. **性能分析**
+   ```dart
+   // 使用 Flutter DevTools 分析性能
+   // 或查看控制台中的性能日志
+   ```
 
 ## 最佳实践
 
-1. **使用智能登录服务**进行自动地址选择和登录
-2. **保存登录凭据**以支持自动登录
-3. **处理 OTP 验证**，提供良好的用户体验
-4. **记录日志**以便调试网络连接问题
-5. **使用 Riverpod Providers**进行依赖注入
-6. **缓存连接结果**以提高后续连接速度
+1. **总是使用适配器**: 不要直接使用具体实现，始终通过 `QuickConnectApiAdapter` 访问
+2. **启用降级机制**: 在生产环境中启用降级机制，确保稳定性
+3. **监控性能**: 定期查看性能数据，优化实现选择
+4. **渐进式迁移**: 使用迁移阶段逐步启用 Retrofit 功能
+5. **错误处理**: 妥善处理各种错误情况，提供用户友好的错误信息
+
+## 更新日志
+
+- **v1.0.0**: 初始版本，支持基本的 QuickConnect 功能
+- **v1.1.0**: 添加 Retrofit 支持和智能降级机制
+- **v1.2.0**: 改进性能监控和错误处理
+- **v1.3.0**: 优化适配器逻辑，支持更灵活的配置

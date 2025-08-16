@@ -19,24 +19,40 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
   QuickConnectApiAdapter({
     required this.apiClient,
     required this.retrofitApi,
-    this.useRetrofit = false, // 配置开关
   });
   
   final ApiClient apiClient;
   final QuickConnectRetrofitApi retrofitApi;
-  final bool useRetrofit; // 控制使用哪种实现
   static const String _tag = 'QuickConnectApiAdapter';
 
   // ==================== 地址解析 API ====================
   
   @override
   Future<TunnelResponse?> requestTunnel(String quickConnectId) async {
-    final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('tunnel');
-    
-    if (shouldUseRetrofit) {
-      return _requestTunnelWithRetrofit(quickConnectId);
-    } else {
-      return _requestTunnelWithLegacy(quickConnectId);
+    try {
+      // 首先尝试使用 Retrofit 实现
+      final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('tunnel');
+      
+      if (shouldUseRetrofit) {
+        AppLogger.info('尝试使用 Retrofit 实现隧道请求', tag: _tag);
+        try {
+          final result = await _requestTunnelWithRetrofit(quickConnectId);
+          if (result != null) {
+            AppLogger.success('Retrofit 隧道请求成功', tag: _tag);
+            return result;
+          }
+        } catch (e) {
+          AppLogger.warning('Retrofit 隧道请求失败，降级到旧实现: $e', tag: _tag);
+        }
+      }
+      
+      // 降级到旧实现
+      AppLogger.info('使用旧实现发送隧道请求', tag: _tag);
+      return await _requestTunnelWithLegacy(quickConnectId);
+      
+    } catch (e) {
+      AppLogger.error('隧道请求完全失败: $e', tag: _tag);
+      return null;
     }
   }
   
@@ -134,12 +150,30 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
 
   @override
   Future<ServerInfoResponse?> requestServerInfo(String quickConnectId) async {
-    final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('serverInfo');
-    
-    if (shouldUseRetrofit) {
-      return _requestServerInfoWithRetrofit(quickConnectId);
-    } else {
-      return _requestServerInfoWithLegacy(quickConnectId);
+    try {
+      // 首先尝试使用 Retrofit 实现
+      final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('serverInfo');
+      
+      if (shouldUseRetrofit) {
+        AppLogger.info('尝试使用 Retrofit 实现服务器信息请求', tag: _tag);
+        try {
+          final result = await _requestServerInfoWithRetrofit(quickConnectId);
+          if (result != null) {
+            AppLogger.success('Retrofit 服务器信息请求成功', tag: _tag);
+            return result;
+          }
+        } catch (e) {
+          AppLogger.warning('Retrofit 服务器信息请求失败，降级到旧实现: $e', tag: _tag);
+        }
+      }
+      
+      // 降级到旧实现
+      AppLogger.info('使用旧实现发送服务器信息请求', tag: _tag);
+      return await _requestServerInfoWithLegacy(quickConnectId);
+      
+    } catch (e) {
+      AppLogger.error('服务器信息请求完全失败: $e', tag: _tag);
+      return null;
     }
   }
   
@@ -217,18 +251,36 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
     required String quickConnectId,
     bool getCaFingerprints = true,
   }) async {
-    final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('serverInfo');
-    
-    if (shouldUseRetrofit) {
-      return _requestQuickConnectServerInfoWithRetrofit(
+    try {
+      // 首先尝试使用 Retrofit 实现
+      final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('serverInfo');
+      
+      if (shouldUseRetrofit) {
+        AppLogger.info('尝试使用 Retrofit 实现 QuickConnect 全球服务器信息请求', tag: _tag);
+        try {
+          final result = await _requestQuickConnectServerInfoWithRetrofit(
+            quickConnectId: quickConnectId,
+            getCaFingerprints: getCaFingerprints,
+          );
+          if (result != null) {
+            AppLogger.success('Retrofit 全球服务器信息请求成功', tag: _tag);
+            return result;
+          }
+        } catch (e) {
+          AppLogger.warning('Retrofit 全球服务器信息请求失败，降级到旧实现: $e', tag: _tag);
+        }
+      }
+      
+      // 降级到旧实现
+      AppLogger.info('使用旧实现发送 QuickConnect 全球服务器信息请求', tag: _tag);
+      return await _requestQuickConnectServerInfoWithLegacy(
         quickConnectId: quickConnectId,
         getCaFingerprints: getCaFingerprints,
       );
-    } else {
-      return _requestQuickConnectServerInfoWithLegacy(
-        quickConnectId: quickConnectId,
-        getCaFingerprints: getCaFingerprints,
-      );
+      
+    } catch (e) {
+      AppLogger.error('QuickConnect 全球服务器信息请求完全失败: $e', tag: _tag);
+      return null;
     }
   }
   
@@ -332,22 +384,40 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
     required String password,
     String? otpCode,
   }) async {
-    final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('login');
-    
-    if (shouldUseRetrofit) {
-      return _requestLoginWithRetrofit(
+    try {
+      // 首先尝试使用 Retrofit 实现
+      final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('login');
+      
+      if (shouldUseRetrofit) {
+        AppLogger.info('尝试使用 Retrofit 实现登录请求', tag: _tag);
+        try {
+          final result = await _requestLoginWithRetrofit(
+            baseUrl: baseUrl,
+            username: username,
+            password: password,
+            otpCode: otpCode,
+          );
+          if (result.isSuccess || result.requireOTP) {
+            AppLogger.success('Retrofit 登录请求成功', tag: _tag);
+            return result;
+          }
+        } catch (e) {
+          AppLogger.warning('Retrofit 登录请求失败，降级到旧实现: $e', tag: _tag);
+        }
+      }
+      
+      // 降级到旧实现
+      AppLogger.info('使用旧实现发送登录请求', tag: _tag);
+      return await _requestLoginWithLegacy(
         baseUrl: baseUrl,
         username: username,
         password: password,
         otpCode: otpCode,
       );
-    } else {
-      return _requestLoginWithLegacy(
-        baseUrl: baseUrl,
-        username: username,
-        password: password,
-        otpCode: otpCode,
-      );
+      
+    } catch (e) {
+      AppLogger.error('登录请求完全失败: $e', tag: _tag);
+      return LoginResult.failure(errorMessage: '登录异常: $e');
     }
   }
   
@@ -448,12 +518,34 @@ class QuickConnectApiAdapter implements QuickConnectApiInterface {
   
   @override
   Future<ConnectionTestResult> testConnection(String baseUrl) async {
-    final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('connectionTest');
-    
-    if (shouldUseRetrofit) {
-      return _testConnectionWithRetrofit(baseUrl);
-      } else {
-      return _testConnectionWithLegacy(baseUrl);
+    try {
+      // 首先尝试使用 Retrofit 实现
+      final shouldUseRetrofit = await RetrofitMigrationConfig.shouldUseRetrofitForFeature('connectionTest');
+      
+      if (shouldUseRetrofit) {
+        AppLogger.info('尝试使用 Retrofit 实现连接测试', tag: _tag);
+        try {
+          final result = await _testConnectionWithRetrofit(baseUrl);
+          if (result.isConnected) {
+            AppLogger.success('Retrofit 连接测试成功', tag: _tag);
+            return result;
+          }
+        } catch (e) {
+          AppLogger.warning('Retrofit 连接测试失败，降级到旧实现: $e', tag: _tag);
+        }
+      }
+      
+      // 降级到旧实现
+      AppLogger.info('使用旧实现测试连接', tag: _tag);
+      return await _testConnectionWithLegacy(baseUrl);
+      
+    } catch (e) {
+      AppLogger.error('连接测试完全失败: $e', tag: _tag);
+      return ConnectionTestResult.failure(
+        baseUrl, 
+        '连接测试异常: $e', 
+        Duration.zero
+      );
     }
   }
   

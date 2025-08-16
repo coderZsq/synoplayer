@@ -15,7 +15,7 @@ class FeatureFlags {
   static bool get useRetrofitApi {
     // 开发环境可以通过环境变量控制
     if (kDebugMode) {
-      const useRetrofit = bool.fromEnvironment('USE_RETROFIT_API', defaultValue: false);
+      const useRetrofit = bool.fromEnvironment('USE_RETROFIT_API', defaultValue: true);
       return useRetrofit;
     }
     

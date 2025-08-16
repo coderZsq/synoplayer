@@ -37,11 +37,11 @@ class RetrofitMigrationConfig {
   static Future<MigrationPhase> getCurrentPhase() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final phaseIndex = prefs.getInt(_migrationPhaseKey) ?? 0;
+      final phaseIndex = prefs.getInt(_migrationPhaseKey) ?? 1; // 默认使用 tunnelRetrofit 阶段
       return MigrationPhase.values[phaseIndex];
     } catch (e) {
       debugPrint('获取迁移阶段失败: $e');
-      return MigrationPhase.legacyOnly;
+      return MigrationPhase.tunnelRetrofit; // 默认使用 tunnelRetrofit 阶段
     }
   }
   

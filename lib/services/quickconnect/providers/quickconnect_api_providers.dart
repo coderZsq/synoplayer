@@ -26,20 +26,14 @@ QuickConnectApiInterface quickConnectApi(Ref ref) {
   final useRetrofit = ref.watch(useRetrofitApiProvider);
   final apiClient = ref.watch(apiClientProvider);
   
-  if (useRetrofit) {
-    // 使用 Retrofit 实现
-    final dio = ref.watch(dioProvider);
-    final retrofitApi = QuickConnectRetrofitApi(dio);
-    
-    return QuickConnectApiAdapter(
-      apiClient: apiClient,
-      retrofitApi: retrofitApi,
-      useRetrofit: true,
-    );
-  } else {
-    // 使用旧实现
-    return QuickConnectApiImpl(apiClient);
-  }
+  // 总是创建适配器，让适配器内部决定使用哪种实现
+  final dio = ref.watch(dioProvider);
+  final retrofitApi = QuickConnectRetrofitApi(dio);
+  
+  return QuickConnectApiAdapter(
+    apiClient: apiClient,
+    retrofitApi: retrofitApi,
+  );
 }
 
 /// QuickConnect API 实现提供者
@@ -64,11 +58,9 @@ QuickConnectApiAdapter quickConnectApiAdapter(QuickConnectApiAdapterRef ref) {
   final apiClient = ref.watch(apiClientProvider);
   final dio = ref.watch(dioProvider);
   final retrofitApi = QuickConnectRetrofitApi(dio);
-  final useRetrofit = ref.watch(useRetrofitApiProvider);
   
   return QuickConnectApiAdapter(
     apiClient: apiClient,
     retrofitApi: retrofitApi,
-    useRetrofit: useRetrofit,
   );
 }
