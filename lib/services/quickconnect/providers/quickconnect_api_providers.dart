@@ -1,25 +1,74 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/network/providers/network_providers.dart';
+import '../../../core/config/feature_flags.dart';
 import '../api/quickconnect_api_interface.dart';
 import '../api/quickconnect_api_impl.dart';
+import '../api/quickconnect_api_adapter.dart';
+import '../api/quickconnect_retrofit_api.dart';
 
 part 'quickconnect_api_providers.g.dart';
 
+/// 功能开关 Provider - 控制是否使用 Retrofit
+/// 
+/// 可以通过配置文件、环境变量或远程配置动态控制
+/// 默认关闭，确保安全
+@riverpod
+bool useRetrofitApi(Ref ref) {
+  return FeatureFlags.useRetrofitApi;
+}
+
 /// QuickConnect API 提供者
 /// 
-/// 负责创建和管理 QuickConnect API 实例
+/// 根据配置选择使用适配器或直接实现
 @riverpod
 QuickConnectApiInterface quickConnectApi(Ref ref) {
+  final useRetrofit = ref.watch(useRetrofitApiProvider);
   final apiClient = ref.watch(apiClientProvider);
-  return QuickConnectApiImpl(apiClient);
+  
+  if (useRetrofit) {
+    // 使用 Retrofit 实现
+    final dio = ref.watch(dioProvider);
+    final retrofitApi = QuickConnectRetrofitApi(dio);
+    
+    return QuickConnectApiAdapter(
+      apiClient: apiClient,
+      retrofitApi: retrofitApi,
+      useRetrofit: true,
+    );
+  } else {
+    // 使用旧实现
+    return QuickConnectApiImpl(apiClient);
+  }
 }
 
 /// QuickConnect API 实现提供者
 /// 
 /// 直接提供具体实现，用于需要访问实现特定功能的场景
 @riverpod
-QuickConnectApiImpl quickConnectApiImpl(Ref ref) {
+QuickConnectApiImpl quickConnectApiImpl(QuickConnectApiImplRef ref) {
   final apiClient = ref.watch(apiClientProvider);
   return QuickConnectApiImpl(apiClient);
+}
+
+/// Retrofit API 提供者 (用于测试和调试)
+@riverpod
+QuickConnectRetrofitApi quickConnectRetrofitApi(QuickConnectRetrofitApiRef ref) {
+  final dio = ref.watch(dioProvider);
+  return QuickConnectRetrofitApi(dio);
+}
+
+/// 适配器 API 提供者 (用于测试和调试)
+@riverpod
+QuickConnectApiAdapter quickConnectApiAdapter(QuickConnectApiAdapterRef ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  final dio = ref.watch(dioProvider);
+  final retrofitApi = QuickConnectRetrofitApi(dio);
+  final useRetrofit = ref.watch(useRetrofitApiProvider);
+  
+  return QuickConnectApiAdapter(
+    apiClient: apiClient,
+    retrofitApi: retrofitApi,
+    useRetrofit: useRetrofit,
+  );
 }

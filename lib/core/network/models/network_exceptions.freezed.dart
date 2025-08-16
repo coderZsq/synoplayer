@@ -12,8 +12,7 @@ part of 'network_exceptions.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$NetworkException {
@@ -37,7 +36,8 @@ mixin _$NetworkException {
     required TResult Function(String? message) unableToProcess,
     required TResult Function(String error, int? statusCode) defaultError,
     required TResult Function(String? message) unexpectedError,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? requestCancelled,
@@ -58,7 +58,8 @@ mixin _$NetworkException {
     TResult? Function(String? message)? unableToProcess,
     TResult? Function(String error, int? statusCode)? defaultError,
     TResult? Function(String? message)? unexpectedError,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? requestCancelled,
@@ -80,7 +81,8 @@ mixin _$NetworkException {
     TResult Function(String error, int? statusCode)? defaultError,
     TResult Function(String? message)? unexpectedError,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(RequestCancelled value) requestCancelled,
@@ -101,7 +103,8 @@ mixin _$NetworkException {
     required TResult Function(UnableToProcess value) unableToProcess,
     required TResult Function(DefaultError value) defaultError,
     required TResult Function(UnexpectedError value) unexpectedError,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(RequestCancelled value)? requestCancelled,
@@ -122,7 +125,8 @@ mixin _$NetworkException {
     TResult? Function(UnableToProcess value)? unableToProcess,
     TResult? Function(DefaultError value)? defaultError,
     TResult? Function(UnexpectedError value)? unexpectedError,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(RequestCancelled value)? requestCancelled,
@@ -144,15 +148,15 @@ mixin _$NetworkException {
     TResult Function(DefaultError value)? defaultError,
     TResult Function(UnexpectedError value)? unexpectedError,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $NetworkExceptionCopyWith<$Res> {
   factory $NetworkExceptionCopyWith(
-    NetworkException value,
-    $Res Function(NetworkException) then,
-  ) = _$NetworkExceptionCopyWithImpl<$Res, NetworkException>;
+          NetworkException value, $Res Function(NetworkException) then) =
+      _$NetworkExceptionCopyWithImpl<$Res, NetworkException>;
 }
 
 /// @nodoc
@@ -171,20 +175,18 @@ class _$NetworkExceptionCopyWithImpl<$Res, $Val extends NetworkException>
 
 /// @nodoc
 abstract class _$$RequestCancelledImplCopyWith<$Res> {
-  factory _$$RequestCancelledImplCopyWith(
-    _$RequestCancelledImpl value,
-    $Res Function(_$RequestCancelledImpl) then,
-  ) = __$$RequestCancelledImplCopyWithImpl<$Res>;
+  factory _$$RequestCancelledImplCopyWith(_$RequestCancelledImpl value,
+          $Res Function(_$RequestCancelledImpl) then) =
+      __$$RequestCancelledImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$RequestCancelledImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$RequestCancelledImpl>
     implements _$$RequestCancelledImplCopyWith<$Res> {
-  __$$RequestCancelledImplCopyWithImpl(
-    _$RequestCancelledImpl _value,
-    $Res Function(_$RequestCancelledImpl) _then,
-  ) : super(_value, _then);
+  __$$RequestCancelledImplCopyWithImpl(_$RequestCancelledImpl _value,
+      $Res Function(_$RequestCancelledImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -374,10 +376,9 @@ abstract class RequestCancelled implements NetworkException {
 
 /// @nodoc
 abstract class _$$UnauthorisedRequestImplCopyWith<$Res> {
-  factory _$$UnauthorisedRequestImplCopyWith(
-    _$UnauthorisedRequestImpl value,
-    $Res Function(_$UnauthorisedRequestImpl) then,
-  ) = __$$UnauthorisedRequestImplCopyWithImpl<$Res>;
+  factory _$$UnauthorisedRequestImplCopyWith(_$UnauthorisedRequestImpl value,
+          $Res Function(_$UnauthorisedRequestImpl) then) =
+      __$$UnauthorisedRequestImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
@@ -386,24 +387,23 @@ abstract class _$$UnauthorisedRequestImplCopyWith<$Res> {
 class __$$UnauthorisedRequestImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$UnauthorisedRequestImpl>
     implements _$$UnauthorisedRequestImplCopyWith<$Res> {
-  __$$UnauthorisedRequestImplCopyWithImpl(
-    _$UnauthorisedRequestImpl _value,
-    $Res Function(_$UnauthorisedRequestImpl) _then,
-  ) : super(_value, _then);
+  __$$UnauthorisedRequestImplCopyWithImpl(_$UnauthorisedRequestImpl _value,
+      $Res Function(_$UnauthorisedRequestImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? message = freezed}) {
-    return _then(
-      _$UnauthorisedRequestImpl(
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$UnauthorisedRequestImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
@@ -438,9 +438,7 @@ class _$UnauthorisedRequestImpl implements UnauthorisedRequest {
   @pragma('vm:prefer-inline')
   _$$UnauthorisedRequestImplCopyWith<_$UnauthorisedRequestImpl> get copyWith =>
       __$$UnauthorisedRequestImplCopyWithImpl<_$UnauthorisedRequestImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -617,9 +615,8 @@ abstract class UnauthorisedRequest implements NetworkException {
 /// @nodoc
 abstract class _$$BadRequestImplCopyWith<$Res> {
   factory _$$BadRequestImplCopyWith(
-    _$BadRequestImpl value,
-    $Res Function(_$BadRequestImpl) then,
-  ) = __$$BadRequestImplCopyWithImpl<$Res>;
+          _$BadRequestImpl value, $Res Function(_$BadRequestImpl) then) =
+      __$$BadRequestImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
@@ -629,23 +626,22 @@ class __$$BadRequestImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$BadRequestImpl>
     implements _$$BadRequestImplCopyWith<$Res> {
   __$$BadRequestImplCopyWithImpl(
-    _$BadRequestImpl _value,
-    $Res Function(_$BadRequestImpl) _then,
-  ) : super(_value, _then);
+      _$BadRequestImpl _value, $Res Function(_$BadRequestImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? message = freezed}) {
-    return _then(
-      _$BadRequestImpl(
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$BadRequestImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
@@ -855,9 +851,8 @@ abstract class BadRequest implements NetworkException {
 /// @nodoc
 abstract class _$$NotFoundImplCopyWith<$Res> {
   factory _$$NotFoundImplCopyWith(
-    _$NotFoundImpl value,
-    $Res Function(_$NotFoundImpl) then,
-  ) = __$$NotFoundImplCopyWithImpl<$Res>;
+          _$NotFoundImpl value, $Res Function(_$NotFoundImpl) then) =
+      __$$NotFoundImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
@@ -867,23 +862,22 @@ class __$$NotFoundImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$NotFoundImpl>
     implements _$$NotFoundImplCopyWith<$Res> {
   __$$NotFoundImplCopyWithImpl(
-    _$NotFoundImpl _value,
-    $Res Function(_$NotFoundImpl) _then,
-  ) : super(_value, _then);
+      _$NotFoundImpl _value, $Res Function(_$NotFoundImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? message = freezed}) {
-    return _then(
-      _$NotFoundImpl(
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$NotFoundImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
@@ -1092,20 +1086,18 @@ abstract class NotFound implements NetworkException {
 
 /// @nodoc
 abstract class _$$MethodNotAllowedImplCopyWith<$Res> {
-  factory _$$MethodNotAllowedImplCopyWith(
-    _$MethodNotAllowedImpl value,
-    $Res Function(_$MethodNotAllowedImpl) then,
-  ) = __$$MethodNotAllowedImplCopyWithImpl<$Res>;
+  factory _$$MethodNotAllowedImplCopyWith(_$MethodNotAllowedImpl value,
+          $Res Function(_$MethodNotAllowedImpl) then) =
+      __$$MethodNotAllowedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$MethodNotAllowedImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$MethodNotAllowedImpl>
     implements _$$MethodNotAllowedImplCopyWith<$Res> {
-  __$$MethodNotAllowedImplCopyWithImpl(
-    _$MethodNotAllowedImpl _value,
-    $Res Function(_$MethodNotAllowedImpl) _then,
-  ) : super(_value, _then);
+  __$$MethodNotAllowedImplCopyWithImpl(_$MethodNotAllowedImpl _value,
+      $Res Function(_$MethodNotAllowedImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -1296,9 +1288,8 @@ abstract class MethodNotAllowed implements NetworkException {
 /// @nodoc
 abstract class _$$NotAcceptableImplCopyWith<$Res> {
   factory _$$NotAcceptableImplCopyWith(
-    _$NotAcceptableImpl value,
-    $Res Function(_$NotAcceptableImpl) then,
-  ) = __$$NotAcceptableImplCopyWithImpl<$Res>;
+          _$NotAcceptableImpl value, $Res Function(_$NotAcceptableImpl) then) =
+      __$$NotAcceptableImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -1306,9 +1297,8 @@ class __$$NotAcceptableImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$NotAcceptableImpl>
     implements _$$NotAcceptableImplCopyWith<$Res> {
   __$$NotAcceptableImplCopyWithImpl(
-    _$NotAcceptableImpl _value,
-    $Res Function(_$NotAcceptableImpl) _then,
-  ) : super(_value, _then);
+      _$NotAcceptableImpl _value, $Res Function(_$NotAcceptableImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -1498,10 +1488,9 @@ abstract class NotAcceptable implements NetworkException {
 
 /// @nodoc
 abstract class _$$RequestTimeoutImplCopyWith<$Res> {
-  factory _$$RequestTimeoutImplCopyWith(
-    _$RequestTimeoutImpl value,
-    $Res Function(_$RequestTimeoutImpl) then,
-  ) = __$$RequestTimeoutImplCopyWithImpl<$Res>;
+  factory _$$RequestTimeoutImplCopyWith(_$RequestTimeoutImpl value,
+          $Res Function(_$RequestTimeoutImpl) then) =
+      __$$RequestTimeoutImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -1509,9 +1498,8 @@ class __$$RequestTimeoutImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$RequestTimeoutImpl>
     implements _$$RequestTimeoutImplCopyWith<$Res> {
   __$$RequestTimeoutImplCopyWithImpl(
-    _$RequestTimeoutImpl _value,
-    $Res Function(_$RequestTimeoutImpl) _then,
-  ) : super(_value, _then);
+      _$RequestTimeoutImpl _value, $Res Function(_$RequestTimeoutImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -1702,9 +1690,8 @@ abstract class RequestTimeout implements NetworkException {
 /// @nodoc
 abstract class _$$SendTimeoutImplCopyWith<$Res> {
   factory _$$SendTimeoutImplCopyWith(
-    _$SendTimeoutImpl value,
-    $Res Function(_$SendTimeoutImpl) then,
-  ) = __$$SendTimeoutImplCopyWithImpl<$Res>;
+          _$SendTimeoutImpl value, $Res Function(_$SendTimeoutImpl) then) =
+      __$$SendTimeoutImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -1712,9 +1699,8 @@ class __$$SendTimeoutImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$SendTimeoutImpl>
     implements _$$SendTimeoutImplCopyWith<$Res> {
   __$$SendTimeoutImplCopyWithImpl(
-    _$SendTimeoutImpl _value,
-    $Res Function(_$SendTimeoutImpl) _then,
-  ) : super(_value, _then);
+      _$SendTimeoutImpl _value, $Res Function(_$SendTimeoutImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -1904,10 +1890,9 @@ abstract class SendTimeout implements NetworkException {
 
 /// @nodoc
 abstract class _$$ReceiveTimeoutImplCopyWith<$Res> {
-  factory _$$ReceiveTimeoutImplCopyWith(
-    _$ReceiveTimeoutImpl value,
-    $Res Function(_$ReceiveTimeoutImpl) then,
-  ) = __$$ReceiveTimeoutImplCopyWithImpl<$Res>;
+  factory _$$ReceiveTimeoutImplCopyWith(_$ReceiveTimeoutImpl value,
+          $Res Function(_$ReceiveTimeoutImpl) then) =
+      __$$ReceiveTimeoutImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -1915,9 +1900,8 @@ class __$$ReceiveTimeoutImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$ReceiveTimeoutImpl>
     implements _$$ReceiveTimeoutImplCopyWith<$Res> {
   __$$ReceiveTimeoutImplCopyWithImpl(
-    _$ReceiveTimeoutImpl _value,
-    $Res Function(_$ReceiveTimeoutImpl) _then,
-  ) : super(_value, _then);
+      _$ReceiveTimeoutImpl _value, $Res Function(_$ReceiveTimeoutImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -2108,9 +2092,8 @@ abstract class ReceiveTimeout implements NetworkException {
 /// @nodoc
 abstract class _$$ConflictImplCopyWith<$Res> {
   factory _$$ConflictImplCopyWith(
-    _$ConflictImpl value,
-    $Res Function(_$ConflictImpl) then,
-  ) = __$$ConflictImplCopyWithImpl<$Res>;
+          _$ConflictImpl value, $Res Function(_$ConflictImpl) then) =
+      __$$ConflictImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -2118,9 +2101,8 @@ class __$$ConflictImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$ConflictImpl>
     implements _$$ConflictImplCopyWith<$Res> {
   __$$ConflictImplCopyWithImpl(
-    _$ConflictImpl _value,
-    $Res Function(_$ConflictImpl) _then,
-  ) : super(_value, _then);
+      _$ConflictImpl _value, $Res Function(_$ConflictImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -2310,10 +2292,9 @@ abstract class Conflict implements NetworkException {
 
 /// @nodoc
 abstract class _$$InternalServerErrorImplCopyWith<$Res> {
-  factory _$$InternalServerErrorImplCopyWith(
-    _$InternalServerErrorImpl value,
-    $Res Function(_$InternalServerErrorImpl) then,
-  ) = __$$InternalServerErrorImplCopyWithImpl<$Res>;
+  factory _$$InternalServerErrorImplCopyWith(_$InternalServerErrorImpl value,
+          $Res Function(_$InternalServerErrorImpl) then) =
+      __$$InternalServerErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
@@ -2322,24 +2303,23 @@ abstract class _$$InternalServerErrorImplCopyWith<$Res> {
 class __$$InternalServerErrorImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$InternalServerErrorImpl>
     implements _$$InternalServerErrorImplCopyWith<$Res> {
-  __$$InternalServerErrorImplCopyWithImpl(
-    _$InternalServerErrorImpl _value,
-    $Res Function(_$InternalServerErrorImpl) _then,
-  ) : super(_value, _then);
+  __$$InternalServerErrorImplCopyWithImpl(_$InternalServerErrorImpl _value,
+      $Res Function(_$InternalServerErrorImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? message = freezed}) {
-    return _then(
-      _$InternalServerErrorImpl(
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$InternalServerErrorImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
@@ -2374,9 +2354,7 @@ class _$InternalServerErrorImpl implements InternalServerError {
   @pragma('vm:prefer-inline')
   _$$InternalServerErrorImplCopyWith<_$InternalServerErrorImpl> get copyWith =>
       __$$InternalServerErrorImplCopyWithImpl<_$InternalServerErrorImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2552,10 +2530,9 @@ abstract class InternalServerError implements NetworkException {
 
 /// @nodoc
 abstract class _$$NotImplementedImplCopyWith<$Res> {
-  factory _$$NotImplementedImplCopyWith(
-    _$NotImplementedImpl value,
-    $Res Function(_$NotImplementedImpl) then,
-  ) = __$$NotImplementedImplCopyWithImpl<$Res>;
+  factory _$$NotImplementedImplCopyWith(_$NotImplementedImpl value,
+          $Res Function(_$NotImplementedImpl) then) =
+      __$$NotImplementedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -2563,9 +2540,8 @@ class __$$NotImplementedImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$NotImplementedImpl>
     implements _$$NotImplementedImplCopyWith<$Res> {
   __$$NotImplementedImplCopyWithImpl(
-    _$NotImplementedImpl _value,
-    $Res Function(_$NotImplementedImpl) _then,
-  ) : super(_value, _then);
+      _$NotImplementedImpl _value, $Res Function(_$NotImplementedImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -2755,20 +2731,18 @@ abstract class NotImplemented implements NetworkException {
 
 /// @nodoc
 abstract class _$$ServiceUnavailableImplCopyWith<$Res> {
-  factory _$$ServiceUnavailableImplCopyWith(
-    _$ServiceUnavailableImpl value,
-    $Res Function(_$ServiceUnavailableImpl) then,
-  ) = __$$ServiceUnavailableImplCopyWithImpl<$Res>;
+  factory _$$ServiceUnavailableImplCopyWith(_$ServiceUnavailableImpl value,
+          $Res Function(_$ServiceUnavailableImpl) then) =
+      __$$ServiceUnavailableImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$ServiceUnavailableImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$ServiceUnavailableImpl>
     implements _$$ServiceUnavailableImplCopyWith<$Res> {
-  __$$ServiceUnavailableImplCopyWithImpl(
-    _$ServiceUnavailableImpl _value,
-    $Res Function(_$ServiceUnavailableImpl) _then,
-  ) : super(_value, _then);
+  __$$ServiceUnavailableImplCopyWithImpl(_$ServiceUnavailableImpl _value,
+      $Res Function(_$ServiceUnavailableImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -2958,20 +2932,18 @@ abstract class ServiceUnavailable implements NetworkException {
 
 /// @nodoc
 abstract class _$$NoInternetConnectionImplCopyWith<$Res> {
-  factory _$$NoInternetConnectionImplCopyWith(
-    _$NoInternetConnectionImpl value,
-    $Res Function(_$NoInternetConnectionImpl) then,
-  ) = __$$NoInternetConnectionImplCopyWithImpl<$Res>;
+  factory _$$NoInternetConnectionImplCopyWith(_$NoInternetConnectionImpl value,
+          $Res Function(_$NoInternetConnectionImpl) then) =
+      __$$NoInternetConnectionImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$NoInternetConnectionImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$NoInternetConnectionImpl>
     implements _$$NoInternetConnectionImplCopyWith<$Res> {
-  __$$NoInternetConnectionImplCopyWithImpl(
-    _$NoInternetConnectionImpl _value,
-    $Res Function(_$NoInternetConnectionImpl) _then,
-  ) : super(_value, _then);
+  __$$NoInternetConnectionImplCopyWithImpl(_$NoInternetConnectionImpl _value,
+      $Res Function(_$NoInternetConnectionImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
@@ -3162,10 +3134,9 @@ abstract class NoInternetConnection implements NetworkException {
 
 /// @nodoc
 abstract class _$$FormatExceptionImplCopyWith<$Res> {
-  factory _$$FormatExceptionImplCopyWith(
-    _$FormatExceptionImpl value,
-    $Res Function(_$FormatExceptionImpl) then,
-  ) = __$$FormatExceptionImplCopyWithImpl<$Res>;
+  factory _$$FormatExceptionImplCopyWith(_$FormatExceptionImpl value,
+          $Res Function(_$FormatExceptionImpl) then) =
+      __$$FormatExceptionImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
@@ -3175,23 +3146,22 @@ class __$$FormatExceptionImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$FormatExceptionImpl>
     implements _$$FormatExceptionImplCopyWith<$Res> {
   __$$FormatExceptionImplCopyWithImpl(
-    _$FormatExceptionImpl _value,
-    $Res Function(_$FormatExceptionImpl) _then,
-  ) : super(_value, _then);
+      _$FormatExceptionImpl _value, $Res Function(_$FormatExceptionImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? message = freezed}) {
-    return _then(
-      _$FormatExceptionImpl(
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$FormatExceptionImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
@@ -3226,9 +3196,7 @@ class _$FormatExceptionImpl implements FormatException {
   @pragma('vm:prefer-inline')
   _$$FormatExceptionImplCopyWith<_$FormatExceptionImpl> get copyWith =>
       __$$FormatExceptionImplCopyWithImpl<_$FormatExceptionImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3404,10 +3372,9 @@ abstract class FormatException implements NetworkException {
 
 /// @nodoc
 abstract class _$$UnableToProcessImplCopyWith<$Res> {
-  factory _$$UnableToProcessImplCopyWith(
-    _$UnableToProcessImpl value,
-    $Res Function(_$UnableToProcessImpl) then,
-  ) = __$$UnableToProcessImplCopyWithImpl<$Res>;
+  factory _$$UnableToProcessImplCopyWith(_$UnableToProcessImpl value,
+          $Res Function(_$UnableToProcessImpl) then) =
+      __$$UnableToProcessImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
@@ -3417,23 +3384,22 @@ class __$$UnableToProcessImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$UnableToProcessImpl>
     implements _$$UnableToProcessImplCopyWith<$Res> {
   __$$UnableToProcessImplCopyWithImpl(
-    _$UnableToProcessImpl _value,
-    $Res Function(_$UnableToProcessImpl) _then,
-  ) : super(_value, _then);
+      _$UnableToProcessImpl _value, $Res Function(_$UnableToProcessImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? message = freezed}) {
-    return _then(
-      _$UnableToProcessImpl(
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$UnableToProcessImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
@@ -3468,9 +3434,7 @@ class _$UnableToProcessImpl implements UnableToProcess {
   @pragma('vm:prefer-inline')
   _$$UnableToProcessImplCopyWith<_$UnableToProcessImpl> get copyWith =>
       __$$UnableToProcessImplCopyWithImpl<_$UnableToProcessImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3647,9 +3611,8 @@ abstract class UnableToProcess implements NetworkException {
 /// @nodoc
 abstract class _$$DefaultErrorImplCopyWith<$Res> {
   factory _$$DefaultErrorImplCopyWith(
-    _$DefaultErrorImpl value,
-    $Res Function(_$DefaultErrorImpl) then,
-  ) = __$$DefaultErrorImplCopyWithImpl<$Res>;
+          _$DefaultErrorImpl value, $Res Function(_$DefaultErrorImpl) then) =
+      __$$DefaultErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error, int? statusCode});
 }
@@ -3659,27 +3622,27 @@ class __$$DefaultErrorImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$DefaultErrorImpl>
     implements _$$DefaultErrorImplCopyWith<$Res> {
   __$$DefaultErrorImplCopyWithImpl(
-    _$DefaultErrorImpl _value,
-    $Res Function(_$DefaultErrorImpl) _then,
-  ) : super(_value, _then);
+      _$DefaultErrorImpl _value, $Res Function(_$DefaultErrorImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? error = null, Object? statusCode = freezed}) {
-    return _then(
-      _$DefaultErrorImpl(
-        error: null == error
-            ? _value.error
-            : error // ignore: cast_nullable_to_non_nullable
-                  as String,
-        statusCode: freezed == statusCode
-            ? _value.statusCode
-            : statusCode // ignore: cast_nullable_to_non_nullable
-                  as int?,
-      ),
-    );
+  $Res call({
+    Object? error = null,
+    Object? statusCode = freezed,
+  }) {
+    return _then(_$DefaultErrorImpl(
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusCode: freezed == statusCode
+          ? _value.statusCode
+          : statusCode // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
   }
 }
 
@@ -3879,10 +3842,9 @@ class _$DefaultErrorImpl implements DefaultError {
 }
 
 abstract class DefaultError implements NetworkException {
-  const factory DefaultError({
-    required final String error,
-    final int? statusCode,
-  }) = _$DefaultErrorImpl;
+  const factory DefaultError(
+      {required final String error,
+      final int? statusCode}) = _$DefaultErrorImpl;
 
   String get error;
   int? get statusCode;
@@ -3896,10 +3858,9 @@ abstract class DefaultError implements NetworkException {
 
 /// @nodoc
 abstract class _$$UnexpectedErrorImplCopyWith<$Res> {
-  factory _$$UnexpectedErrorImplCopyWith(
-    _$UnexpectedErrorImpl value,
-    $Res Function(_$UnexpectedErrorImpl) then,
-  ) = __$$UnexpectedErrorImplCopyWithImpl<$Res>;
+  factory _$$UnexpectedErrorImplCopyWith(_$UnexpectedErrorImpl value,
+          $Res Function(_$UnexpectedErrorImpl) then) =
+      __$$UnexpectedErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
@@ -3909,23 +3870,22 @@ class __$$UnexpectedErrorImplCopyWithImpl<$Res>
     extends _$NetworkExceptionCopyWithImpl<$Res, _$UnexpectedErrorImpl>
     implements _$$UnexpectedErrorImplCopyWith<$Res> {
   __$$UnexpectedErrorImplCopyWithImpl(
-    _$UnexpectedErrorImpl _value,
-    $Res Function(_$UnexpectedErrorImpl) _then,
-  ) : super(_value, _then);
+      _$UnexpectedErrorImpl _value, $Res Function(_$UnexpectedErrorImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of NetworkException
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? message = freezed}) {
-    return _then(
-      _$UnexpectedErrorImpl(
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$UnexpectedErrorImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
@@ -3960,9 +3920,7 @@ class _$UnexpectedErrorImpl implements UnexpectedError {
   @pragma('vm:prefer-inline')
   _$$UnexpectedErrorImplCopyWith<_$UnexpectedErrorImpl> get copyWith =>
       __$$UnexpectedErrorImplCopyWithImpl<_$UnexpectedErrorImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs

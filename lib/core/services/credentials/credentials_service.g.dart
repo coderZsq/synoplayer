@@ -7,30 +7,30 @@ part of 'credentials_service.dart';
 // **************************************************************************
 
 _$LoginCredentialsImpl _$$LoginCredentialsImplFromJson(
-  Map<String, dynamic> json,
-) => _$LoginCredentialsImpl(
-  quickConnectId: json['quickConnectId'] as String,
-  username: json['username'] as String,
-  password: json['password'] as String,
-  workingAddress: json['workingAddress'] as String?,
-  sid: json['sid'] as String?,
-  loginTime: json['loginTime'] == null
-      ? null
-      : DateTime.parse(json['loginTime'] as String),
-  rememberCredentials: json['rememberCredentials'] as bool? ?? true,
-);
+        Map<String, dynamic> json) =>
+    _$LoginCredentialsImpl(
+      quickConnectId: json['quickConnectId'] as String,
+      username: json['username'] as String,
+      password: json['password'] as String,
+      workingAddress: json['workingAddress'] as String?,
+      sid: json['sid'] as String?,
+      loginTime: json['loginTime'] == null
+          ? null
+          : DateTime.parse(json['loginTime'] as String),
+      rememberCredentials: json['rememberCredentials'] as bool? ?? true,
+    );
 
 Map<String, dynamic> _$$LoginCredentialsImplToJson(
-  _$LoginCredentialsImpl instance,
-) => <String, dynamic>{
-  'quickConnectId': instance.quickConnectId,
-  'username': instance.username,
-  'password': instance.password,
-  'workingAddress': instance.workingAddress,
-  'sid': instance.sid,
-  'loginTime': instance.loginTime?.toIso8601String(),
-  'rememberCredentials': instance.rememberCredentials,
-};
+        _$LoginCredentialsImpl instance) =>
+    <String, dynamic>{
+      'quickConnectId': instance.quickConnectId,
+      'username': instance.username,
+      'password': instance.password,
+      'workingAddress': instance.workingAddress,
+      'sid': instance.sid,
+      'loginTime': instance.loginTime?.toIso8601String(),
+      'rememberCredentials': instance.rememberCredentials,
+    };
 
 // **************************************************************************
 // RiverpodGenerator
@@ -45,14 +45,14 @@ String _$credentialsServiceHash() =>
 @ProviderFor(credentialsService)
 final credentialsServiceProvider =
     AutoDisposeProvider<CredentialsService>.internal(
-      credentialsService,
-      name: r'credentialsServiceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$credentialsServiceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  credentialsService,
+  name: r'credentialsServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$credentialsServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -66,14 +66,14 @@ String _$currentCredentialsHash() =>
 @ProviderFor(currentCredentials)
 final currentCredentialsProvider =
     AutoDisposeFutureProvider<LoginCredentials?>.internal(
-      currentCredentials,
-      name: r'currentCredentialsProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$currentCredentialsHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  currentCredentials,
+  name: r'currentCredentialsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentCredentialsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -106,9 +106,8 @@ String _$isLoggedInHash() => r'da65a2775a9785b4917669bd9ea3d6a5eca0e9ce';
 final isLoggedInProvider = AutoDisposeFutureProvider<bool>.internal(
   isLoggedIn,
   name: r'isLoggedInProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$isLoggedInHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$isLoggedInHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

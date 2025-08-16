@@ -12,8 +12,7 @@ part of 'login_result.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 LoginResult _$LoginResultFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
@@ -27,12 +26,8 @@ LoginResult _$LoginResultFromJson(Map<String, dynamic> json) {
       return LoginResultRequireOTPWithAddress.fromJson(json);
 
     default:
-      throw CheckedFromJsonException(
-        json,
-        'runtimeType',
-        'LoginResult',
-        'Invalid union type "${json['runtimeType']}"!',
-      );
+      throw CheckedFromJsonException(json, 'runtimeType', 'LoginResult',
+          'Invalid union type "${json['runtimeType']}"!');
   }
 }
 
@@ -44,50 +39,56 @@ mixin _$LoginResult {
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
-    requireOTPWithAddress,
-  }) => throw _privateConstructorUsedError;
+        requireOTPWithAddress,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String sid, String? availableAddress)? success,
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
-  }) => throw _privateConstructorUsedError;
+        requireOTPWithAddress,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String sid, String? availableAddress)? success,
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoginResultSuccess value) success,
     required TResult Function(LoginResultFailure value) failure,
     required TResult Function(LoginResultRequireOTP value) requireOTP,
     required TResult Function(LoginResultRequireOTPWithAddress value)
-    requireOTPWithAddress,
-  }) => throw _privateConstructorUsedError;
+        requireOTPWithAddress,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoginResultSuccess value)? success,
     TResult? Function(LoginResultFailure value)? failure,
     TResult? Function(LoginResultRequireOTP value)? requireOTP,
     TResult? Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
-  }) => throw _privateConstructorUsedError;
+        requireOTPWithAddress,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoginResultSuccess value)? success,
     TResult Function(LoginResultFailure value)? failure,
     TResult Function(LoginResultRequireOTP value)? requireOTP,
     TResult Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this LoginResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -96,9 +97,8 @@ mixin _$LoginResult {
 /// @nodoc
 abstract class $LoginResultCopyWith<$Res> {
   factory $LoginResultCopyWith(
-    LoginResult value,
-    $Res Function(LoginResult) then,
-  ) = _$LoginResultCopyWithImpl<$Res, LoginResult>;
+          LoginResult value, $Res Function(LoginResult) then) =
+      _$LoginResultCopyWithImpl<$Res, LoginResult>;
 }
 
 /// @nodoc
@@ -117,10 +117,9 @@ class _$LoginResultCopyWithImpl<$Res, $Val extends LoginResult>
 
 /// @nodoc
 abstract class _$$LoginResultSuccessImplCopyWith<$Res> {
-  factory _$$LoginResultSuccessImplCopyWith(
-    _$LoginResultSuccessImpl value,
-    $Res Function(_$LoginResultSuccessImpl) then,
-  ) = __$$LoginResultSuccessImplCopyWithImpl<$Res>;
+  factory _$$LoginResultSuccessImplCopyWith(_$LoginResultSuccessImpl value,
+          $Res Function(_$LoginResultSuccessImpl) then) =
+      __$$LoginResultSuccessImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String sid, String? availableAddress});
 }
@@ -129,40 +128,38 @@ abstract class _$$LoginResultSuccessImplCopyWith<$Res> {
 class __$$LoginResultSuccessImplCopyWithImpl<$Res>
     extends _$LoginResultCopyWithImpl<$Res, _$LoginResultSuccessImpl>
     implements _$$LoginResultSuccessImplCopyWith<$Res> {
-  __$$LoginResultSuccessImplCopyWithImpl(
-    _$LoginResultSuccessImpl _value,
-    $Res Function(_$LoginResultSuccessImpl) _then,
-  ) : super(_value, _then);
+  __$$LoginResultSuccessImplCopyWithImpl(_$LoginResultSuccessImpl _value,
+      $Res Function(_$LoginResultSuccessImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of LoginResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? sid = null, Object? availableAddress = freezed}) {
-    return _then(
-      _$LoginResultSuccessImpl(
-        sid: null == sid
-            ? _value.sid
-            : sid // ignore: cast_nullable_to_non_nullable
-                  as String,
-        availableAddress: freezed == availableAddress
-            ? _value.availableAddress
-            : availableAddress // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+  $Res call({
+    Object? sid = null,
+    Object? availableAddress = freezed,
+  }) {
+    return _then(_$LoginResultSuccessImpl(
+      sid: null == sid
+          ? _value.sid
+          : sid // ignore: cast_nullable_to_non_nullable
+              as String,
+      availableAddress: freezed == availableAddress
+          ? _value.availableAddress
+          : availableAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$LoginResultSuccessImpl extends LoginResultSuccess {
-  const _$LoginResultSuccessImpl({
-    required this.sid,
-    this.availableAddress,
-    final String? $type,
-  }) : $type = $type ?? 'success',
-       super._();
+  const _$LoginResultSuccessImpl(
+      {required this.sid, this.availableAddress, final String? $type})
+      : $type = $type ?? 'success',
+        super._();
 
   factory _$LoginResultSuccessImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginResultSuccessImplFromJson(json);
@@ -201,9 +198,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
   @pragma('vm:prefer-inline')
   _$$LoginResultSuccessImplCopyWith<_$LoginResultSuccessImpl> get copyWith =>
       __$$LoginResultSuccessImplCopyWithImpl<_$LoginResultSuccessImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -212,7 +207,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return success(sid, availableAddress);
   }
@@ -224,7 +219,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return success?.call(sid, availableAddress);
   }
@@ -236,7 +231,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -252,7 +247,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     required TResult Function(LoginResultFailure value) failure,
     required TResult Function(LoginResultRequireOTP value) requireOTP,
     required TResult Function(LoginResultRequireOTPWithAddress value)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return success(this);
   }
@@ -264,7 +259,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     TResult? Function(LoginResultFailure value)? failure,
     TResult? Function(LoginResultRequireOTP value)? requireOTP,
     TResult? Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return success?.call(this);
   }
@@ -276,7 +271,7 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
     TResult Function(LoginResultFailure value)? failure,
     TResult Function(LoginResultRequireOTP value)? requireOTP,
     TResult Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -287,15 +282,16 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginResultSuccessImplToJson(this);
+    return _$$LoginResultSuccessImplToJson(
+      this,
+    );
   }
 }
 
 abstract class LoginResultSuccess extends LoginResult {
-  const factory LoginResultSuccess({
-    required final String sid,
-    final String? availableAddress,
-  }) = _$LoginResultSuccessImpl;
+  const factory LoginResultSuccess(
+      {required final String sid,
+      final String? availableAddress}) = _$LoginResultSuccessImpl;
   const LoginResultSuccess._() : super._();
 
   factory LoginResultSuccess.fromJson(Map<String, dynamic> json) =
@@ -313,10 +309,9 @@ abstract class LoginResultSuccess extends LoginResult {
 
 /// @nodoc
 abstract class _$$LoginResultFailureImplCopyWith<$Res> {
-  factory _$$LoginResultFailureImplCopyWith(
-    _$LoginResultFailureImpl value,
-    $Res Function(_$LoginResultFailureImpl) then,
-  ) = __$$LoginResultFailureImplCopyWithImpl<$Res>;
+  factory _$$LoginResultFailureImplCopyWith(_$LoginResultFailureImpl value,
+          $Res Function(_$LoginResultFailureImpl) then) =
+      __$$LoginResultFailureImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String errorMessage});
 }
@@ -325,35 +320,33 @@ abstract class _$$LoginResultFailureImplCopyWith<$Res> {
 class __$$LoginResultFailureImplCopyWithImpl<$Res>
     extends _$LoginResultCopyWithImpl<$Res, _$LoginResultFailureImpl>
     implements _$$LoginResultFailureImplCopyWith<$Res> {
-  __$$LoginResultFailureImplCopyWithImpl(
-    _$LoginResultFailureImpl _value,
-    $Res Function(_$LoginResultFailureImpl) _then,
-  ) : super(_value, _then);
+  __$$LoginResultFailureImplCopyWithImpl(_$LoginResultFailureImpl _value,
+      $Res Function(_$LoginResultFailureImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of LoginResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? errorMessage = null}) {
-    return _then(
-      _$LoginResultFailureImpl(
-        errorMessage: null == errorMessage
-            ? _value.errorMessage
-            : errorMessage // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
+  $Res call({
+    Object? errorMessage = null,
+  }) {
+    return _then(_$LoginResultFailureImpl(
+      errorMessage: null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$LoginResultFailureImpl extends LoginResultFailure {
-  const _$LoginResultFailureImpl({
-    required this.errorMessage,
-    final String? $type,
-  }) : $type = $type ?? 'failure',
-       super._();
+  const _$LoginResultFailureImpl(
+      {required this.errorMessage, final String? $type})
+      : $type = $type ?? 'failure',
+        super._();
 
   factory _$LoginResultFailureImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginResultFailureImplFromJson(json);
@@ -389,9 +382,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
   @pragma('vm:prefer-inline')
   _$$LoginResultFailureImplCopyWith<_$LoginResultFailureImpl> get copyWith =>
       __$$LoginResultFailureImplCopyWithImpl<_$LoginResultFailureImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -400,7 +391,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return failure(errorMessage);
   }
@@ -412,7 +403,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return failure?.call(errorMessage);
   }
@@ -424,7 +415,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (failure != null) {
@@ -440,7 +431,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
     required TResult Function(LoginResultFailure value) failure,
     required TResult Function(LoginResultRequireOTP value) requireOTP,
     required TResult Function(LoginResultRequireOTPWithAddress value)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return failure(this);
   }
@@ -452,7 +443,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
     TResult? Function(LoginResultFailure value)? failure,
     TResult? Function(LoginResultRequireOTP value)? requireOTP,
     TResult? Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return failure?.call(this);
   }
@@ -464,7 +455,7 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
     TResult Function(LoginResultFailure value)? failure,
     TResult Function(LoginResultRequireOTP value)? requireOTP,
     TResult Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (failure != null) {
@@ -475,7 +466,9 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginResultFailureImplToJson(this);
+    return _$$LoginResultFailureImplToJson(
+      this,
+    );
   }
 }
 
@@ -499,9 +492,9 @@ abstract class LoginResultFailure extends LoginResult {
 /// @nodoc
 abstract class _$$LoginResultRequireOTPImplCopyWith<$Res> {
   factory _$$LoginResultRequireOTPImplCopyWith(
-    _$LoginResultRequireOTPImpl value,
-    $Res Function(_$LoginResultRequireOTPImpl) then,
-  ) = __$$LoginResultRequireOTPImplCopyWithImpl<$Res>;
+          _$LoginResultRequireOTPImpl value,
+          $Res Function(_$LoginResultRequireOTPImpl) then) =
+      __$$LoginResultRequireOTPImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String errorMessage});
 }
@@ -510,35 +503,33 @@ abstract class _$$LoginResultRequireOTPImplCopyWith<$Res> {
 class __$$LoginResultRequireOTPImplCopyWithImpl<$Res>
     extends _$LoginResultCopyWithImpl<$Res, _$LoginResultRequireOTPImpl>
     implements _$$LoginResultRequireOTPImplCopyWith<$Res> {
-  __$$LoginResultRequireOTPImplCopyWithImpl(
-    _$LoginResultRequireOTPImpl _value,
-    $Res Function(_$LoginResultRequireOTPImpl) _then,
-  ) : super(_value, _then);
+  __$$LoginResultRequireOTPImplCopyWithImpl(_$LoginResultRequireOTPImpl _value,
+      $Res Function(_$LoginResultRequireOTPImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of LoginResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? errorMessage = null}) {
-    return _then(
-      _$LoginResultRequireOTPImpl(
-        errorMessage: null == errorMessage
-            ? _value.errorMessage
-            : errorMessage // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
+  $Res call({
+    Object? errorMessage = null,
+  }) {
+    return _then(_$LoginResultRequireOTPImpl(
+      errorMessage: null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
-  const _$LoginResultRequireOTPImpl({
-    required this.errorMessage,
-    final String? $type,
-  }) : $type = $type ?? 'requireOTP',
-       super._();
+  const _$LoginResultRequireOTPImpl(
+      {required this.errorMessage, final String? $type})
+      : $type = $type ?? 'requireOTP',
+        super._();
 
   factory _$LoginResultRequireOTPImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginResultRequireOTPImplFromJson(json);
@@ -573,11 +564,8 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
   @override
   @pragma('vm:prefer-inline')
   _$$LoginResultRequireOTPImplCopyWith<_$LoginResultRequireOTPImpl>
-  get copyWith =>
-      __$$LoginResultRequireOTPImplCopyWithImpl<_$LoginResultRequireOTPImpl>(
-        this,
-        _$identity,
-      );
+      get copyWith => __$$LoginResultRequireOTPImplCopyWithImpl<
+          _$LoginResultRequireOTPImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -586,7 +574,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTP(errorMessage);
   }
@@ -598,7 +586,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTP?.call(errorMessage);
   }
@@ -610,7 +598,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (requireOTP != null) {
@@ -626,7 +614,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
     required TResult Function(LoginResultFailure value) failure,
     required TResult Function(LoginResultRequireOTP value) requireOTP,
     required TResult Function(LoginResultRequireOTPWithAddress value)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTP(this);
   }
@@ -638,7 +626,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
     TResult? Function(LoginResultFailure value)? failure,
     TResult? Function(LoginResultRequireOTP value)? requireOTP,
     TResult? Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTP?.call(this);
   }
@@ -650,7 +638,7 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
     TResult Function(LoginResultFailure value)? failure,
     TResult Function(LoginResultRequireOTP value)? requireOTP,
     TResult Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (requireOTP != null) {
@@ -661,7 +649,9 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginResultRequireOTPImplToJson(this);
+    return _$$LoginResultRequireOTPImplToJson(
+      this,
+    );
   }
 }
 
@@ -679,46 +669,47 @@ abstract class LoginResultRequireOTP extends LoginResult {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginResultRequireOTPImplCopyWith<_$LoginResultRequireOTPImpl>
-  get copyWith => throw _privateConstructorUsedError;
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$LoginResultRequireOTPWithAddressImplCopyWith<$Res> {
   factory _$$LoginResultRequireOTPWithAddressImplCopyWith(
-    _$LoginResultRequireOTPWithAddressImpl value,
-    $Res Function(_$LoginResultRequireOTPWithAddressImpl) then,
-  ) = __$$LoginResultRequireOTPWithAddressImplCopyWithImpl<$Res>;
+          _$LoginResultRequireOTPWithAddressImpl value,
+          $Res Function(_$LoginResultRequireOTPWithAddressImpl) then) =
+      __$$LoginResultRequireOTPWithAddressImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String errorMessage, String availableAddress});
 }
 
 /// @nodoc
 class __$$LoginResultRequireOTPWithAddressImplCopyWithImpl<$Res>
-    extends
-        _$LoginResultCopyWithImpl<$Res, _$LoginResultRequireOTPWithAddressImpl>
+    extends _$LoginResultCopyWithImpl<$Res,
+        _$LoginResultRequireOTPWithAddressImpl>
     implements _$$LoginResultRequireOTPWithAddressImplCopyWith<$Res> {
   __$$LoginResultRequireOTPWithAddressImplCopyWithImpl(
-    _$LoginResultRequireOTPWithAddressImpl _value,
-    $Res Function(_$LoginResultRequireOTPWithAddressImpl) _then,
-  ) : super(_value, _then);
+      _$LoginResultRequireOTPWithAddressImpl _value,
+      $Res Function(_$LoginResultRequireOTPWithAddressImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of LoginResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? errorMessage = null, Object? availableAddress = null}) {
-    return _then(
-      _$LoginResultRequireOTPWithAddressImpl(
-        errorMessage: null == errorMessage
-            ? _value.errorMessage
-            : errorMessage // ignore: cast_nullable_to_non_nullable
-                  as String,
-        availableAddress: null == availableAddress
-            ? _value.availableAddress
-            : availableAddress // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
+  $Res call({
+    Object? errorMessage = null,
+    Object? availableAddress = null,
+  }) {
+    return _then(_$LoginResultRequireOTPWithAddressImpl(
+      errorMessage: null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+      availableAddress: null == availableAddress
+          ? _value.availableAddress
+          : availableAddress // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
   }
 }
 
@@ -726,16 +717,16 @@ class __$$LoginResultRequireOTPWithAddressImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LoginResultRequireOTPWithAddressImpl
     extends LoginResultRequireOTPWithAddress {
-  const _$LoginResultRequireOTPWithAddressImpl({
-    required this.errorMessage,
-    required this.availableAddress,
-    final String? $type,
-  }) : $type = $type ?? 'requireOTPWithAddress',
-       super._();
+  const _$LoginResultRequireOTPWithAddressImpl(
+      {required this.errorMessage,
+      required this.availableAddress,
+      final String? $type})
+      : $type = $type ?? 'requireOTPWithAddress',
+        super._();
 
   factory _$LoginResultRequireOTPWithAddressImpl.fromJson(
-    Map<String, dynamic> json,
-  ) => _$$LoginResultRequireOTPWithAddressImplFromJson(json);
+          Map<String, dynamic> json) =>
+      _$$LoginResultRequireOTPWithAddressImplFromJson(json);
 
   @override
   final String errorMessage;
@@ -771,12 +762,9 @@ class _$LoginResultRequireOTPWithAddressImpl
   @override
   @pragma('vm:prefer-inline')
   _$$LoginResultRequireOTPWithAddressImplCopyWith<
-    _$LoginResultRequireOTPWithAddressImpl
-  >
-  get copyWith =>
-      __$$LoginResultRequireOTPWithAddressImplCopyWithImpl<
-        _$LoginResultRequireOTPWithAddressImpl
-      >(this, _$identity);
+          _$LoginResultRequireOTPWithAddressImpl>
+      get copyWith => __$$LoginResultRequireOTPWithAddressImplCopyWithImpl<
+          _$LoginResultRequireOTPWithAddressImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -785,7 +773,7 @@ class _$LoginResultRequireOTPWithAddressImpl
     required TResult Function(String errorMessage) failure,
     required TResult Function(String errorMessage) requireOTP,
     required TResult Function(String errorMessage, String availableAddress)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTPWithAddress(errorMessage, availableAddress);
   }
@@ -797,7 +785,7 @@ class _$LoginResultRequireOTPWithAddressImpl
     TResult? Function(String errorMessage)? failure,
     TResult? Function(String errorMessage)? requireOTP,
     TResult? Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTPWithAddress?.call(errorMessage, availableAddress);
   }
@@ -809,7 +797,7 @@ class _$LoginResultRequireOTPWithAddressImpl
     TResult Function(String errorMessage)? failure,
     TResult Function(String errorMessage)? requireOTP,
     TResult Function(String errorMessage, String availableAddress)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (requireOTPWithAddress != null) {
@@ -825,7 +813,7 @@ class _$LoginResultRequireOTPWithAddressImpl
     required TResult Function(LoginResultFailure value) failure,
     required TResult Function(LoginResultRequireOTP value) requireOTP,
     required TResult Function(LoginResultRequireOTPWithAddress value)
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTPWithAddress(this);
   }
@@ -837,7 +825,7 @@ class _$LoginResultRequireOTPWithAddressImpl
     TResult? Function(LoginResultFailure value)? failure,
     TResult? Function(LoginResultRequireOTP value)? requireOTP,
     TResult? Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
   }) {
     return requireOTPWithAddress?.call(this);
   }
@@ -849,7 +837,7 @@ class _$LoginResultRequireOTPWithAddressImpl
     TResult Function(LoginResultFailure value)? failure,
     TResult Function(LoginResultRequireOTP value)? requireOTP,
     TResult Function(LoginResultRequireOTPWithAddress value)?
-    requireOTPWithAddress,
+        requireOTPWithAddress,
     required TResult orElse(),
   }) {
     if (requireOTPWithAddress != null) {
@@ -860,15 +848,17 @@ class _$LoginResultRequireOTPWithAddressImpl
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginResultRequireOTPWithAddressImplToJson(this);
+    return _$$LoginResultRequireOTPWithAddressImplToJson(
+      this,
+    );
   }
 }
 
 abstract class LoginResultRequireOTPWithAddress extends LoginResult {
-  const factory LoginResultRequireOTPWithAddress({
-    required final String errorMessage,
-    required final String availableAddress,
-  }) = _$LoginResultRequireOTPWithAddressImpl;
+  const factory LoginResultRequireOTPWithAddress(
+          {required final String errorMessage,
+          required final String availableAddress}) =
+      _$LoginResultRequireOTPWithAddressImpl;
   const LoginResultRequireOTPWithAddress._() : super._();
 
   factory LoginResultRequireOTPWithAddress.fromJson(Map<String, dynamic> json) =
@@ -881,7 +871,6 @@ abstract class LoginResultRequireOTPWithAddress extends LoginResult {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginResultRequireOTPWithAddressImplCopyWith<
-    _$LoginResultRequireOTPWithAddressImpl
-  >
-  get copyWith => throw _privateConstructorUsedError;
+          _$LoginResultRequireOTPWithAddressImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

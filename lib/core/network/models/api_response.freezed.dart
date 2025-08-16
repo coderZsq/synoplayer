@@ -12,8 +12,7 @@ part of 'api_response.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ApiResponse<T> {
@@ -22,75 +21,54 @@ mixin _$ApiResponse<T> {
   Map<String, dynamic>? get extra => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )
-    success,
-    required TResult Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )
-    error,
-  }) => throw _privateConstructorUsedError;
+    required TResult Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)
+        success,
+    required TResult Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)
+        error,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )?
-    success,
-    TResult? Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )?
-    error,
-  }) => throw _privateConstructorUsedError;
+    TResult? Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)?
+        success,
+    TResult? Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)?
+        error,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )?
-    success,
-    TResult Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )?
-    error,
+    TResult Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)?
+        success,
+    TResult Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)?
+        error,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ApiSuccess<T> value) success,
     required TResult Function(ApiError<T> value) error,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ApiSuccess<T> value)? success,
     TResult? Function(ApiError<T> value)? error,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ApiSuccess<T> value)? success,
     TResult Function(ApiError<T> value)? error,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of ApiResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -102,9 +80,8 @@ mixin _$ApiResponse<T> {
 /// @nodoc
 abstract class $ApiResponseCopyWith<T, $Res> {
   factory $ApiResponseCopyWith(
-    ApiResponse<T> value,
-    $Res Function(ApiResponse<T>) then,
-  ) = _$ApiResponseCopyWithImpl<T, $Res, ApiResponse<T>>;
+          ApiResponse<T> value, $Res Function(ApiResponse<T>) then) =
+      _$ApiResponseCopyWithImpl<T, $Res, ApiResponse<T>>;
   @useResult
   $Res call({int statusCode, String message, Map<String, dynamic>? extra});
 }
@@ -128,23 +105,20 @@ class _$ApiResponseCopyWithImpl<T, $Res, $Val extends ApiResponse<T>>
     Object? message = null,
     Object? extra = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            statusCode: null == statusCode
-                ? _value.statusCode
-                : statusCode // ignore: cast_nullable_to_non_nullable
-                      as int,
-            message: null == message
-                ? _value.message!
-                : message // ignore: cast_nullable_to_non_nullable
-                      as String,
-            extra: freezed == extra
-                ? _value.extra
-                : extra // ignore: cast_nullable_to_non_nullable
-                      as Map<String, dynamic>?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      statusCode: null == statusCode
+          ? _value.statusCode
+          : statusCode // ignore: cast_nullable_to_non_nullable
+              as int,
+      message: null == message
+          ? _value.message!
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      extra: freezed == extra
+          ? _value.extra
+          : extra // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+    ) as $Val);
   }
 }
 
@@ -152,17 +126,12 @@ class _$ApiResponseCopyWithImpl<T, $Res, $Val extends ApiResponse<T>>
 abstract class _$$ApiSuccessImplCopyWith<T, $Res>
     implements $ApiResponseCopyWith<T, $Res> {
   factory _$$ApiSuccessImplCopyWith(
-    _$ApiSuccessImpl<T> value,
-    $Res Function(_$ApiSuccessImpl<T>) then,
-  ) = __$$ApiSuccessImplCopyWithImpl<T, $Res>;
+          _$ApiSuccessImpl<T> value, $Res Function(_$ApiSuccessImpl<T>) then) =
+      __$$ApiSuccessImplCopyWithImpl<T, $Res>;
   @override
   @useResult
-  $Res call({
-    T data,
-    int statusCode,
-    String? message,
-    Map<String, dynamic>? extra,
-  });
+  $Res call(
+      {T data, int statusCode, String? message, Map<String, dynamic>? extra});
 }
 
 /// @nodoc
@@ -170,9 +139,8 @@ class __$$ApiSuccessImplCopyWithImpl<T, $Res>
     extends _$ApiResponseCopyWithImpl<T, $Res, _$ApiSuccessImpl<T>>
     implements _$$ApiSuccessImplCopyWith<T, $Res> {
   __$$ApiSuccessImplCopyWithImpl(
-    _$ApiSuccessImpl<T> _value,
-    $Res Function(_$ApiSuccessImpl<T>) _then,
-  ) : super(_value, _then);
+      _$ApiSuccessImpl<T> _value, $Res Function(_$ApiSuccessImpl<T>) _then)
+      : super(_value, _then);
 
   /// Create a copy of ApiResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -184,38 +152,36 @@ class __$$ApiSuccessImplCopyWithImpl<T, $Res>
     Object? message = freezed,
     Object? extra = freezed,
   }) {
-    return _then(
-      _$ApiSuccessImpl<T>(
-        data: freezed == data
-            ? _value.data
-            : data // ignore: cast_nullable_to_non_nullable
-                  as T,
-        statusCode: null == statusCode
-            ? _value.statusCode
-            : statusCode // ignore: cast_nullable_to_non_nullable
-                  as int,
-        message: freezed == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        extra: freezed == extra
-            ? _value._extra
-            : extra // ignore: cast_nullable_to_non_nullable
-                  as Map<String, dynamic>?,
-      ),
-    );
+    return _then(_$ApiSuccessImpl<T>(
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as T,
+      statusCode: null == statusCode
+          ? _value.statusCode
+          : statusCode // ignore: cast_nullable_to_non_nullable
+              as int,
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      extra: freezed == extra
+          ? _value._extra
+          : extra // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+    ));
   }
 }
 
 /// @nodoc
 
 class _$ApiSuccessImpl<T> implements ApiSuccess<T> {
-  const _$ApiSuccessImpl({
-    required this.data,
-    required this.statusCode,
-    this.message,
-    final Map<String, dynamic>? extra,
-  }) : _extra = extra;
+  const _$ApiSuccessImpl(
+      {required this.data,
+      required this.statusCode,
+      this.message,
+      final Map<String, dynamic>? extra})
+      : _extra = extra;
 
   @override
   final T data;
@@ -252,12 +218,11 @@ class _$ApiSuccessImpl<T> implements ApiSuccess<T> {
 
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    const DeepCollectionEquality().hash(data),
-    statusCode,
-    message,
-    const DeepCollectionEquality().hash(_extra),
-  );
+      runtimeType,
+      const DeepCollectionEquality().hash(data),
+      statusCode,
+      message,
+      const DeepCollectionEquality().hash(_extra));
 
   /// Create a copy of ApiResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -270,21 +235,12 @@ class _$ApiSuccessImpl<T> implements ApiSuccess<T> {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )
-    success,
-    required TResult Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )
-    error,
+    required TResult Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)
+        success,
+    required TResult Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)
+        error,
   }) {
     return success(data, statusCode, message, extra);
   }
@@ -292,21 +248,12 @@ class _$ApiSuccessImpl<T> implements ApiSuccess<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )?
-    success,
-    TResult? Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )?
-    error,
+    TResult? Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)?
+        success,
+    TResult? Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)?
+        error,
   }) {
     return success?.call(data, statusCode, message, extra);
   }
@@ -314,21 +261,12 @@ class _$ApiSuccessImpl<T> implements ApiSuccess<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )?
-    success,
-    TResult Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )?
-    error,
+    TResult Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)?
+        success,
+    TResult Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)?
+        error,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -370,12 +308,11 @@ class _$ApiSuccessImpl<T> implements ApiSuccess<T> {
 }
 
 abstract class ApiSuccess<T> implements ApiResponse<T> {
-  const factory ApiSuccess({
-    required final T data,
-    required final int statusCode,
-    final String? message,
-    final Map<String, dynamic>? extra,
-  }) = _$ApiSuccessImpl<T>;
+  const factory ApiSuccess(
+      {required final T data,
+      required final int statusCode,
+      final String? message,
+      final Map<String, dynamic>? extra}) = _$ApiSuccessImpl<T>;
 
   T get data;
   @override
@@ -397,18 +334,16 @@ abstract class ApiSuccess<T> implements ApiResponse<T> {
 abstract class _$$ApiErrorImplCopyWith<T, $Res>
     implements $ApiResponseCopyWith<T, $Res> {
   factory _$$ApiErrorImplCopyWith(
-    _$ApiErrorImpl<T> value,
-    $Res Function(_$ApiErrorImpl<T>) then,
-  ) = __$$ApiErrorImplCopyWithImpl<T, $Res>;
+          _$ApiErrorImpl<T> value, $Res Function(_$ApiErrorImpl<T>) then) =
+      __$$ApiErrorImplCopyWithImpl<T, $Res>;
   @override
   @useResult
-  $Res call({
-    String message,
-    int statusCode,
-    String? errorCode,
-    dynamic error,
-    Map<String, dynamic>? extra,
-  });
+  $Res call(
+      {String message,
+      int statusCode,
+      String? errorCode,
+      dynamic error,
+      Map<String, dynamic>? extra});
 }
 
 /// @nodoc
@@ -416,9 +351,8 @@ class __$$ApiErrorImplCopyWithImpl<T, $Res>
     extends _$ApiResponseCopyWithImpl<T, $Res, _$ApiErrorImpl<T>>
     implements _$$ApiErrorImplCopyWith<T, $Res> {
   __$$ApiErrorImplCopyWithImpl(
-    _$ApiErrorImpl<T> _value,
-    $Res Function(_$ApiErrorImpl<T>) _then,
-  ) : super(_value, _then);
+      _$ApiErrorImpl<T> _value, $Res Function(_$ApiErrorImpl<T>) _then)
+      : super(_value, _then);
 
   /// Create a copy of ApiResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -431,43 +365,41 @@ class __$$ApiErrorImplCopyWithImpl<T, $Res>
     Object? error = freezed,
     Object? extra = freezed,
   }) {
-    return _then(
-      _$ApiErrorImpl<T>(
-        message: null == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String,
-        statusCode: null == statusCode
-            ? _value.statusCode
-            : statusCode // ignore: cast_nullable_to_non_nullable
-                  as int,
-        errorCode: freezed == errorCode
-            ? _value.errorCode
-            : errorCode // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        error: freezed == error
-            ? _value.error
-            : error // ignore: cast_nullable_to_non_nullable
-                  as dynamic,
-        extra: freezed == extra
-            ? _value._extra
-            : extra // ignore: cast_nullable_to_non_nullable
-                  as Map<String, dynamic>?,
-      ),
-    );
+    return _then(_$ApiErrorImpl<T>(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusCode: null == statusCode
+          ? _value.statusCode
+          : statusCode // ignore: cast_nullable_to_non_nullable
+              as int,
+      errorCode: freezed == errorCode
+          ? _value.errorCode
+          : errorCode // ignore: cast_nullable_to_non_nullable
+              as String?,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      extra: freezed == extra
+          ? _value._extra
+          : extra // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+    ));
   }
 }
 
 /// @nodoc
 
 class _$ApiErrorImpl<T> implements ApiError<T> {
-  const _$ApiErrorImpl({
-    required this.message,
-    required this.statusCode,
-    this.errorCode,
-    this.error,
-    final Map<String, dynamic>? extra,
-  }) : _extra = extra;
+  const _$ApiErrorImpl(
+      {required this.message,
+      required this.statusCode,
+      this.errorCode,
+      this.error,
+      final Map<String, dynamic>? extra})
+      : _extra = extra;
 
   @override
   final String message;
@@ -508,13 +440,12 @@ class _$ApiErrorImpl<T> implements ApiError<T> {
 
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    message,
-    statusCode,
-    errorCode,
-    const DeepCollectionEquality().hash(error),
-    const DeepCollectionEquality().hash(_extra),
-  );
+      runtimeType,
+      message,
+      statusCode,
+      errorCode,
+      const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(_extra));
 
   /// Create a copy of ApiResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -527,21 +458,12 @@ class _$ApiErrorImpl<T> implements ApiError<T> {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )
-    success,
-    required TResult Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )
-    error,
+    required TResult Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)
+        success,
+    required TResult Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)
+        error,
   }) {
     return error(message, statusCode, errorCode, this.error, extra);
   }
@@ -549,21 +471,12 @@ class _$ApiErrorImpl<T> implements ApiError<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )?
-    success,
-    TResult? Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )?
-    error,
+    TResult? Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)?
+        success,
+    TResult? Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)?
+        error,
   }) {
     return error?.call(message, statusCode, errorCode, this.error, extra);
   }
@@ -571,21 +484,12 @@ class _$ApiErrorImpl<T> implements ApiError<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-      T data,
-      int statusCode,
-      String? message,
-      Map<String, dynamic>? extra,
-    )?
-    success,
-    TResult Function(
-      String message,
-      int statusCode,
-      String? errorCode,
-      dynamic error,
-      Map<String, dynamic>? extra,
-    )?
-    error,
+    TResult Function(T data, int statusCode, String? message,
+            Map<String, dynamic>? extra)?
+        success,
+    TResult Function(String message, int statusCode, String? errorCode,
+            dynamic error, Map<String, dynamic>? extra)?
+        error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -627,13 +531,12 @@ class _$ApiErrorImpl<T> implements ApiError<T> {
 }
 
 abstract class ApiError<T> implements ApiResponse<T> {
-  const factory ApiError({
-    required final String message,
-    required final int statusCode,
-    final String? errorCode,
-    final dynamic error,
-    final Map<String, dynamic>? extra,
-  }) = _$ApiErrorImpl<T>;
+  const factory ApiError(
+      {required final String message,
+      required final int statusCode,
+      final String? errorCode,
+      final dynamic error,
+      final Map<String, dynamic>? extra}) = _$ApiErrorImpl<T>;
 
   @override
   String get message;

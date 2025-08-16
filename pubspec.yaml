@@ -42,6 +42,9 @@ dependencies:
   dio: ^5.4.0
   connectivity_plus: ^5.0.2
   
+  # Retrofit - 类型安全的 HTTP 客户端
+  retrofit: ^4.1.0
+  
   # JSON serialization
   json_annotation: ^4.9.0
   
@@ -50,6 +53,9 @@ dependencies:
   
   # Riverpod code generation
   riverpod_annotation: ^2.3.3
+  
+  # 本地存储
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +77,12 @@ dev_dependencies:
   
   # Riverpod code generation
   riverpod_generator: ^2.3.9
+  
+  # Retrofit code generation
+  retrofit_generator: ^8.1.0
+  
+  # 测试依赖
+  mocktail: ^1.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

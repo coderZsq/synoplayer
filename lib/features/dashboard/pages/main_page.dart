@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/index.dart';
 import '../../../shared/widgets/log_display_widget.dart';
 import '../../authentication/pages/login_page.dart';
+import '../widgets/retrofit_migration_widget.dart';
 import '../widgets/welcome_card_widget.dart';
 import '../widgets/connection_info_widget.dart';
 import '../widgets/feature_buttons_widget.dart';
@@ -202,7 +203,11 @@ class _MainPageState extends ConsumerState<MainPage> {
                 onThemeChanged: _onThemeChanged,
               ),
               const SizedBox(height: 16),
-              
+
+              // Retrofit 迁移
+              RetrofitMigrationWidget(),
+              const SizedBox(height: 16),
+
               // 退出登录区域
               LogoutSectionWidget(
                 onLogout: _logout,

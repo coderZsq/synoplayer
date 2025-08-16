@@ -15,9 +15,8 @@ String _$themeServiceHash() => r'b66070108bd53fa9a711625ecf5fc04ecc6d862d';
 final themeServiceProvider = AutoDisposeProvider<ThemeService>.internal(
   themeService,
   name: r'themeServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$themeServiceHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$themeServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -85,15 +84,21 @@ class IsDarkModeFamily extends Family<bool> {
   /// 当前是否为暗黑模式 Provider
   ///
   /// Copied from [isDarkMode].
-  IsDarkModeProvider call(BuildContext context) {
-    return IsDarkModeProvider(context);
+  IsDarkModeProvider call(
+    BuildContext context,
+  ) {
+    return IsDarkModeProvider(
+      context,
+    );
   }
 
   @override
   IsDarkModeProvider getProviderOverride(
     covariant IsDarkModeProvider provider,
   ) {
-    return call(provider.context);
+    return call(
+      provider.context,
+    );
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -118,18 +123,24 @@ class IsDarkModeProvider extends AutoDisposeProvider<bool> {
   /// 当前是否为暗黑模式 Provider
   ///
   /// Copied from [isDarkMode].
-  IsDarkModeProvider(BuildContext context)
-    : this._internal(
-        (ref) => isDarkMode(ref as IsDarkModeRef, context),
-        from: isDarkModeProvider,
-        name: r'isDarkModeProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$isDarkModeHash,
-        dependencies: IsDarkModeFamily._dependencies,
-        allTransitiveDependencies: IsDarkModeFamily._allTransitiveDependencies,
-        context: context,
-      );
+  IsDarkModeProvider(
+    BuildContext context,
+  ) : this._internal(
+          (ref) => isDarkMode(
+            ref as IsDarkModeRef,
+            context,
+          ),
+          from: isDarkModeProvider,
+          name: r'isDarkModeProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$isDarkModeHash,
+          dependencies: IsDarkModeFamily._dependencies,
+          allTransitiveDependencies:
+              IsDarkModeFamily._allTransitiveDependencies,
+          context: context,
+        );
 
   IsDarkModeProvider._internal(
     super._createNotifier, {
@@ -144,7 +155,9 @@ class IsDarkModeProvider extends AutoDisposeProvider<bool> {
   final BuildContext context;
 
   @override
-  Override overrideWith(bool Function(IsDarkModeRef provider) create) {
+  Override overrideWith(
+    bool Function(IsDarkModeRef provider) create,
+  ) {
     return ProviderOverride(
       origin: this,
       override: IsDarkModeProvider._internal(
@@ -201,14 +214,14 @@ String _$themeNotifierHash() => r'3f897d5a320214cf7d358dbf5b099c1273e315c7';
 @ProviderFor(ThemeNotifier)
 final themeNotifierProvider =
     AutoDisposeAsyncNotifierProvider<ThemeNotifier, AppThemeMode>.internal(
-      ThemeNotifier.new,
-      name: r'themeNotifierProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$themeNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  ThemeNotifier.new,
+  name: r'themeNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$themeNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$ThemeNotifier = AutoDisposeAsyncNotifier<AppThemeMode>;
 // ignore_for_file: type=lint

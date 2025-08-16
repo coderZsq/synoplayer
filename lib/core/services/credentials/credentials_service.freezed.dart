@@ -12,8 +12,7 @@ part of 'credentials_service.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 LoginCredentials _$LoginCredentialsFromJson(Map<String, dynamic> json) {
   return _LoginCredentials.fromJson(json);
@@ -42,19 +41,17 @@ mixin _$LoginCredentials {
 /// @nodoc
 abstract class $LoginCredentialsCopyWith<$Res> {
   factory $LoginCredentialsCopyWith(
-    LoginCredentials value,
-    $Res Function(LoginCredentials) then,
-  ) = _$LoginCredentialsCopyWithImpl<$Res, LoginCredentials>;
+          LoginCredentials value, $Res Function(LoginCredentials) then) =
+      _$LoginCredentialsCopyWithImpl<$Res, LoginCredentials>;
   @useResult
-  $Res call({
-    String quickConnectId,
-    String username,
-    String password,
-    String? workingAddress,
-    String? sid,
-    DateTime? loginTime,
-    bool rememberCredentials,
-  });
+  $Res call(
+      {String quickConnectId,
+      String username,
+      String password,
+      String? workingAddress,
+      String? sid,
+      DateTime? loginTime,
+      bool rememberCredentials});
 }
 
 /// @nodoc
@@ -80,70 +77,64 @@ class _$LoginCredentialsCopyWithImpl<$Res, $Val extends LoginCredentials>
     Object? loginTime = freezed,
     Object? rememberCredentials = null,
   }) {
-    return _then(
-      _value.copyWith(
-            quickConnectId: null == quickConnectId
-                ? _value.quickConnectId
-                : quickConnectId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            username: null == username
-                ? _value.username
-                : username // ignore: cast_nullable_to_non_nullable
-                      as String,
-            password: null == password
-                ? _value.password
-                : password // ignore: cast_nullable_to_non_nullable
-                      as String,
-            workingAddress: freezed == workingAddress
-                ? _value.workingAddress
-                : workingAddress // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            sid: freezed == sid
-                ? _value.sid
-                : sid // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            loginTime: freezed == loginTime
-                ? _value.loginTime
-                : loginTime // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            rememberCredentials: null == rememberCredentials
-                ? _value.rememberCredentials
-                : rememberCredentials // ignore: cast_nullable_to_non_nullable
-                      as bool,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      quickConnectId: null == quickConnectId
+          ? _value.quickConnectId
+          : quickConnectId // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      password: null == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
+      workingAddress: freezed == workingAddress
+          ? _value.workingAddress
+          : workingAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sid: freezed == sid
+          ? _value.sid
+          : sid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      loginTime: freezed == loginTime
+          ? _value.loginTime
+          : loginTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      rememberCredentials: null == rememberCredentials
+          ? _value.rememberCredentials
+          : rememberCredentials // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$LoginCredentialsImplCopyWith<$Res>
     implements $LoginCredentialsCopyWith<$Res> {
-  factory _$$LoginCredentialsImplCopyWith(
-    _$LoginCredentialsImpl value,
-    $Res Function(_$LoginCredentialsImpl) then,
-  ) = __$$LoginCredentialsImplCopyWithImpl<$Res>;
+  factory _$$LoginCredentialsImplCopyWith(_$LoginCredentialsImpl value,
+          $Res Function(_$LoginCredentialsImpl) then) =
+      __$$LoginCredentialsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String quickConnectId,
-    String username,
-    String password,
-    String? workingAddress,
-    String? sid,
-    DateTime? loginTime,
-    bool rememberCredentials,
-  });
+  $Res call(
+      {String quickConnectId,
+      String username,
+      String password,
+      String? workingAddress,
+      String? sid,
+      DateTime? loginTime,
+      bool rememberCredentials});
 }
 
 /// @nodoc
 class __$$LoginCredentialsImplCopyWithImpl<$Res>
     extends _$LoginCredentialsCopyWithImpl<$Res, _$LoginCredentialsImpl>
     implements _$$LoginCredentialsImplCopyWith<$Res> {
-  __$$LoginCredentialsImplCopyWithImpl(
-    _$LoginCredentialsImpl _value,
-    $Res Function(_$LoginCredentialsImpl) _then,
-  ) : super(_value, _then);
+  __$$LoginCredentialsImplCopyWithImpl(_$LoginCredentialsImpl _value,
+      $Res Function(_$LoginCredentialsImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of LoginCredentials
   /// with the given fields replaced by the non-null parameter values.
@@ -158,53 +149,50 @@ class __$$LoginCredentialsImplCopyWithImpl<$Res>
     Object? loginTime = freezed,
     Object? rememberCredentials = null,
   }) {
-    return _then(
-      _$LoginCredentialsImpl(
-        quickConnectId: null == quickConnectId
-            ? _value.quickConnectId
-            : quickConnectId // ignore: cast_nullable_to_non_nullable
-                  as String,
-        username: null == username
-            ? _value.username
-            : username // ignore: cast_nullable_to_non_nullable
-                  as String,
-        password: null == password
-            ? _value.password
-            : password // ignore: cast_nullable_to_non_nullable
-                  as String,
-        workingAddress: freezed == workingAddress
-            ? _value.workingAddress
-            : workingAddress // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        sid: freezed == sid
-            ? _value.sid
-            : sid // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        loginTime: freezed == loginTime
-            ? _value.loginTime
-            : loginTime // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        rememberCredentials: null == rememberCredentials
-            ? _value.rememberCredentials
-            : rememberCredentials // ignore: cast_nullable_to_non_nullable
-                  as bool,
-      ),
-    );
+    return _then(_$LoginCredentialsImpl(
+      quickConnectId: null == quickConnectId
+          ? _value.quickConnectId
+          : quickConnectId // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      password: null == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
+      workingAddress: freezed == workingAddress
+          ? _value.workingAddress
+          : workingAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sid: freezed == sid
+          ? _value.sid
+          : sid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      loginTime: freezed == loginTime
+          ? _value.loginTime
+          : loginTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      rememberCredentials: null == rememberCredentials
+          ? _value.rememberCredentials
+          : rememberCredentials // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$LoginCredentialsImpl implements _LoginCredentials {
-  const _$LoginCredentialsImpl({
-    required this.quickConnectId,
-    required this.username,
-    required this.password,
-    this.workingAddress,
-    this.sid,
-    this.loginTime,
-    this.rememberCredentials = true,
-  });
+  const _$LoginCredentialsImpl(
+      {required this.quickConnectId,
+      required this.username,
+      required this.password,
+      this.workingAddress,
+      this.sid,
+      this.loginTime,
+      this.rememberCredentials = true});
 
   factory _$LoginCredentialsImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginCredentialsImplFromJson(json);
@@ -252,16 +240,8 @@ class _$LoginCredentialsImpl implements _LoginCredentials {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    quickConnectId,
-    username,
-    password,
-    workingAddress,
-    sid,
-    loginTime,
-    rememberCredentials,
-  );
+  int get hashCode => Object.hash(runtimeType, quickConnectId, username,
+      password, workingAddress, sid, loginTime, rememberCredentials);
 
   /// Create a copy of LoginCredentials
   /// with the given fields replaced by the non-null parameter values.
@@ -270,26 +250,25 @@ class _$LoginCredentialsImpl implements _LoginCredentials {
   @pragma('vm:prefer-inline')
   _$$LoginCredentialsImplCopyWith<_$LoginCredentialsImpl> get copyWith =>
       __$$LoginCredentialsImplCopyWithImpl<_$LoginCredentialsImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginCredentialsImplToJson(this);
+    return _$$LoginCredentialsImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _LoginCredentials implements LoginCredentials {
-  const factory _LoginCredentials({
-    required final String quickConnectId,
-    required final String username,
-    required final String password,
-    final String? workingAddress,
-    final String? sid,
-    final DateTime? loginTime,
-    final bool rememberCredentials,
-  }) = _$LoginCredentialsImpl;
+  const factory _LoginCredentials(
+      {required final String quickConnectId,
+      required final String username,
+      required final String password,
+      final String? workingAddress,
+      final String? sid,
+      final DateTime? loginTime,
+      final bool rememberCredentials}) = _$LoginCredentialsImpl;
 
   factory _LoginCredentials.fromJson(Map<String, dynamic> json) =
       _$LoginCredentialsImpl.fromJson;
