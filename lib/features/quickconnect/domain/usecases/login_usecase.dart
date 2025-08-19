@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import '../entities/quickconnect_entity.dart';
 import '../repositories/quickconnect_repository.dart';
 import '../../../../core/error/failures.dart';
-import '../../../../core/error/exceptions.dart';
 
 /// 登录用例
 /// 
@@ -16,22 +15,26 @@ class LoginUseCase {
 
   /// 执行登录
   /// 
-  /// [serverUrl] 服务器地址
+  /// [address] 服务器地址
   /// [username] 用户名
   /// [password] 密码
   /// [otpCode] 双因素认证码（可选）
+  /// [rememberMe] 是否记住登录凭据
+  /// [port] 服务器端口（可选）
   /// 
   /// Returns: 成功时返回登录结果，失败时返回错误
-  Future<Either<Failure, QuickConnectLoginResult>> call({
-    required String serverUrl,
+  Future<Either<Failure, QuickConnectLoginResult>> execute({
+    required String address,
     required String username,
     required String password,
     String? otpCode,
+    bool rememberMe = false,
+    int? port,
   }) async {
     try {
       // 1. 输入验证
       final validationResult = _validateInput(
-        serverUrl: serverUrl,
+        address: address,
         username: username,
         password: password,
         otpCode: otpCode,
@@ -42,10 +45,12 @@ class LoginUseCase {
 
       // 2. 执行业务逻辑
       final result = await _repository.login(
-        serverUrl: serverUrl,
+        address: address,
         username: username,
         password: password,
         otpCode: otpCode,
+        rememberMe: rememberMe,
+        port: port,
       );
 
       // 3. 后处理验证
@@ -60,17 +65,17 @@ class LoginUseCase {
 
   /// 验证输入参数
   Either<Failure, void> _validateInput({
-    required String serverUrl,
+    required String address,
     required String username,
     required String password,
     String? otpCode,
   }) {
     // 验证服务器地址
-    if (serverUrl.isEmpty) {
+    if (address.isEmpty) {
       return const Left(ValidationFailure('服务器地址不能为空'));
     }
 
-    if (!_isValidUrl(serverUrl)) {
+    if (!_isValidUrl(address)) {
       return const Left(ValidationFailure('服务器地址格式无效'));
     }
 
@@ -157,23 +162,29 @@ class SmartLoginUseCase {
 
   /// 执行智能登录
   /// 
-  /// [serverUrl] 服务器地址
+  /// [quickConnectId] QuickConnect ID
   /// [username] 用户名
   /// [password] 密码
+  /// [otpCode] 双因素认证码（可选）
+  /// [rememberMe] 是否记住登录凭据
   /// 
   /// Returns: 成功时返回登录结果，失败时返回错误
-  Future<Either<Failure, QuickConnectLoginResult>> call({
-    required String serverUrl,
+  Future<Either<Failure, QuickConnectLoginResult>> execute({
+    required String quickConnectId,
     required String username,
     required String password,
+    String? otpCode,
+    bool rememberMe = false,
   }) async {
     try {
       // 1. 输入验证（复用基本验证逻辑）
       final loginUseCase = LoginUseCase(_repository);
-      final validationResult = await loginUseCase.call(
-        serverUrl: serverUrl,
+      final validationResult = await loginUseCase.execute(
+        address: quickConnectId, // 临时使用 quickConnectId 作为地址
         username: username,
         password: password,
+        otpCode: otpCode,
+        rememberMe: rememberMe,
       );
 
       if (validationResult.isLeft()) {
@@ -182,9 +193,11 @@ class SmartLoginUseCase {
 
       // 2. 执行智能登录
       final result = await _repository.smartLogin(
-        serverUrl: serverUrl,
+        quickConnectId: quickConnectId,
         username: username,
         password: password,
+        otpCode: otpCode,
+        rememberMe: rememberMe,
       );
 
       // 3. 后处理验证

@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import '../entities/quickconnect_entity.dart';
 import '../repositories/quickconnect_repository.dart';
 import '../../../../core/error/failures.dart';
-import '../../../../core/error/exceptions.dart';
 
 /// 地址解析用例
 /// 
@@ -19,7 +18,7 @@ class ResolveAddressUseCase {
   /// [quickConnectId] QuickConnect ID
   /// 
   /// Returns: 成功时返回服务器信息，失败时返回错误
-  Future<Either<Failure, QuickConnectServerInfo>> call(
+  Future<Either<Failure, QuickConnectServerInfo>> execute(
     String quickConnectId,
   ) async {
     try {

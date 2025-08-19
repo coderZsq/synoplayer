@@ -6,7 +6,6 @@ import '../datasources/quickconnect_remote_datasource.dart';
 import '../datasources/quickconnect_local_datasource.dart';
 import '../models/quickconnect_model.dart';
 import '../../../../core/error/failures.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/network_info.dart';
 
 /// QuickConnect 仓库实现
@@ -133,8 +132,9 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
 
   @override
   Future<Either<Failure, QuickConnectConnectionStatus>> testConnection(
-    String serverUrl,
-  ) async {
+    String address, {
+    int? port,
+  }) async {
     try {
       // 1. 检查网络连接
       final isConnected = await networkInfo.isConnected;
@@ -144,11 +144,26 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       }
 
       // 2. 测试连接
-      final remoteResult = await remoteDataSource.testConnection(serverUrl);
+      final testResult = await remoteDataSource.testConnection(address, port: port);
       
-      return remoteResult.fold(
+      return testResult.fold(
         (failure) => Left(failure),
-        (connectionStatusModel) => Right(connectionStatusModel.toEntity()),
+        (isConnected) async {
+          // 3. 创建连接状态
+          final connectionStatus = QuickConnectConnectionStatus(
+            isConnected: isConnected,
+            responseTime: 0, // 这里可以添加实际的响应时间测量
+            errorMessage: isConnected ? null : '连接失败',
+            serverInfo: null, // 可以添加服务器信息
+          );
+
+          // 4. 缓存连接状态
+          await localDataSource.cacheConnectionStatus(
+            QuickConnectConnectionStatusModel.fromEntity(connectionStatus),
+          );
+
+          return Right(connectionStatus);
+        },
       );
     } catch (e) {
       return Left(_handleUnexpectedError(e));
@@ -157,10 +172,12 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
 
   @override
   Future<Either<Failure, QuickConnectLoginResult>> login({
-    required String serverUrl,
+    required String address,
     required String username,
     required String password,
     String? otpCode,
+    bool rememberMe = false,
+    int? port,
   }) async {
     try {
       // 1. 检查网络连接
@@ -171,16 +188,22 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       }
 
       // 2. 执行登录
-      final remoteResult = await remoteDataSource.requestLogin(
-        baseUrl: serverUrl,
+      final loginResult = await remoteDataSource.login(
+        address: address,
         username: username,
         password: password,
         otpCode: otpCode,
+        rememberMe: rememberMe,
+        port: port,
       );
-      
-      return remoteResult.fold(
+
+      return loginResult.fold(
         (failure) => Left(failure),
         (loginResponse) async {
+          if (loginResponse == null) {
+            return const Left(ServerFailure('登录响应为空'));
+          }
+
           // 3. 转换为领域实体
           final loginResult = QuickConnectLoginResult(
             isSuccess: loginResponse.isSuccess,
@@ -189,14 +212,15 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
             redirectUrl: loginResponse.redirectUrl,
           );
 
-          // 4. 如果登录成功，缓存凭据和会话
-          if (loginResult.isSuccess && loginResult.sid != null) {
-            await _cacheLoginData(
-              serverUrl: serverUrl,
+          // 4. 如果登录成功且选择记住我，缓存凭据
+          if (loginResult.isSuccess && rememberMe) {
+            final credentials = LoginRequestModel(
               username: username,
               password: password,
-              sid: loginResult.sid!,
+              otpCode: otpCode,
+              rememberMe: rememberMe,
             );
+            await localDataSource.cacheCredentials(credentials);
           }
 
           return Right(loginResult);
@@ -209,146 +233,32 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
 
   @override
   Future<Either<Failure, QuickConnectLoginResult>> smartLogin({
-    required String serverUrl,
+    required String quickConnectId,
     required String username,
     required String password,
+    String? otpCode,
+    bool rememberMe = false,
   }) async {
     try {
-      // 1. 检查网络连接
-      final isConnected = await networkInfo.isConnected;
+      // 1. 解析地址
+      final addressResult = await resolveAddress(quickConnectId);
       
-      if (!isConnected) {
-        return const Left(NetworkFailure('网络不可用'));
-      }
-
-      // 2. 尝试智能登录（这里可以添加智能逻辑）
-      // 例如：先尝试普通登录，失败时尝试其他方式
-      final loginResult = await login(
-        serverUrl: serverUrl,
-        username: username,
-        password: password,
-      );
-
-      return loginResult;
-    } catch (e) {
-      return Left(_handleUnexpectedError(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> validateSession({
-    required String serverUrl,
-    required String sid,
-  }) async {
-    try {
-      // 1. 检查网络连接
-      final isConnected = await networkInfo.isConnected;
-      
-      if (!isConnected) {
-        // 离线时检查本地缓存
-        final cachedSession = await localDataSource.getCachedSession(serverUrl);
-        return cachedSession.fold(
-          (failure) => Left(failure),
-          (session) {
-            if (session == null) return const Right(false);
-            
-            final expiryTime = DateTime.parse(session['expiry_time']);
-            return Right(DateTime.now().isBefore(expiryTime));
-          },
-        );
-      }
-
-      // 2. 验证远程会话
-      final remoteResult = await remoteDataSource.validateSession(
-        baseUrl: serverUrl,
-        sid: sid,
-      );
-      
-      return remoteResult;
-    } catch (e) {
-      return Left(_handleUnexpectedError(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> logout({
-    required String serverUrl,
-    required String sid,
-  }) async {
-    try {
-      // 1. 检查网络连接
-      final isConnected = await networkInfo.isConnected;
-      
-      if (!isConnected) {
-        // 离线时只清除本地缓存
-        await localDataSource.clearSession(serverUrl);
-        await localDataSource.clearCredentials(serverUrl);
-        return const Right(true);
-      }
-
-      // 2. 远程注销
-      final remoteResult = await remoteDataSource.logout(
-        baseUrl: serverUrl,
-        sid: sid,
-      );
-      
-      // 3. 无论远程是否成功，都清除本地缓存
-      await localDataSource.clearSession(serverUrl);
-      await localDataSource.clearCredentials(serverUrl);
-      
-      return remoteResult;
-    } catch (e) {
-      return Left(_handleUnexpectedError(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<QuickConnectServerInfo>>> getConnectionHistory() async {
-    try {
-      final localResult = await localDataSource.getConnectionHistory();
-      
-      return localResult.fold(
+      return addressResult.fold(
         (failure) => Left(failure),
-        (historyModels) => Right(
-          historyModels.map((model) => model.toEntity()).toList(),
-        ),
+        (serverInfo) async {
+          // 2. 尝试登录
+          final loginResult = await login(
+            address: serverInfo.externalDomain,
+            username: username,
+            password: password,
+            otpCode: otpCode,
+            rememberMe: rememberMe,
+            port: serverInfo.port,
+          );
+
+          return loginResult;
+        },
       );
-    } catch (e) {
-      return Left(_handleUnexpectedError(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> saveConnectionHistory(
-    QuickConnectServerInfo serverInfo,
-  ) async {
-    try {
-      final model = QuickConnectServerInfoModel.fromEntity(serverInfo);
-      final result = await localDataSource.cacheConnectionHistory(model);
-      
-      return result;
-    } catch (e) {
-      return Left(_handleUnexpectedError(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> clearConnectionHistory() async {
-    try {
-      final result = await localDataSource.clearConnectionHistory();
-      
-      return result;
-    } catch (e) {
-      return Left(_handleUnexpectedError(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> checkNetworkConnectivity() async {
-    try {
-      final isConnected = await networkInfo.isConnected;
-      
-      return Right(isConnected);
     } catch (e) {
       return Left(_handleUnexpectedError(e));
     }
@@ -358,70 +268,58 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
   Future<Either<Failure, Map<String, dynamic>>> getPerformanceStats() async {
     try {
       // 1. 尝试从远程获取最新统计
-      final isConnected = await networkInfo.isConnected;
+      final remoteResult = await remoteDataSource.getPerformanceStats();
       
-      if (isConnected) {
-        final remoteResult = await remoteDataSource.getPerformanceStats();
-        
-        return remoteResult.fold(
-          (failure) => Left(failure),
-          (remoteStats) async {
-            // 缓存到本地
-            await localDataSource.cachePerformanceStats(remoteStats);
-            return Right(remoteStats);
-          },
-        );
-      }
-
-      // 2. 离线时返回本地缓存
-      final localResult = await localDataSource.getCachedPerformanceStats();
-      
-      return localResult.fold(
-        (failure) => Left(failure),
-        (cachedStats) => cachedStats != null
-            ? Right(cachedStats)
-            : const Left(CacheFailure('无性能统计数据')),
+      return remoteResult.fold(
+        (failure) async {
+          // 远程获取失败，尝试从本地获取缓存
+          final cachedResult = await localDataSource.getCachedPerformanceStats();
+          return cachedResult.fold(
+            (cacheFailure) => Left(cacheFailure),
+            (cachedStats) => cachedStats != null
+                ? Right(cachedStats)
+                : const Left(ServerFailure('无法获取性能统计')),
+          );
+        },
+        (remoteStats) async {
+          // 远程获取成功，缓存到本地
+          await localDataSource.cachePerformanceStats(remoteStats);
+          return Right(remoteStats);
+        },
       );
     } catch (e) {
       return Left(_handleUnexpectedError(e));
     }
   }
 
-  /// 缓存登录相关数据
-  Future<void> _cacheLoginData({
-    required String serverUrl,
-    required String username,
-    required String password,
-    required String sid,
-  }) async {
+  @override
+  Future<Either<Failure, bool>> cleanupExpiredCache() async {
     try {
-      // 缓存凭据
-      await localDataSource.cacheCredentials(
-        serverUrl: serverUrl,
-        username: username,
-        password: password,
-        rememberMe: true,
-      );
-
-      // 缓存会话（24小时过期）
-      final expiryTime = DateTime.now().add(const Duration(hours: 24));
-      await localDataSource.cacheSession(
-        serverUrl: serverUrl,
-        sid: sid,
-        expiryTime: expiryTime,
-      );
+      final result = await localDataSource.cleanupExpiredCache();
+      return result;
     } catch (e) {
-      // 缓存失败不影响登录流程
-      // 可以记录日志但不抛出异常
+      return Left(_handleUnexpectedError(e));
     }
   }
 
-  /// 处理未预期的错误
-  Failure _handleUnexpectedError(Object error) {
-    if (error is Exception) {
-      return ServerFailure('服务器异常: ${error.toString()}');
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getCacheStats() async {
+    try {
+      final result = await localDataSource.getCacheStats();
+      return result;
+    } catch (e) {
+      return Left(_handleUnexpectedError(e));
     }
+  }
 
-    return UnknownFailure('未知错误: ${error.toString()}');
+  /// 处理意外错误
+  Failure _handleUnexpectedError(Object error) {
+    if (error is Failure) {
+      return error;
+    } else if (error is Exception) {
+      return ServerFailure('服务器异常: $error');
+    } else {
+      return ServerFailure('未知错误: $error');
+    }
   }
 }

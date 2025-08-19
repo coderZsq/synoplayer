@@ -6,8 +6,50 @@ part of 'quickconnect_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$localDataSourceHash() => r'68fd38f5c94c47767b4bbfc2c83374899abd3663';
+
+/// 本地数据源 Provider
+///
+/// Copied from [localDataSource].
+@ProviderFor(localDataSource)
+final localDataSourceProvider =
+    AutoDisposeProvider<QuickConnectLocalDataSource>.internal(
+  localDataSource,
+  name: r'localDataSourceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$localDataSourceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef LocalDataSourceRef
+    = AutoDisposeProviderRef<QuickConnectLocalDataSource>;
+String _$remoteDataSourceHash() => r'221d43d84e3c5baabdf45826141218308bfac6d6';
+
+/// 远程数据源 Provider
+///
+/// Copied from [remoteDataSource].
+@ProviderFor(remoteDataSource)
+final remoteDataSourceProvider =
+    AutoDisposeProvider<QuickConnectRemoteDataSource>.internal(
+  remoteDataSource,
+  name: r'remoteDataSourceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$remoteDataSourceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef RemoteDataSourceRef
+    = AutoDisposeProviderRef<QuickConnectRemoteDataSource>;
 String _$quickConnectRepositoryHash() =>
-    r'f8cd5bf7d0ef99a07ec6fad6082756f37c63dcd1';
+    r'1ffa9eaa4862f393a0d54934661e9377d0e63af3';
 
 /// QuickConnect 仓库 Provider
 ///
@@ -28,50 +70,6 @@ final quickConnectRepositoryProvider =
 // ignore: unused_element
 typedef QuickConnectRepositoryRef
     = AutoDisposeProviderRef<QuickConnectRepository>;
-String _$quickConnectRemoteDataSourceHash() =>
-    r'899b8372f649ce2bea6b4fcf9a3e9950681a5971';
-
-/// QuickConnect 远程数据源 Provider
-///
-/// Copied from [quickConnectRemoteDataSource].
-@ProviderFor(quickConnectRemoteDataSource)
-final quickConnectRemoteDataSourceProvider =
-    AutoDisposeProvider<QuickConnectRemoteDataSource>.internal(
-  quickConnectRemoteDataSource,
-  name: r'quickConnectRemoteDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$quickConnectRemoteDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef QuickConnectRemoteDataSourceRef
-    = AutoDisposeProviderRef<QuickConnectRemoteDataSource>;
-String _$quickConnectLocalDataSourceHash() =>
-    r'31bcee4182cbb0c18c772a8cc2ba687de905b81b';
-
-/// QuickConnect 本地数据源 Provider
-///
-/// Copied from [quickConnectLocalDataSource].
-@ProviderFor(quickConnectLocalDataSource)
-final quickConnectLocalDataSourceProvider =
-    AutoDisposeProvider<QuickConnectLocalDataSource>.internal(
-  quickConnectLocalDataSource,
-  name: r'quickConnectLocalDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$quickConnectLocalDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef QuickConnectLocalDataSourceRef
-    = AutoDisposeProviderRef<QuickConnectLocalDataSource>;
 String _$resolveAddressUseCaseHash() =>
     r'fd093f37dd2e0cbefb80b4acdb2854addcd5565b';
 
@@ -132,10 +130,68 @@ final smartLoginUseCaseProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SmartLoginUseCaseRef = AutoDisposeProviderRef<SmartLoginUseCase>;
-String _$addressResolutionNotifierHash() =>
-    r'1bcd6b380fc38a30c87049a9f1e8cca3e2639aab';
+String _$sharedPreferencesHash() => r'6c03b929f567eb6f97608f6208b95744ffee3bfd';
 
-/// 地址解析状态 Provider
+/// 共享偏好设置 Provider
+///
+/// Copied from [sharedPreferences].
+@ProviderFor(sharedPreferences)
+final sharedPreferencesProvider =
+    AutoDisposeFutureProvider<SharedPreferences>.internal(
+  sharedPreferences,
+  name: r'sharedPreferencesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$sharedPreferencesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SharedPreferencesRef = AutoDisposeFutureProviderRef<SharedPreferences>;
+String _$secureStorageHash() => r'273dc403a965c1f24962aaf4d40776611a26f8b8';
+
+/// 安全存储 Provider
+///
+/// Copied from [secureStorage].
+@ProviderFor(secureStorage)
+final secureStorageProvider =
+    AutoDisposeProvider<FlutterSecureStorage>.internal(
+  secureStorage,
+  name: r'secureStorageProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$secureStorageHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SecureStorageRef = AutoDisposeProviderRef<FlutterSecureStorage>;
+String _$dioHash() => r'c50c57ae3220b42c06ae5c33f1bce6ef76cd8f0c';
+
+/// Dio 客户端 Provider
+///
+/// Copied from [dio].
+@ProviderFor(dio)
+final dioProvider = AutoDisposeProvider<Dio>.internal(
+  dio,
+  name: r'dioProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$dioHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DioRef = AutoDisposeProviderRef<Dio>;
+String _$addressResolutionNotifierHash() =>
+    r'3de49cf28ad00d4d7c6bffc67d15059a6ec1c3af';
+
+/// 地址解析状态管理
 ///
 /// Copied from [AddressResolutionNotifier].
 @ProviderFor(AddressResolutionNotifier)
@@ -152,9 +208,9 @@ final addressResolutionNotifierProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$AddressResolutionNotifier
     = AutoDisposeAsyncNotifier<QuickConnectServerInfo?>;
-String _$loginNotifierHash() => r'4f1a23b7dafb23d3fb508b97eb6c4cef3f8c02af';
+String _$loginNotifierHash() => r'8bc02b31cb97a4a8d448fb02b113ea03fcf185da';
 
-/// 登录状态 Provider
+/// 登录状态管理
 ///
 /// Copied from [LoginNotifier].
 @ProviderFor(LoginNotifier)
@@ -171,9 +227,9 @@ final loginNotifierProvider = AutoDisposeAsyncNotifierProvider<LoginNotifier,
 
 typedef _$LoginNotifier = AutoDisposeAsyncNotifier<QuickConnectLoginResult?>;
 String _$connectionTestNotifierHash() =>
-    r'9e64554adfcd9e989422a8d2d9f8a45f958e9ed6';
+    r'e4722ab73892a159cd7a6448f10f90c37d8cf605';
 
-/// 连接测试状态 Provider
+/// 连接测试状态管理
 ///
 /// Copied from [ConnectionTestNotifier].
 @ProviderFor(ConnectionTestNotifier)
@@ -190,64 +246,25 @@ final connectionTestNotifierProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$ConnectionTestNotifier
     = AutoDisposeAsyncNotifier<QuickConnectConnectionStatus?>;
-String _$connectionHistoryNotifierHash() =>
-    r'1e1f6fbc71491cdd27018181ececde96bf59f666';
+String _$cacheManagementNotifierHash() =>
+    r'2f64c51ebabef8d4eec7929f9431a9f33a64fbb1';
 
-/// 连接历史 Provider
+/// 缓存管理状态
 ///
-/// Copied from [ConnectionHistoryNotifier].
-@ProviderFor(ConnectionHistoryNotifier)
-final connectionHistoryNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    ConnectionHistoryNotifier, List<QuickConnectServerInfo>>.internal(
-  ConnectionHistoryNotifier.new,
-  name: r'connectionHistoryNotifierProvider',
+/// Copied from [CacheManagementNotifier].
+@ProviderFor(CacheManagementNotifier)
+final cacheManagementNotifierProvider = AutoDisposeAsyncNotifierProvider<
+    CacheManagementNotifier, Map<String, dynamic>?>.internal(
+  CacheManagementNotifier.new,
+  name: r'cacheManagementNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$connectionHistoryNotifierHash,
+      : _$cacheManagementNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ConnectionHistoryNotifier
-    = AutoDisposeAsyncNotifier<List<QuickConnectServerInfo>>;
-String _$networkConnectivityNotifierHash() =>
-    r'e67557aa3a5c7c7346d4afd5e3001fd657fd2e97';
-
-/// 网络连接状态 Provider
-///
-/// Copied from [NetworkConnectivityNotifier].
-@ProviderFor(NetworkConnectivityNotifier)
-final networkConnectivityNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    NetworkConnectivityNotifier, bool>.internal(
-  NetworkConnectivityNotifier.new,
-  name: r'networkConnectivityNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$networkConnectivityNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$NetworkConnectivityNotifier = AutoDisposeAsyncNotifier<bool>;
-String _$performanceStatsNotifierHash() =>
-    r'72576a9bcea1cd91ed019daa6a584d42b84cc33f';
-
-/// 性能统计 Provider
-///
-/// Copied from [PerformanceStatsNotifier].
-@ProviderFor(PerformanceStatsNotifier)
-final performanceStatsNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    PerformanceStatsNotifier, Map<String, dynamic>>.internal(
-  PerformanceStatsNotifier.new,
-  name: r'performanceStatsNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$performanceStatsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$PerformanceStatsNotifier
-    = AutoDisposeAsyncNotifier<Map<String, dynamic>>;
+typedef _$CacheManagementNotifier
+    = AutoDisposeAsyncNotifier<Map<String, dynamic>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

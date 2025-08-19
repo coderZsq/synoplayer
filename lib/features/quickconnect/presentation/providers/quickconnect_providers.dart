@@ -1,22 +1,53 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dio/dio.dart';
 
+import '../../../../core/providers/network_providers.dart';
 import '../../domain/entities/quickconnect_entity.dart';
 import '../../domain/repositories/quickconnect_repository.dart';
-import '../../domain/usecases/resolve_address_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
-import '../../data/repositories/quickconnect_repository_impl.dart';
-import '../../data/datasources/quickconnect_remote_datasource.dart';
+import '../../domain/usecases/resolve_address_usecase.dart';
 import '../../data/datasources/quickconnect_local_datasource.dart';
-import '../../../../core/providers/network_providers.dart';
+import '../../data/datasources/quickconnect_remote_datasource.dart';
+import '../../data/repositories/quickconnect_repository_impl.dart';
 
 part 'quickconnect_providers.g.dart';
+
+// ==================== 数据源 Providers ====================
+
+/// 本地数据源 Provider
+@riverpod
+QuickConnectLocalDataSource localDataSource(Ref ref) {
+  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  final secureStorage = ref.watch(secureStorageProvider);
+  
+  return QuickConnectLocalDataSourceImpl(
+    sharedPreferences: sharedPreferences.valueOrNull!,
+    secureStorage: secureStorage,
+  );
+}
+
+/// 远程数据源 Provider
+@riverpod
+QuickConnectRemoteDataSource remoteDataSource(Ref ref) {
+  final dio = ref.watch(dioProvider);
+  final networkInfo = ref.watch(networkInfoProvider);
+  
+  return QuickConnectRemoteDataSourceImpl(
+    dio: dio,
+    networkInfo: networkInfo,
+  );
+}
+
+// ==================== 仓库 Provider ====================
 
 /// QuickConnect 仓库 Provider
 @riverpod
 QuickConnectRepository quickConnectRepository(Ref ref) {
-  final remoteDataSource = ref.watch(quickConnectRemoteDataSourceProvider);
-  final localDataSource = ref.watch(quickConnectLocalDataSourceProvider);
+  final remoteDataSource = ref.watch(remoteDataSourceProvider);
+  final localDataSource = ref.watch(localDataSourceProvider);
   final networkInfo = ref.watch(networkInfoProvider);
   
   return QuickConnectRepositoryImpl(
@@ -26,27 +57,12 @@ QuickConnectRepository quickConnectRepository(Ref ref) {
   );
 }
 
-/// QuickConnect 远程数据源 Provider
-@riverpod
-QuickConnectRemoteDataSource quickConnectRemoteDataSource(Ref ref) {
-  // 这里应该返回具体的远程数据源实现
-  // 暂时返回一个空的实现，需要根据现有代码重构
-  throw UnimplementedError('需要实现具体的远程数据源');
-}
-
-/// QuickConnect 本地数据源 Provider
-@riverpod
-QuickConnectLocalDataSource quickConnectLocalDataSource(Ref ref) {
-  // 这里应该返回具体的本地数据源实现
-  // 暂时返回一个空的实现，需要根据现有代码重构
-  throw UnimplementedError('需要实现具体的本地数据源');
-}
+// ==================== 用例 Providers ====================
 
 /// 地址解析用例 Provider
 @riverpod
 ResolveAddressUseCase resolveAddressUseCase(Ref ref) {
   final repository = ref.watch(quickConnectRepositoryProvider);
-  
   return ResolveAddressUseCase(repository);
 }
 
@@ -54,7 +70,6 @@ ResolveAddressUseCase resolveAddressUseCase(Ref ref) {
 @riverpod
 LoginUseCase loginUseCase(Ref ref) {
   final repository = ref.watch(quickConnectRepositoryProvider);
-  
   return LoginUseCase(repository);
 }
 
@@ -62,11 +77,12 @@ LoginUseCase loginUseCase(Ref ref) {
 @riverpod
 SmartLoginUseCase smartLoginUseCase(Ref ref) {
   final repository = ref.watch(quickConnectRepositoryProvider);
-  
   return SmartLoginUseCase(repository);
 }
 
-/// 地址解析状态 Provider
+// ==================== 状态管理 Providers ====================
+
+/// 地址解析状态管理
 @riverpod
 class AddressResolutionNotifier extends _$AddressResolutionNotifier {
   @override
@@ -74,32 +90,30 @@ class AddressResolutionNotifier extends _$AddressResolutionNotifier {
     return null;
   }
 
-  /// 解析地址
+  /// 解析 QuickConnect 地址
   Future<void> resolveAddress(String quickConnectId) async {
-    if (quickConnectId.isEmpty) return;
-    
-    state = const AsyncLoading();
+    state = const AsyncValue.loading();
     
     try {
       final useCase = ref.read(resolveAddressUseCaseProvider);
-      final result = await useCase.call(quickConnectId);
+      final result = await useCase.execute(quickConnectId);
       
       result.fold(
-        (failure) => state = AsyncError(failure, StackTrace.current),
-        (serverInfo) => state = AsyncData(serverInfo),
+        (failure) => state = AsyncValue.error(failure, StackTrace.current),
+        (serverInfo) => state = AsyncValue.data(serverInfo),
       );
     } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 
-  /// 清除状态
-  void clear() {
-    state = const AsyncData(null);
+  /// 清除地址解析状态
+  void clearAddress() {
+    state = const AsyncValue.data(null);
   }
 }
 
-/// 登录状态 Provider
+/// 登录状态管理
 @riverpod
 class LoginNotifier extends _$LoginNotifier {
   @override
@@ -109,63 +123,71 @@ class LoginNotifier extends _$LoginNotifier {
 
   /// 执行登录
   Future<void> login({
-    required String serverUrl,
+    required String address,
     required String username,
     required String password,
     String? otpCode,
+    bool rememberMe = false,
+    int? port,
   }) async {
-    state = const AsyncLoading();
+    state = const AsyncValue.loading();
     
     try {
       final useCase = ref.read(loginUseCaseProvider);
-      final result = await useCase.call(
-        serverUrl: serverUrl,
+      final result = await useCase.execute(
+        address: address,
         username: username,
         password: password,
         otpCode: otpCode,
+        rememberMe: rememberMe,
+        port: port,
       );
       
       result.fold(
-        (failure) => state = AsyncError(failure, StackTrace.current),
-        (loginResult) => state = AsyncData(loginResult),
+        (failure) => state = AsyncValue.error(failure, StackTrace.current),
+        (loginResult) => state = AsyncValue.data(loginResult),
       );
     } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 
   /// 执行智能登录
   Future<void> smartLogin({
-    required String serverUrl,
+    required String quickConnectId,
     required String username,
     required String password,
+    String? otpCode,
+    bool rememberMe = false,
   }) async {
-    state = const AsyncLoading();
+    state = const AsyncValue.loading();
     
     try {
       final useCase = ref.read(smartLoginUseCaseProvider);
-      final result = await useCase.call(
-        serverUrl: serverUrl,
+      final result = await useCase.execute(
+        quickConnectId: quickConnectId,
         username: username,
         password: password,
+        otpCode: otpCode,
+        rememberMe: rememberMe,
       );
       
       result.fold(
-        (failure) => state = AsyncError(failure, StackTrace.current),
-        (loginResult) => state = AsyncData(loginResult),
+        (failure) => state = AsyncValue.error(failure, StackTrace.current),
+        (loginResult) => state = AsyncValue.data(loginResult),
       );
     } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 
   /// 清除登录状态
-  void clear() {
-    state = const AsyncData(null);
+  void clearLogin() {
+    state = const AsyncValue.data(null);
   }
 }
 
-/// 连接测试状态 Provider
+/// 连接测试状态管理
 @riverpod
 class ConnectionTestNotifier extends _$ConnectionTestNotifier {
   @override
@@ -174,126 +196,114 @@ class ConnectionTestNotifier extends _$ConnectionTestNotifier {
   }
 
   /// 测试连接
-  Future<void> testConnection(String serverUrl) async {
-    if (serverUrl.isEmpty) return;
-    
-    state = const AsyncLoading();
+  Future<void> testConnection(String address, {int? port}) async {
+    state = const AsyncValue.loading();
     
     try {
       final repository = ref.read(quickConnectRepositoryProvider);
-      final result = await repository.testConnection(serverUrl);
+      final result = await repository.testConnection(address, port: port);
       
       result.fold(
-        (failure) => state = AsyncError(failure, StackTrace.current),
-        (connectionStatus) => state = AsyncData(connectionStatus),
+        (failure) => state = AsyncValue.error(failure, StackTrace.current),
+        (connectionStatus) => state = AsyncValue.data(connectionStatus),
       );
     } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 
-  /// 清除状态
-  void clear() {
-    state = const AsyncData(null);
+  /// 清除连接测试状态
+  void clearConnectionTest() {
+    state = const AsyncValue.data(null);
   }
 }
 
-/// 连接历史 Provider
+/// 缓存管理状态
 @riverpod
-class ConnectionHistoryNotifier extends _$ConnectionHistoryNotifier {
+class CacheManagementNotifier extends _$CacheManagementNotifier {
   @override
-  Future<List<QuickConnectServerInfo>> build() async {
+  Future<Map<String, dynamic>?> build() async {
+    return null;
+  }
+
+  /// 清理过期缓存
+  Future<void> cleanupExpiredCache() async {
+    state = const AsyncValue.loading();
+    
     try {
       final repository = ref.read(quickConnectRepositoryProvider);
-      final result = await repository.getConnectionHistory();
+      final result = await repository.cleanupExpiredCache();
       
-      return result.fold(
-        (failure) => throw failure,
-        (history) => history,
+      result.fold(
+        (failure) => state = AsyncValue.error(failure, StackTrace.current),
+        (success) async {
+          if (success) {
+            // 获取更新后的缓存统计
+            final statsResult = await repository.getCacheStats();
+            statsResult.fold(
+              (failure) => state = AsyncValue.error(failure, StackTrace.current),
+              (stats) => state = AsyncValue.data(stats),
+            );
+          } else {
+            state = const AsyncValue.data(null);
+          }
+        },
       );
     } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
-      return [];
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 
-  /// 添加连接历史
-  Future<void> addConnectionHistory(QuickConnectServerInfo serverInfo) async {
+  /// 获取缓存统计
+  Future<void> getCacheStats() async {
+    state = const AsyncValue.loading();
+    
     try {
       final repository = ref.read(quickConnectRepositoryProvider);
-      final result = await repository.saveConnectionHistory(serverInfo);
+      final result = await repository.getCacheStats();
       
-      return result.fold(
-        (failure) => throw failure,
-        (_) => ref.invalidateSelf(),
+      result.fold(
+        (failure) => state = AsyncValue.error(failure, StackTrace.current),
+        (stats) => state = AsyncValue.data(stats),
       );
     } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 
-  /// 清除连接历史
-  Future<void> clearConnectionHistory() async {
-    try {
-      final repository = ref.read(quickConnectRepositoryProvider);
-      final result = await repository.clearConnectionHistory();
-      
-      return result.fold(
-        (failure) => throw failure,
-        (_) => ref.invalidateSelf(),
-      );
-    } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
-    }
+  /// 清除缓存统计状态
+  void clearCacheStats() {
+    state = const AsyncValue.data(null);
   }
 }
 
-/// 网络连接状态 Provider
-@riverpod
-class NetworkConnectivityNotifier extends _$NetworkConnectivityNotifier {
-  @override
-  Future<bool> build() async {
-    try {
-      final repository = ref.read(quickConnectRepositoryProvider);
-      final result = await repository.checkNetworkConnectivity();
-      
-      return result.fold(
-        (failure) => throw failure,
-        (isConnected) => isConnected,
-      );
-    } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
-      return false;
-    }
-  }
+// ==================== 辅助 Providers ====================
 
-  /// 刷新网络状态
-  Future<void> refresh() async {
-    ref.invalidateSelf();
-  }
+/// 共享偏好设置 Provider
+@riverpod
+Future<SharedPreferences> sharedPreferences(Ref ref) async {
+  return SharedPreferences.getInstance();
 }
 
-/// 性能统计 Provider
+/// 安全存储 Provider
 @riverpod
-class PerformanceStatsNotifier extends _$PerformanceStatsNotifier {
-  @override
-  Future<Map<String, dynamic>> build() async {
-    try {
-      final repository = ref.read(quickConnectRepositoryProvider);
-      final result = await repository.getPerformanceStats();
-      
-      return result.fold(
-        (failure) => throw failure,
-        (stats) => stats,
-      );
-    } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
-      return {};
-    }
-  }
+FlutterSecureStorage secureStorage(Ref ref) {
+  return const FlutterSecureStorage();
+}
 
-  /// 刷新性能统计
-  Future<void> refresh() async {
-    ref.invalidateSelf();
-  }
+/// Dio 客户端 Provider
+@riverpod
+Dio dio(Ref ref) {
+  final dio = Dio();
+  
+  // 基础配置
+  dio.options = BaseOptions(
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  );
+
+  return dio;
 }
