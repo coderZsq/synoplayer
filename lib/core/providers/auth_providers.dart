@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
 import '../services/credentials/credentials_service.dart';
 import '../utils/logger.dart';
@@ -448,7 +449,7 @@ UserSession? userSession(Ref ref) {
 }
 
 /// 用户会话信息
-class UserSession {
+class UserSession extends Equatable {
   const UserSession({
     required this.username,
     required this.quickConnectId,
@@ -462,19 +463,7 @@ class UserSession {
   final String? sessionId;
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is UserSession &&
-        other.username == username &&
-        other.quickConnectId == quickConnectId &&
-        other.workingAddress == workingAddress &&
-        other.sessionId == sessionId;
-  }
-
-  @override
-  int get hashCode {
-    return Object.hash(username, quickConnectId, workingAddress, sessionId);
-  }
+  List<Object?> get props => [username, quickConnectId, workingAddress, sessionId];
 
   @override
   String toString() {

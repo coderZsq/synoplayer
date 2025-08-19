@@ -472,7 +472,7 @@ class AddressInfo with _$AddressInfo {
     return AddressInfo(
       url: url,
       type: type,
-      description: description,
+        description: description,
       priority: priority,
     );
   }
