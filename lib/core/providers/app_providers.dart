@@ -5,6 +5,9 @@ import '../services/credentials/credentials_service.dart';
 import '../services/theme/theme_service.dart';
 import '../network/providers/network_providers.dart';
 
+// 重新导出主题相关的 providers
+export '../services/theme/theme_service.dart';
+
 part 'app_providers.g.dart';
 
 /// 应用全局依赖管理
