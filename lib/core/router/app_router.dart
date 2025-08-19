@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/authentication/pages/login_page.dart';
+import '../../features/quickconnect/presentation/pages/quickconnect_login_page.dart';
 import '../../features/dashboard/pages/main_page.dart';
 import '../providers/auth_providers.dart';
 import '../providers/app_providers.dart';
@@ -88,6 +89,12 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) => const LoginPage(),
       ),
       
+      // QuickConnect 登录页 (新架构)
+      GoRoute(
+        path: RoutePaths.quickconnectLogin,
+        builder: (context, state) => const QuickConnectLoginPage(),
+      ),
+      
       // 主页面
       GoRoute(
         path: RoutePaths.dashboard,
@@ -122,6 +129,7 @@ GoRouter goRouter(Ref ref) {
 abstract class RoutePaths {
   static const String splash = '/splash';
   static const String login = '/login';
+  static const String quickconnectLogin = '/quickconnect-login';
   static const String dashboard = '/dashboard';
 }
 
@@ -132,6 +140,9 @@ extension AppRouterExtension on GoRouter {
   
   /// 导航到登录页
   void goToLogin() => go(RoutePaths.login);
+  
+  /// 导航到 QuickConnect 登录页
+  void goToQuickConnectLogin() => go(RoutePaths.quickconnectLogin);
   
   /// 导航到主页面
   void goToDashboard({

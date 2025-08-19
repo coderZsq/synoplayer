@@ -9,6 +9,9 @@ import '../../domain/entities/quickconnect_entity.dart';
 import '../../domain/repositories/quickconnect_repository.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/resolve_address_usecase.dart';
+import '../../domain/usecases/enhanced_smart_login_usecase.dart';
+import '../../domain/usecases/connection_management_usecase.dart';
+import '../../domain/services/quickconnect_service_adapter.dart';
 import '../../data/datasources/quickconnect_local_datasource.dart';
 import '../../data/datasources/quickconnect_remote_datasource.dart';
 import '../../data/repositories/quickconnect_repository_impl.dart';
@@ -78,6 +81,34 @@ LoginUseCase loginUseCase(Ref ref) {
 SmartLoginUseCase smartLoginUseCase(Ref ref) {
   final repository = ref.watch(quickConnectRepositoryProvider);
   return SmartLoginUseCase(repository);
+}
+
+/// 增强智能登录用例 Provider
+@riverpod
+EnhancedSmartLoginUseCase enhancedSmartLoginUseCase(Ref ref) {
+  final repository = ref.watch(quickConnectRepositoryProvider);
+  return EnhancedSmartLoginUseCase(repository);
+}
+
+/// 连接管理用例 Provider
+@riverpod
+ConnectionManagementUseCase connectionManagementUseCase(Ref ref) {
+  final repository = ref.watch(quickConnectRepositoryProvider);
+  return ConnectionManagementUseCase(repository);
+}
+
+/// QuickConnect 服务适配器 Provider
+@riverpod
+QuickConnectServiceAdapter quickConnectServiceAdapter(Ref ref) {
+  final repository = ref.watch(quickConnectRepositoryProvider);
+  final enhancedSmartLoginUseCase = ref.watch(enhancedSmartLoginUseCaseProvider);
+  final connectionManagementUseCase = ref.watch(connectionManagementUseCaseProvider);
+  
+  return QuickConnectServiceAdapter(
+    repository: repository,
+    enhancedSmartLoginUseCase: enhancedSmartLoginUseCase,
+    connectionManagementUseCase: connectionManagementUseCase,
+  );
 }
 
 // ==================== 状态管理 Providers ====================

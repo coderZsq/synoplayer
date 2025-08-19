@@ -6,7 +6,7 @@ part of 'quickconnect_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$localDataSourceHash() => r'68fd38f5c94c47767b4bbfc2c83374899abd3663';
+String _$localDataSourceHash() => r'fe095d9b89a418e8bf8bb9bbf3d567391b6e53e5';
 
 /// 本地数据源 Provider
 ///
@@ -130,6 +130,72 @@ final smartLoginUseCaseProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SmartLoginUseCaseRef = AutoDisposeProviderRef<SmartLoginUseCase>;
+String _$enhancedSmartLoginUseCaseHash() =>
+    r'e12cf6a353a1ba33e908d5cac97f84fac647a4ba';
+
+/// 增强智能登录用例 Provider
+///
+/// Copied from [enhancedSmartLoginUseCase].
+@ProviderFor(enhancedSmartLoginUseCase)
+final enhancedSmartLoginUseCaseProvider =
+    AutoDisposeProvider<EnhancedSmartLoginUseCase>.internal(
+  enhancedSmartLoginUseCase,
+  name: r'enhancedSmartLoginUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$enhancedSmartLoginUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef EnhancedSmartLoginUseCaseRef
+    = AutoDisposeProviderRef<EnhancedSmartLoginUseCase>;
+String _$connectionManagementUseCaseHash() =>
+    r'9e1a5b93d40df91af415773b633a76ad970fb67d';
+
+/// 连接管理用例 Provider
+///
+/// Copied from [connectionManagementUseCase].
+@ProviderFor(connectionManagementUseCase)
+final connectionManagementUseCaseProvider =
+    AutoDisposeProvider<ConnectionManagementUseCase>.internal(
+  connectionManagementUseCase,
+  name: r'connectionManagementUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$connectionManagementUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ConnectionManagementUseCaseRef
+    = AutoDisposeProviderRef<ConnectionManagementUseCase>;
+String _$quickConnectServiceAdapterHash() =>
+    r'ef6d80f7c3b412cd042c5ff56b84b0a32b5f56e3';
+
+/// QuickConnect 服务适配器 Provider
+///
+/// Copied from [quickConnectServiceAdapter].
+@ProviderFor(quickConnectServiceAdapter)
+final quickConnectServiceAdapterProvider =
+    AutoDisposeProvider<QuickConnectServiceAdapter>.internal(
+  quickConnectServiceAdapter,
+  name: r'quickConnectServiceAdapterProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$quickConnectServiceAdapterHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef QuickConnectServiceAdapterRef
+    = AutoDisposeProviderRef<QuickConnectServiceAdapter>;
 String _$sharedPreferencesHash() => r'6c03b929f567eb6f97608f6208b95744ffee3bfd';
 
 /// 共享偏好设置 Provider
