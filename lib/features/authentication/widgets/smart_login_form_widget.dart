@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../services/quickconnect/index.dart';
 import '../../../core/services/index.dart';
+import '../../../simple/quickconnect_api.dart';
 
 /// 智能登录表单组件
 /// 
@@ -320,7 +321,11 @@ class _SmartLoginFormWidgetState extends ConsumerState<SmartLoginFormWidget> {
             SizedBox(
               height: 56,
               child: ElevatedButton.icon(
-                onPressed: widget.isLoading ? null : _performSmartLogin,
+                onPressed: widget.isLoading ? null : () async {
+                  final res = await QuickConnectServiceImpl().getServerInfo(serverId: 'Shuangquan');
+                  debugPrint('[TAG] res: $res');
+                  return;
+                },
                 icon: widget.isLoading 
                     ? SizedBox(
                         width: 20,
