@@ -5,5 +5,6 @@ abstract class GetServerInfoRepository {
     required String serverID,
     String id,
     String command,
+    String? site,
   });
 }

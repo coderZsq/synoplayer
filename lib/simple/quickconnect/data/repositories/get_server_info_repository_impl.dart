@@ -6,15 +6,12 @@ import '../datasources/get_server_info_api.dart';
 import '../../../core/network/network_config.dart';
 
 class GetServerInfoRepositoryImpl implements GetServerInfoRepository {
-  final GetServerInfoApi _api;
-
-  GetServerInfoRepositoryImpl() : _api = GetServerInfoApi(NetworkConfig.createDio(), baseUrl: 'https://global.quickconnect.to');
-
   @override
   Future<GetServerInfoResponse> getServerInfo({
     required String serverID,
     String id = 'dsm_https',
     String command = 'get_server_info',
+    String? site,
   }) async {
     final request = GetServerInfoRequest(
       id: id,
@@ -23,7 +20,14 @@ class GetServerInfoRepositoryImpl implements GetServerInfoRepository {
     );
 
     try {
-      return await _api.getServerInfo(request);
+      final dio = NetworkConfig.createDio();
+      if (site != null) {
+        final api = GetServerInfoApi(dio, baseUrl: 'https://$site');
+        return await api.getServerInfo(request);
+      } else {
+        final api = GetServerInfoApi(dio, baseUrl: 'https://global.quickconnect.to');
+        return await api.getServerInfo(request);
+      }
     } on DioException catch (e) {
       print('Network error: ${e.message}');
       rethrow;

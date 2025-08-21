@@ -7,7 +7,7 @@ class NetworkConfig {
     Duration? connectTimeout,
     Duration? receiveTimeout,
     Duration? sendTimeout,
-    bool enableLogging = false,
+    bool enableLogging = true,
     Map<String, String>? defaultHeaders,
   }) {
     final dio = Dio();

@@ -8,9 +8,11 @@ class GetServerInfoUseCase {
 
   Future<GetServerInfoResponse> call({
     required String serverID,
+    String? site,
   }) {
     return repository.getServerInfo(
       serverID: serverID,
+      site: site,
     );
   }
 }
