@@ -9,7 +9,7 @@ class LoggingInterceptor extends Interceptor {
     print('Headers: ${options.headers}');
     print('Data: ${options.data}');
     print('===============');
-    super.onRequest(options, handler);
+    handler.next(options);
   }
 
   @override
@@ -19,7 +19,7 @@ class LoggingInterceptor extends Interceptor {
     print('Headers: ${response.headers}');
     print('Data: ${response.data}');
     print('================');
-    super.onResponse(response, handler);
+    handler.next(response);
   }
 
   @override
@@ -29,6 +29,6 @@ class LoggingInterceptor extends Interceptor {
     print('Error Message: ${err.message}');
     print('Response: ${err.response}');
     print('=============');
-    super.onError(err, handler);
+    handler.next(err);
   }
 }

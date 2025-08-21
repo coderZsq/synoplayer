@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_server_info_api.dart';
+part of 'quick_connect_api.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'get_server_info_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _GetServerInfoApi implements GetServerInfoApi {
-  _GetServerInfoApi(
+class _QuickConnectApi implements QuickConnectApi {
+  _QuickConnectApi(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
@@ -54,6 +54,32 @@ class _GetServerInfoApi implements GetServerInfoApi {
       rethrow;
     }
     return _value;
+  }
+
+  @override
+  Future<void> queryApiInfo(QueryApiInfoRequest request) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(request.toJson());
+    final _options = _setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/webapi/query.cgi',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    await _dio.fetch<void>(_options);
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

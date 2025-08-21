@@ -5,18 +5,14 @@ void main() async {
   final quickConnectService = QuickConnectService2();
   
   try {
-    // 使用新的 fallback 方法：先调用 global.quickconnect.to，如果 sites 有值则用 sites 中的值再次调用
-    final response = await quickConnectService.getServerInfoWithFallback(
-      serverID: 'Shuangquan',
+    // 简单的登录流程 - 用户只需要知道服务器ID
+    final response = await quickConnectService.login(
+      quickConnectId: 'Shuangquan',
+      username: 'Shuangquan',
+      password: 'Super91502991'
     );
-    print('Final server info: ${response.sites}');
-    
-    // 或者使用原来的方法
-    // final response = await quickConnectService.getServerInfo(
-    //   serverID: 'Shuangquan',
-    // );
-    // print('Server info: ${response.sites}');
+    print('登录成功！服务器信息: ${response.sites}');
   } catch (e) {
-    print('Error: $e');
+    print('登录失败: $e');
   }
 }

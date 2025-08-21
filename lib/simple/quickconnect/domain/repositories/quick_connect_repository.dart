@@ -1,10 +1,13 @@
 import '../../entities/get_server_info_response.dart';
 
-abstract class GetServerInfoRepository {
+abstract class QuickConnectRepository {
   Future<GetServerInfoResponse> getServerInfo({
     required String serverID,
-    String id,
-    String command,
     String? site,
+  });
+
+  Future<void> queryApiInfo({
+    required String relayDn,
+    required int relayPort
   });
 }

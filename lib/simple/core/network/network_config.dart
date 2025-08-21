@@ -19,10 +19,10 @@ class NetworkConfig {
       'Accept': '*/*',
       ...?defaultHeaders,
     });
+    dio.interceptors.add(JsonResponseInterceptor());
     if (enableLogging) {
       dio.interceptors.add(LoggingInterceptor());
     }
-    dio.interceptors.add(JsonResponseInterceptor());
     return dio;
   }
 }
