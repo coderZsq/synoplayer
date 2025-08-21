@@ -6,7 +6,7 @@ void main() async {
   
   try {
     final response = await quickConnectService.getServerInfo(
-      serverId: 'Shuangquan',
+      serverID: 'Shuangquan',
     );
     print('Server info: ${response.sites}');
   } catch (e) {

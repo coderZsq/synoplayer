@@ -1,16 +1,16 @@
-import '../../entities/quickconnect_response.dart';
-import '../repositories/quickconnect_repository.dart';
+import '../../entities/get_server_info_response.dart';
+import '../repositories/get_server_info_repository.dart';
 
 class GetServerInfoUseCase {
-  final QuickConnectRepository repository;
+  final GetServerInfoRepository repository;
 
   GetServerInfoUseCase(this.repository);
 
-  Future<QuickConnectResponse> call({
-    required String serverId,
+  Future<GetServerInfoResponse> call({
+    required String serverID,
   }) {
     return repository.getServerInfo(
-      serverId: serverId,
+      serverID: serverID,
     );
   }
 }

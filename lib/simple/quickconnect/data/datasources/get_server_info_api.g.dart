@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'quickconnect_api.dart';
+part of 'get_server_info_api.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'quickconnect_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _QuickConnectApi implements QuickConnectApi {
-  _QuickConnectApi(
+class _GetServerInfoApi implements GetServerInfoApi {
+  _GetServerInfoApi(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
@@ -22,20 +22,21 @@ class _QuickConnectApi implements QuickConnectApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<QuickConnectResponse> getServerInfo(
-      QuickConnectRequest request) async {
+  Future<GetServerInfoResponse> getServerInfo(
+      GetServerInfoRequest request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = request;
-    final _options = _setStreamType<QuickConnectResponse>(Options(
+    final _data = <String, dynamic>{};
+    _data.addAll(request.toJson());
+    final _options = _setStreamType<GetServerInfoResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          'https://global.quickconnect.to/Serv.php',
+          '/Serv.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -45,9 +46,9 @@ class _QuickConnectApi implements QuickConnectApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late QuickConnectResponse _value;
+    late GetServerInfoResponse _value;
     try {
-      _value = QuickConnectResponse.fromJson(_result.data!);
+      _value = GetServerInfoResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
