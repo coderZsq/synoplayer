@@ -24,12 +24,8 @@ mixin _$QueryApiInfoRequest {
   String get method => throw _privateConstructorUsedError;
   String get version => throw _privateConstructorUsedError;
 
-  /// Serializes this QueryApiInfoRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of QueryApiInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $QueryApiInfoRequestCopyWith<QueryApiInfoRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,8 +49,6 @@ class _$QueryApiInfoRequestCopyWithImpl<$Res, $Val extends QueryApiInfoRequest>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of QueryApiInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,8 +92,6 @@ class __$$QueryApiInfoRequestImplCopyWithImpl<$Res>
       $Res Function(_$QueryApiInfoRequestImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of QueryApiInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -155,13 +147,11 @@ class _$QueryApiInfoRequestImpl implements _QueryApiInfoRequest {
             (identical(other.version, version) || other.version == version));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, api, method, version);
 
-  /// Create a copy of QueryApiInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$QueryApiInfoRequestImplCopyWith<_$QueryApiInfoRequestImpl> get copyWith =>
@@ -191,11 +181,8 @@ abstract class _QueryApiInfoRequest implements QueryApiInfoRequest {
   String get method;
   @override
   String get version;
-
-  /// Create a copy of QueryApiInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$QueryApiInfoRequestImplCopyWith<_$QueryApiInfoRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

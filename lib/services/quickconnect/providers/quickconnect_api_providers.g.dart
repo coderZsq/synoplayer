@@ -25,8 +25,6 @@ final useRetrofitApiProvider = AutoDisposeProvider<bool>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef UseRetrofitApiRef = AutoDisposeProviderRef<bool>;
 String _$quickConnectApiHash() => r'fb7f156faa2c2f80821fb569e24d3c9c294bbb70';
 
@@ -47,8 +45,6 @@ final quickConnectApiProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectApiRef = AutoDisposeProviderRef<QuickConnectApiInterface>;
 String _$quickConnectApiImplHash() =>
     r'ff26f16ef09afebcf79d087b4e07d0383a17cddf';
@@ -70,8 +66,6 @@ final quickConnectApiImplProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectApiImplRef = AutoDisposeProviderRef<QuickConnectApiImpl>;
 String _$quickConnectRetrofitApiHash() =>
     r'2f7fc509c83bd8fe5f5c789363a33c682257923f';
@@ -91,8 +85,6 @@ final quickConnectRetrofitApiProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectRetrofitApiRef
     = AutoDisposeProviderRef<QuickConnectRetrofitApi>;
 String _$quickConnectApiAdapterHash() =>
@@ -113,9 +105,7 @@ final quickConnectApiAdapterProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectApiAdapterRef
     = AutoDisposeProviderRef<QuickConnectApiAdapter>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

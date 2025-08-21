@@ -24,8 +24,6 @@ final quickConnectAuthServiceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectAuthServiceRef
     = AutoDisposeProviderRef<QuickConnectAuthService>;
 String _$quickConnectConnectionServiceHash() =>
@@ -46,8 +44,6 @@ final quickConnectConnectionServiceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectConnectionServiceRef
     = AutoDisposeProviderRef<QuickConnectConnectionService>;
 String _$quickConnectAddressResolverHash() =>
@@ -68,8 +64,6 @@ final quickConnectAddressResolverProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectAddressResolverRef
     = AutoDisposeProviderRef<QuickConnectAddressResolver>;
 String _$quickConnectSmartLoginServiceHash() =>
@@ -90,8 +84,6 @@ final quickConnectSmartLoginServiceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectSmartLoginServiceRef
     = AutoDisposeProviderRef<QuickConnectSmartLoginService>;
 String _$quickConnectServiceHash() =>
@@ -112,8 +104,6 @@ final quickConnectServiceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectServiceRef = AutoDisposeProviderRef<QuickConnectService>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

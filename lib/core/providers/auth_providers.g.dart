@@ -22,8 +22,6 @@ final authStateStreamProvider = AutoDisposeStreamProvider<AuthState>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef AuthStateStreamRef = AutoDisposeStreamProviderRef<AuthState>;
 String _$currentUserHash() => r'b84aa86ab954c40aba8f1df5f6b7929e059fc818';
 
@@ -40,8 +38,6 @@ final currentUserProvider = AutoDisposeProvider<LoginCredentials?>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef CurrentUserRef = AutoDisposeProviderRef<LoginCredentials?>;
 String _$isAuthenticatedHash() => r'0ce278bd5b55ef5dc7c4d0af6d86778bae8d39dd';
 
@@ -59,8 +55,6 @@ final isAuthenticatedProvider = AutoDisposeProvider<bool>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef IsAuthenticatedRef = AutoDisposeProviderRef<bool>;
 String _$userSessionHash() => r'd711959027c9e62baf8c9ddfc270a0ab7bfe34c6';
 
@@ -77,8 +71,6 @@ final userSessionProvider = AutoDisposeProvider<UserSession?>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef UserSessionRef = AutoDisposeProviderRef<UserSession?>;
 String _$authNotifierHash() => r'5172a47794eff9f51fa66cbbdf4968f4ba5b87a6';
 
@@ -104,4 +96,4 @@ final authNotifierProvider =
 
 typedef _$AuthNotifier = AutoDisposeAsyncNotifier<AuthState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

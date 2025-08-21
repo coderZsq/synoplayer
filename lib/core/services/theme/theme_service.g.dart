@@ -21,8 +21,6 @@ final themeServiceProvider = AutoDisposeProvider<ThemeService>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef ThemeServiceRef = AutoDisposeProviderRef<ThemeService>;
 String _$currentThemeModeHash() => r'0ec6685944a9272ce28b6e92aa0ae250fc124a8c';
 
@@ -40,8 +38,6 @@ final currentThemeModeProvider = AutoDisposeProvider<ThemeMode>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef CurrentThemeModeRef = AutoDisposeProviderRef<ThemeMode>;
 String _$isDarkModeHash() => r'3a376d9c1fe77627dd41f4d9dfedb711e7e8d349';
 
@@ -191,8 +187,6 @@ class IsDarkModeProvider extends AutoDisposeProvider<bool> {
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 mixin IsDarkModeRef on AutoDisposeProviderRef<bool> {
   /// The parameter `context` of this provider.
   BuildContext get context;
@@ -225,4 +219,4 @@ final themeNotifierProvider =
 
 typedef _$ThemeNotifier = AutoDisposeAsyncNotifier<AppThemeMode>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

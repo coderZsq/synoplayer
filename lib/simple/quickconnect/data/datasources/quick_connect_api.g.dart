@@ -23,7 +23,7 @@ class _QuickConnectApi implements QuickConnectApi {
 
   @override
   Future<GetServerInfoResponse> getServerInfo(
-      GetServerInfoRequest request) async {
+      {required GetServerInfoRequest request}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -57,13 +57,22 @@ class _QuickConnectApi implements QuickConnectApi {
   }
 
   @override
-  Future<void> queryApiInfo(QueryApiInfoRequest request) async {
+  Future<QueryApiInfoResponse> queryApiInfo({
+    required String api,
+    required String method,
+    required String version,
+    required QueryApiInfoRequest request,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api': api,
+      r'method': method,
+      r'version': version,
+    };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(request.toJson());
-    final _options = _setStreamType<void>(Options(
+    final _options = _setStreamType<QueryApiInfoResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -79,7 +88,69 @@ class _QuickConnectApi implements QuickConnectApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    await _dio.fetch<void>(_options);
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late QueryApiInfoResponse _value;
+    try {
+      _value = QueryApiInfoResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AuthLoginResponse> authLogin({
+    required String api,
+    required String method,
+    required String account,
+    required String passwd,
+    required String session,
+    required String format,
+    String? otp_code,
+    required String version,
+    required AuthLoginRequest request,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api': api,
+      r'method': method,
+      r'account': account,
+      r'passwd': passwd,
+      r'session': session,
+      r'format': format,
+      r'otp_code': otp_code,
+      r'version': version,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(request.toJson());
+    final _options = _setStreamType<AuthLoginResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/webapi/auth.cgi',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AuthLoginResponse _value;
+    try {
+      _value = AuthLoginResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

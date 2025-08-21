@@ -1,4 +1,4 @@
-import '../../entities/get_server_info_response.dart';
+import 'package:synoplayer/simple/quickconnect/entities/auth_login_response.dart';
 import '../repositories/quick_connect_repository.dart';
 
 class LoginUseCase {
@@ -6,38 +6,39 @@ class LoginUseCase {
 
   LoginUseCase(this.repository);
 
-  Future<GetServerInfoResponse> call({
+  bool? isConnected;
+
+  Future<AuthLoginResponse?> call({
     required String quickConnectId,
     required String username,
     required String password,
-    required String? optCode,
+    required String? otpCode,
   }) async {
-    // 先调用global API获取基本信息
-    final firstResponse = await repository.getServerInfo(
+    if (isConnected == true) {
+      return await repository.authLogin(account: username, passwd: password, otp_code: otpCode);
+    }
+    final r1 = await repository.getServerInfo(
       serverID: quickConnectId,
     );
-    
-    final sites = firstResponse.sites;
+    final sites = r1.sites;
     if (sites != null && sites.isNotEmpty) {
       final site = sites.first;
       try {
-        // 如果有sites，则用第一个site再次调用获取详细信息
-        final secondResponse = await repository.getServerInfo(
+        final r2 = await repository.getServerInfo(
           serverID: quickConnectId,
           site: site,
         );
-        final relayDn = secondResponse.service?.relay_dn;
-        final relayPort = secondResponse.service?.relay_port;
+        final relayDn = r2.service?.relay_dn;
+        final relayPort = r2.service?.relay_port;
         if (relayDn != null && relayPort != null) {
-          await repository.queryApiInfo(relayDn: relayDn, relayPort: relayPort);
+          isConnected = await repository.queryApiInfo(relayDn: relayDn, relayPort: relayPort);
+          return await repository.authLogin(account: username, passwd: password, otp_code: otpCode);
         }
-        return secondResponse;
+        return null;
       } catch (e) {
-        // 如果第二次调用失败，返回第一次的结果
-        return firstResponse;
+        return null;
       }
     }
-    
-    return firstResponse;
+    return null;
   }
 }

@@ -54,8 +54,6 @@ final credentialsServiceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef CredentialsServiceRef = AutoDisposeProviderRef<CredentialsService>;
 String _$currentCredentialsHash() =>
     r'b4ff762f857027963ecf26f49fb06af284518ec8';
@@ -75,8 +73,6 @@ final currentCredentialsProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef CurrentCredentialsRef = AutoDisposeFutureProviderRef<LoginCredentials?>;
 String _$sessionStatusHash() => r'ea8b0718310d05d1f6b54733f0ac0cabd569c5be';
 
@@ -94,8 +90,6 @@ final sessionStatusProvider = AutoDisposeFutureProvider<SessionStatus>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef SessionStatusRef = AutoDisposeFutureProviderRef<SessionStatus>;
 String _$isLoggedInHash() => r'da65a2775a9785b4917669bd9ea3d6a5eca0e9ce';
 
@@ -112,8 +106,6 @@ final isLoggedInProvider = AutoDisposeFutureProvider<bool>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef IsLoggedInRef = AutoDisposeFutureProviderRef<bool>;
 String _$currentSessionIdHash() => r'2c26118025b3f19b56d64fa750fe9b90435cae8d';
 
@@ -131,8 +123,6 @@ final currentSessionIdProvider = AutoDisposeFutureProvider<String?>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef CurrentSessionIdRef = AutoDisposeFutureProviderRef<String?>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

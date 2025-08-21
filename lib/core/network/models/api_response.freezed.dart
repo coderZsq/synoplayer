@@ -70,9 +70,7 @@ mixin _$ApiResponse<T> {
   }) =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ApiResponseCopyWith<T, ApiResponse<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -96,8 +94,6 @@ class _$ApiResponseCopyWithImpl<T, $Res, $Val extends ApiResponse<T>>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -142,8 +138,6 @@ class __$$ApiSuccessImplCopyWithImpl<T, $Res>
       _$ApiSuccessImpl<T> _value, $Res Function(_$ApiSuccessImpl<T>) _then)
       : super(_value, _then);
 
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -224,9 +218,7 @@ class _$ApiSuccessImpl<T> implements ApiSuccess<T> {
       message,
       const DeepCollectionEquality().hash(_extra));
 
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ApiSuccessImplCopyWith<T, _$ApiSuccessImpl<T>> get copyWith =>
@@ -321,11 +313,8 @@ abstract class ApiSuccess<T> implements ApiResponse<T> {
   String? get message;
   @override
   Map<String, dynamic>? get extra;
-
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ApiSuccessImplCopyWith<T, _$ApiSuccessImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -354,8 +343,6 @@ class __$$ApiErrorImplCopyWithImpl<T, $Res>
       _$ApiErrorImpl<T> _value, $Res Function(_$ApiErrorImpl<T>) _then)
       : super(_value, _then);
 
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -447,9 +434,7 @@ class _$ApiErrorImpl<T> implements ApiError<T> {
       const DeepCollectionEquality().hash(error),
       const DeepCollectionEquality().hash(_extra));
 
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ApiErrorImplCopyWith<T, _$ApiErrorImpl<T>> get copyWith =>
@@ -546,11 +531,8 @@ abstract class ApiError<T> implements ApiResponse<T> {
   dynamic get error;
   @override
   Map<String, dynamic>? get extra;
-
-  /// Create a copy of ApiResponse
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ApiErrorImplCopyWith<T, _$ApiErrorImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }

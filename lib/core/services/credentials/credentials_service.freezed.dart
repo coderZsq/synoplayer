@@ -28,12 +28,8 @@ mixin _$LoginCredentials {
   DateTime? get loginTime => throw _privateConstructorUsedError;
   bool get rememberCredentials => throw _privateConstructorUsedError;
 
-  /// Serializes this LoginCredentials to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of LoginCredentials
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $LoginCredentialsCopyWith<LoginCredentials> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -64,8 +60,6 @@ class _$LoginCredentialsCopyWithImpl<$Res, $Val extends LoginCredentials>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of LoginCredentials
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -136,8 +130,6 @@ class __$$LoginCredentialsImplCopyWithImpl<$Res>
       $Res Function(_$LoginCredentialsImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginCredentials
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -238,14 +230,12 @@ class _$LoginCredentialsImpl implements _LoginCredentials {
                 other.rememberCredentials == rememberCredentials));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, quickConnectId, username,
       password, workingAddress, sid, loginTime, rememberCredentials);
 
-  /// Create a copy of LoginCredentials
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginCredentialsImplCopyWith<_$LoginCredentialsImpl> get copyWith =>
@@ -287,11 +277,8 @@ abstract class _LoginCredentials implements LoginCredentials {
   DateTime? get loginTime;
   @override
   bool get rememberCredentials;
-
-  /// Create a copy of LoginCredentials
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginCredentialsImplCopyWith<_$LoginCredentialsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -32,12 +32,8 @@ mixin _$QuickConnectServerInfoModel {
   int? get port => throw _privateConstructorUsedError;
   String? get protocol => throw _privateConstructorUsedError;
 
-  /// Serializes this QuickConnectServerInfoModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of QuickConnectServerInfoModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $QuickConnectServerInfoModelCopyWith<QuickConnectServerInfoModel>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -71,8 +67,6 @@ class _$QuickConnectServerInfoModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of QuickConnectServerInfoModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -146,8 +140,6 @@ class __$$QuickConnectServerInfoModelImplCopyWithImpl<$Res>
       $Res Function(_$QuickConnectServerInfoModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of QuickConnectServerInfoModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -250,14 +242,12 @@ class _$QuickConnectServerInfoModelImpl
                 other.protocol == protocol));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, externalDomain,
       internalIp, isOnline, port, protocol);
 
-  /// Create a copy of QuickConnectServerInfoModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$QuickConnectServerInfoModelImplCopyWith<_$QuickConnectServerInfoModelImpl>
@@ -303,11 +293,8 @@ abstract class _QuickConnectServerInfoModel
   int? get port;
   @override
   String? get protocol;
-
-  /// Create a copy of QuickConnectServerInfoModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$QuickConnectServerInfoModelImplCopyWith<_$QuickConnectServerInfoModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -327,12 +314,8 @@ mixin _$QuickConnectLoginResultModel {
   @JsonKey(name: 'redirect_url')
   String? get redirectUrl => throw _privateConstructorUsedError;
 
-  /// Serializes this QuickConnectLoginResultModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of QuickConnectLoginResultModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $QuickConnectLoginResultModelCopyWith<QuickConnectLoginResultModel>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -363,8 +346,6 @@ class _$QuickConnectLoginResultModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of QuickConnectLoginResultModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -420,8 +401,6 @@ class __$$QuickConnectLoginResultModelImplCopyWithImpl<$Res>
       $Res Function(_$QuickConnectLoginResultModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of QuickConnectLoginResultModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -496,14 +475,12 @@ class _$QuickConnectLoginResultModelImpl
                 other.redirectUrl == redirectUrl));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, isSuccess, sid, errorMessage, redirectUrl);
 
-  /// Create a copy of QuickConnectLoginResultModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$QuickConnectLoginResultModelImplCopyWith<
@@ -542,11 +519,8 @@ abstract class _QuickConnectLoginResultModel
   @override
   @JsonKey(name: 'redirect_url')
   String? get redirectUrl;
-
-  /// Create a copy of QuickConnectLoginResultModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$QuickConnectLoginResultModelImplCopyWith<
           _$QuickConnectLoginResultModelImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -569,12 +543,8 @@ mixin _$QuickConnectConnectionStatusModel {
   QuickConnectServerInfoModel? get serverInfo =>
       throw _privateConstructorUsedError;
 
-  /// Serializes this QuickConnectConnectionStatusModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of QuickConnectConnectionStatusModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $QuickConnectConnectionStatusModelCopyWith<QuickConnectConnectionStatusModel>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -607,8 +577,6 @@ class _$QuickConnectConnectionStatusModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of QuickConnectConnectionStatusModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -637,8 +605,6 @@ class _$QuickConnectConnectionStatusModelCopyWithImpl<$Res,
     ) as $Val);
   }
 
-  /// Create a copy of QuickConnectConnectionStatusModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $QuickConnectServerInfoModelCopyWith<$Res>? get serverInfo {
@@ -682,8 +648,6 @@ class __$$QuickConnectConnectionStatusModelImplCopyWithImpl<$Res>
       $Res Function(_$QuickConnectConnectionStatusModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of QuickConnectConnectionStatusModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -760,14 +724,12 @@ class _$QuickConnectConnectionStatusModelImpl
                 other.serverInfo == serverInfo));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, isConnected, responseTime, errorMessage, serverInfo);
 
-  /// Create a copy of QuickConnectConnectionStatusModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$QuickConnectConnectionStatusModelImplCopyWith<
@@ -809,11 +771,8 @@ abstract class _QuickConnectConnectionStatusModel
   @override
   @JsonKey(name: 'server_info')
   QuickConnectServerInfoModel? get serverInfo;
-
-  /// Create a copy of QuickConnectConnectionStatusModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$QuickConnectConnectionStatusModelImplCopyWith<
           _$QuickConnectConnectionStatusModelImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -834,12 +793,8 @@ mixin _$TunnelResponseModel {
   @JsonKey(name: 'response_time')
   int get responseTime => throw _privateConstructorUsedError;
 
-  /// Serializes this TunnelResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of TunnelResponseModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $TunnelResponseModelCopyWith<TunnelResponseModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -869,8 +824,6 @@ class _$TunnelResponseModelCopyWithImpl<$Res, $Val extends TunnelResponseModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of TunnelResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -935,8 +888,6 @@ class __$$TunnelResponseModelImplCopyWithImpl<$Res>
       $Res Function(_$TunnelResponseModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TunnelResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1026,14 +977,12 @@ class _$TunnelResponseModelImpl implements _TunnelResponseModel {
                 other.responseTime == responseTime));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, domain, port, protocol, isOnline, responseTime);
 
-  /// Create a copy of TunnelResponseModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$TunnelResponseModelImplCopyWith<_$TunnelResponseModelImpl> get copyWith =>
@@ -1075,11 +1024,8 @@ abstract class _TunnelResponseModel implements TunnelResponseModel {
   @override
   @JsonKey(name: 'response_time')
   int get responseTime;
-
-  /// Create a copy of TunnelResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$TunnelResponseModelImplCopyWith<_$TunnelResponseModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1104,12 +1050,8 @@ mixin _$ServerInfoResponseModel {
   @JsonKey(name: 'response_time')
   int get responseTime => throw _privateConstructorUsedError;
 
-  /// Serializes this ServerInfoResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ServerInfoResponseModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ServerInfoResponseModelCopyWith<ServerInfoResponseModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1142,8 +1084,6 @@ class _$ServerInfoResponseModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ServerInfoResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1223,8 +1163,6 @@ class __$$ServerInfoResponseModelImplCopyWithImpl<$Res>
       $Res Function(_$ServerInfoResponseModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ServerInfoResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1336,14 +1274,12 @@ class _$ServerInfoResponseModelImpl implements _ServerInfoResponseModel {
                 other.responseTime == responseTime));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, externalDomain,
       internalIp, isOnline, port, protocol, responseTime);
 
-  /// Create a copy of ServerInfoResponseModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ServerInfoResponseModelImplCopyWith<_$ServerInfoResponseModelImpl>
@@ -1393,11 +1329,8 @@ abstract class _ServerInfoResponseModel implements ServerInfoResponseModel {
   @override
   @JsonKey(name: 'response_time')
   int get responseTime;
-
-  /// Create a copy of ServerInfoResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ServerInfoResponseModelImplCopyWith<_$ServerInfoResponseModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1415,12 +1348,8 @@ mixin _$LoginRequestModel {
   @JsonKey(name: 'remember_me')
   bool get rememberMe => throw _privateConstructorUsedError;
 
-  /// Serializes this LoginRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of LoginRequestModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $LoginRequestModelCopyWith<LoginRequestModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1448,8 +1377,6 @@ class _$LoginRequestModelCopyWithImpl<$Res, $Val extends LoginRequestModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of LoginRequestModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1502,8 +1429,6 @@ class __$$LoginRequestModelImplCopyWithImpl<$Res>
       $Res Function(_$LoginRequestModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginRequestModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1575,14 +1500,12 @@ class _$LoginRequestModelImpl implements _LoginRequestModel {
                 other.rememberMe == rememberMe));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, username, password, otpCode, rememberMe);
 
-  /// Create a copy of LoginRequestModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginRequestModelImplCopyWith<_$LoginRequestModelImpl> get copyWith =>
@@ -1618,11 +1541,8 @@ abstract class _LoginRequestModel implements LoginRequestModel {
   @override
   @JsonKey(name: 'remember_me')
   bool get rememberMe;
-
-  /// Create a copy of LoginRequestModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginRequestModelImplCopyWith<_$LoginRequestModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1643,12 +1563,8 @@ mixin _$LoginResponseModel {
   @JsonKey(name: 'response_time')
   int get responseTime => throw _privateConstructorUsedError;
 
-  /// Serializes this LoginResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of LoginResponseModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $LoginResponseModelCopyWith<LoginResponseModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1677,8 +1593,6 @@ class _$LoginResponseModelCopyWithImpl<$Res, $Val extends LoginResponseModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of LoginResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1737,8 +1651,6 @@ class __$$LoginResponseModelImplCopyWithImpl<$Res>
       $Res Function(_$LoginResponseModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1822,14 +1734,12 @@ class _$LoginResponseModelImpl implements _LoginResponseModel {
                 other.responseTime == responseTime));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, isSuccess, sid, errorMessage, redirectUrl, responseTime);
 
-  /// Create a copy of LoginResponseModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginResponseModelImplCopyWith<_$LoginResponseModelImpl> get copyWith =>
@@ -1870,11 +1780,8 @@ abstract class _LoginResponseModel implements LoginResponseModel {
   @override
   @JsonKey(name: 'response_time')
   int get responseTime;
-
-  /// Create a copy of LoginResponseModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginResponseModelImplCopyWith<_$LoginResponseModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

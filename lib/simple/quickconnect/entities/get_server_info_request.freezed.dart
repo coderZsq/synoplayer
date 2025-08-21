@@ -24,12 +24,8 @@ mixin _$GetServerInfoRequest {
   String get serverID => throw _privateConstructorUsedError;
   String get command => throw _privateConstructorUsedError;
 
-  /// Serializes this GetServerInfoRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of GetServerInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $GetServerInfoRequestCopyWith<GetServerInfoRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,8 +50,6 @@ class _$GetServerInfoRequestCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of GetServerInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -99,8 +93,6 @@ class __$$QuickConnectRequestImplCopyWithImpl<$Res>
       $Res Function(_$QuickConnectRequestImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of GetServerInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,13 +149,11 @@ class _$QuickConnectRequestImpl implements _QuickConnectRequest {
             (identical(other.command, command) || other.command == command));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, serverID, command);
 
-  /// Create a copy of GetServerInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$QuickConnectRequestImplCopyWith<_$QuickConnectRequestImpl> get copyWith =>
@@ -193,11 +183,8 @@ abstract class _QuickConnectRequest implements GetServerInfoRequest {
   String get serverID;
   @override
   String get command;
-
-  /// Create a copy of GetServerInfoRequest
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$QuickConnectRequestImplCopyWith<_$QuickConnectRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

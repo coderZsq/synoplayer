@@ -1,3 +1,4 @@
+import '../../entities/auth_login_response.dart';
 import '../../entities/get_server_info_response.dart';
 
 abstract class QuickConnectRepository {
@@ -6,8 +7,14 @@ abstract class QuickConnectRepository {
     String? site,
   });
 
-  Future<void> queryApiInfo({
+  Future<bool> queryApiInfo({
     required String relayDn,
-    required int relayPort
+    required int relayPort,
+  });
+
+  Future<AuthLoginResponse> authLogin({
+    required String account,
+    required String passwd,
+    String? otp_code,
   });
 }

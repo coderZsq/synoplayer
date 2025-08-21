@@ -23,8 +23,6 @@ final localDataSourceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef LocalDataSourceRef
     = AutoDisposeProviderRef<QuickConnectLocalDataSource>;
 String _$remoteDataSourceHash() => r'221d43d84e3c5baabdf45826141218308bfac6d6';
@@ -44,8 +42,6 @@ final remoteDataSourceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef RemoteDataSourceRef
     = AutoDisposeProviderRef<QuickConnectRemoteDataSource>;
 String _$quickConnectRepositoryHash() =>
@@ -66,8 +62,6 @@ final quickConnectRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectRepositoryRef
     = AutoDisposeProviderRef<QuickConnectRepository>;
 String _$resolveAddressUseCaseHash() =>
@@ -88,8 +82,6 @@ final resolveAddressUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef ResolveAddressUseCaseRef
     = AutoDisposeProviderRef<ResolveAddressUseCase>;
 String _$loginUseCaseHash() => r'a2157714a5ba83af0571fd6f5eb328d3b907336c';
@@ -107,8 +99,6 @@ final loginUseCaseProvider = AutoDisposeProvider<LoginUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef LoginUseCaseRef = AutoDisposeProviderRef<LoginUseCase>;
 String _$smartLoginUseCaseHash() => r'5120d5dee3a88d289a19d098387ef3eecd6f530f';
 
@@ -127,8 +117,6 @@ final smartLoginUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef SmartLoginUseCaseRef = AutoDisposeProviderRef<SmartLoginUseCase>;
 String _$enhancedSmartLoginUseCaseHash() =>
     r'e12cf6a353a1ba33e908d5cac97f84fac647a4ba';
@@ -148,8 +136,6 @@ final enhancedSmartLoginUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef EnhancedSmartLoginUseCaseRef
     = AutoDisposeProviderRef<EnhancedSmartLoginUseCase>;
 String _$connectionManagementUseCaseHash() =>
@@ -170,8 +156,6 @@ final connectionManagementUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef ConnectionManagementUseCaseRef
     = AutoDisposeProviderRef<ConnectionManagementUseCase>;
 String _$quickConnectServiceAdapterHash() =>
@@ -192,8 +176,6 @@ final quickConnectServiceAdapterProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef QuickConnectServiceAdapterRef
     = AutoDisposeProviderRef<QuickConnectServiceAdapter>;
 String _$sharedPreferencesHash() => r'6c03b929f567eb6f97608f6208b95744ffee3bfd';
@@ -213,8 +195,6 @@ final sharedPreferencesProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef SharedPreferencesRef = AutoDisposeFutureProviderRef<SharedPreferences>;
 String _$secureStorageHash() => r'273dc403a965c1f24962aaf4d40776611a26f8b8';
 
@@ -233,8 +213,6 @@ final secureStorageProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef SecureStorageRef = AutoDisposeProviderRef<FlutterSecureStorage>;
 String _$dioHash() => r'c50c57ae3220b42c06ae5c33f1bce6ef76cd8f0c';
 
@@ -251,8 +229,6 @@ final dioProvider = AutoDisposeProvider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef DioRef = AutoDisposeProviderRef<Dio>;
 String _$addressResolutionNotifierHash() =>
     r'3de49cf28ad00d4d7c6bffc67d15059a6ec1c3af';
@@ -333,4 +309,4 @@ final cacheManagementNotifierProvider = AutoDisposeAsyncNotifierProvider<
 typedef _$CacheManagementNotifier
     = AutoDisposeAsyncNotifier<Map<String, dynamic>?>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

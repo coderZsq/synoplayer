@@ -89,8 +89,6 @@ mixin _$LoginResult {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
-  /// Serializes this LoginResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
@@ -110,9 +108,6 @@ class _$LoginResultCopyWithImpl<$Res, $Val extends LoginResult>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -132,8 +127,6 @@ class __$$LoginResultSuccessImplCopyWithImpl<$Res>
       $Res Function(_$LoginResultSuccessImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -187,13 +180,11 @@ class _$LoginResultSuccessImpl extends LoginResultSuccess {
                 other.availableAddress == availableAddress));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, sid, availableAddress);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginResultSuccessImplCopyWith<_$LoginResultSuccessImpl> get copyWith =>
@@ -299,10 +290,7 @@ abstract class LoginResultSuccess extends LoginResult {
 
   String get sid;
   String? get availableAddress;
-
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginResultSuccessImplCopyWith<_$LoginResultSuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -324,8 +312,6 @@ class __$$LoginResultFailureImplCopyWithImpl<$Res>
       $Res Function(_$LoginResultFailureImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -371,13 +357,11 @@ class _$LoginResultFailureImpl extends LoginResultFailure {
                 other.errorMessage == errorMessage));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, errorMessage);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginResultFailureImplCopyWith<_$LoginResultFailureImpl> get copyWith =>
@@ -481,10 +465,7 @@ abstract class LoginResultFailure extends LoginResult {
       _$LoginResultFailureImpl.fromJson;
 
   String get errorMessage;
-
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginResultFailureImplCopyWith<_$LoginResultFailureImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -507,8 +488,6 @@ class __$$LoginResultRequireOTPImplCopyWithImpl<$Res>
       $Res Function(_$LoginResultRequireOTPImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -554,13 +533,11 @@ class _$LoginResultRequireOTPImpl extends LoginResultRequireOTP {
                 other.errorMessage == errorMessage));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, errorMessage);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginResultRequireOTPImplCopyWith<_$LoginResultRequireOTPImpl>
@@ -664,10 +641,7 @@ abstract class LoginResultRequireOTP extends LoginResult {
       _$LoginResultRequireOTPImpl.fromJson;
 
   String get errorMessage;
-
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginResultRequireOTPImplCopyWith<_$LoginResultRequireOTPImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -692,8 +666,6 @@ class __$$LoginResultRequireOTPWithAddressImplCopyWithImpl<$Res>
       $Res Function(_$LoginResultRequireOTPWithAddressImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -752,13 +724,11 @@ class _$LoginResultRequireOTPWithAddressImpl
                 other.availableAddress == availableAddress));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, errorMessage, availableAddress);
 
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginResultRequireOTPWithAddressImplCopyWith<
@@ -866,10 +836,7 @@ abstract class LoginResultRequireOTPWithAddress extends LoginResult {
 
   String get errorMessage;
   String get availableAddress;
-
-  /// Create a copy of LoginResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginResultRequireOTPWithAddressImplCopyWith<
           _$LoginResultRequireOTPWithAddressImpl>
       get copyWith => throw _privateConstructorUsedError;

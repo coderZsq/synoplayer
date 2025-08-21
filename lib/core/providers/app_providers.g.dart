@@ -24,8 +24,6 @@ final credentialsServiceProvider =
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef CredentialsServiceRef = AutoDisposeProviderRef<CredentialsService>;
 String _$themeServiceHash() => r'b66070108bd53fa9a711625ecf5fc04ecc6d862d';
 
@@ -42,8 +40,6 @@ final themeServiceProvider = AutoDisposeProvider<ThemeService>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef ThemeServiceRef = AutoDisposeProviderRef<ThemeService>;
 String _$appConfigHash() => r'89539f7dfac47380884155599073a6cbd054873a';
 
@@ -60,8 +56,6 @@ final appConfigProvider = AutoDisposeProvider<AppConfig>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef AppConfigRef = AutoDisposeProviderRef<AppConfig>;
 String _$appDependenciesHash() => r'da4a222c9a24182134e850c89ac0717cf409b8a2';
 
@@ -105,4 +99,4 @@ final appStateProvider =
 
 typedef _$AppState = AutoDisposeNotifier<AppStateData>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

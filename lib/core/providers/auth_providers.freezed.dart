@@ -77,9 +77,6 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -96,9 +93,6 @@ class __$$AuthUnauthenticatedImplCopyWithImpl<$Res>
   __$$AuthUnauthenticatedImplCopyWithImpl(_$AuthUnauthenticatedImpl _value,
       $Res Function(_$AuthUnauthenticatedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -213,8 +207,6 @@ class __$$AuthAuthenticatedImplCopyWithImpl<$Res>
       $Res Function(_$AuthAuthenticatedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -228,8 +220,6 @@ class __$$AuthAuthenticatedImplCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LoginCredentialsCopyWith<$Res> get credentials {
@@ -264,9 +254,7 @@ class _$AuthAuthenticatedImpl implements AuthAuthenticated {
   @override
   int get hashCode => Object.hash(runtimeType, credentials);
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AuthAuthenticatedImplCopyWith<_$AuthAuthenticatedImpl> get copyWith =>
@@ -347,10 +335,7 @@ abstract class AuthAuthenticated implements AuthState {
       _$AuthAuthenticatedImpl;
 
   LoginCredentials get credentials;
-
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AuthAuthenticatedImplCopyWith<_$AuthAuthenticatedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -369,9 +354,6 @@ class __$$AuthAuthenticatingImplCopyWithImpl<$Res>
   __$$AuthAuthenticatingImplCopyWithImpl(_$AuthAuthenticatingImpl _value,
       $Res Function(_$AuthAuthenticatingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

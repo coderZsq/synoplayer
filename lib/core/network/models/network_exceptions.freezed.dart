@@ -168,9 +168,6 @@ class _$NetworkExceptionCopyWithImpl<$Res, $Val extends NetworkException>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -187,9 +184,6 @@ class __$$RequestCancelledImplCopyWithImpl<$Res>
   __$$RequestCancelledImplCopyWithImpl(_$RequestCancelledImpl _value,
       $Res Function(_$RequestCancelledImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -391,8 +385,6 @@ class __$$UnauthorisedRequestImplCopyWithImpl<$Res>
       $Res Function(_$UnauthorisedRequestImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -431,9 +423,7 @@ class _$UnauthorisedRequestImpl implements UnauthorisedRequest {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UnauthorisedRequestImplCopyWith<_$UnauthorisedRequestImpl> get copyWith =>
@@ -604,10 +594,7 @@ abstract class UnauthorisedRequest implements NetworkException {
       _$UnauthorisedRequestImpl;
 
   String? get message;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$UnauthorisedRequestImplCopyWith<_$UnauthorisedRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -629,8 +616,6 @@ class __$$BadRequestImplCopyWithImpl<$Res>
       _$BadRequestImpl _value, $Res Function(_$BadRequestImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -669,9 +654,7 @@ class _$BadRequestImpl implements BadRequest {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$BadRequestImplCopyWith<_$BadRequestImpl> get copyWith =>
@@ -840,10 +823,7 @@ abstract class BadRequest implements NetworkException {
   const factory BadRequest({final String? message}) = _$BadRequestImpl;
 
   String? get message;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$BadRequestImplCopyWith<_$BadRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -865,8 +845,6 @@ class __$$NotFoundImplCopyWithImpl<$Res>
       _$NotFoundImpl _value, $Res Function(_$NotFoundImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -905,9 +883,7 @@ class _$NotFoundImpl implements NotFound {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$NotFoundImplCopyWith<_$NotFoundImpl> get copyWith =>
@@ -1076,10 +1052,7 @@ abstract class NotFound implements NetworkException {
   const factory NotFound({final String? message}) = _$NotFoundImpl;
 
   String? get message;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$NotFoundImplCopyWith<_$NotFoundImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1098,9 +1071,6 @@ class __$$MethodNotAllowedImplCopyWithImpl<$Res>
   __$$MethodNotAllowedImplCopyWithImpl(_$MethodNotAllowedImpl _value,
       $Res Function(_$MethodNotAllowedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1299,9 +1269,6 @@ class __$$NotAcceptableImplCopyWithImpl<$Res>
   __$$NotAcceptableImplCopyWithImpl(
       _$NotAcceptableImpl _value, $Res Function(_$NotAcceptableImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1500,9 +1467,6 @@ class __$$RequestTimeoutImplCopyWithImpl<$Res>
   __$$RequestTimeoutImplCopyWithImpl(
       _$RequestTimeoutImpl _value, $Res Function(_$RequestTimeoutImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1701,9 +1665,6 @@ class __$$SendTimeoutImplCopyWithImpl<$Res>
   __$$SendTimeoutImplCopyWithImpl(
       _$SendTimeoutImpl _value, $Res Function(_$SendTimeoutImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1902,9 +1863,6 @@ class __$$ReceiveTimeoutImplCopyWithImpl<$Res>
   __$$ReceiveTimeoutImplCopyWithImpl(
       _$ReceiveTimeoutImpl _value, $Res Function(_$ReceiveTimeoutImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2103,9 +2061,6 @@ class __$$ConflictImplCopyWithImpl<$Res>
   __$$ConflictImplCopyWithImpl(
       _$ConflictImpl _value, $Res Function(_$ConflictImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2307,8 +2262,6 @@ class __$$InternalServerErrorImplCopyWithImpl<$Res>
       $Res Function(_$InternalServerErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2347,9 +2300,7 @@ class _$InternalServerErrorImpl implements InternalServerError {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$InternalServerErrorImplCopyWith<_$InternalServerErrorImpl> get copyWith =>
@@ -2520,10 +2471,7 @@ abstract class InternalServerError implements NetworkException {
       _$InternalServerErrorImpl;
 
   String? get message;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$InternalServerErrorImplCopyWith<_$InternalServerErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2542,9 +2490,6 @@ class __$$NotImplementedImplCopyWithImpl<$Res>
   __$$NotImplementedImplCopyWithImpl(
       _$NotImplementedImpl _value, $Res Function(_$NotImplementedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2743,9 +2688,6 @@ class __$$ServiceUnavailableImplCopyWithImpl<$Res>
   __$$ServiceUnavailableImplCopyWithImpl(_$ServiceUnavailableImpl _value,
       $Res Function(_$ServiceUnavailableImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2944,9 +2886,6 @@ class __$$NoInternetConnectionImplCopyWithImpl<$Res>
   __$$NoInternetConnectionImplCopyWithImpl(_$NoInternetConnectionImpl _value,
       $Res Function(_$NoInternetConnectionImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -3149,8 +3088,6 @@ class __$$FormatExceptionImplCopyWithImpl<$Res>
       _$FormatExceptionImpl _value, $Res Function(_$FormatExceptionImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3189,9 +3126,7 @@ class _$FormatExceptionImpl implements FormatException {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$FormatExceptionImplCopyWith<_$FormatExceptionImpl> get copyWith =>
@@ -3362,10 +3297,7 @@ abstract class FormatException implements NetworkException {
       _$FormatExceptionImpl;
 
   String? get message;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$FormatExceptionImplCopyWith<_$FormatExceptionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -3387,8 +3319,6 @@ class __$$UnableToProcessImplCopyWithImpl<$Res>
       _$UnableToProcessImpl _value, $Res Function(_$UnableToProcessImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3427,9 +3357,7 @@ class _$UnableToProcessImpl implements UnableToProcess {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UnableToProcessImplCopyWith<_$UnableToProcessImpl> get copyWith =>
@@ -3600,10 +3528,7 @@ abstract class UnableToProcess implements NetworkException {
       _$UnableToProcessImpl;
 
   String? get message;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$UnableToProcessImplCopyWith<_$UnableToProcessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -3625,8 +3550,6 @@ class __$$DefaultErrorImplCopyWithImpl<$Res>
       _$DefaultErrorImpl _value, $Res Function(_$DefaultErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3674,9 +3597,7 @@ class _$DefaultErrorImpl implements DefaultError {
   @override
   int get hashCode => Object.hash(runtimeType, error, statusCode);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$DefaultErrorImplCopyWith<_$DefaultErrorImpl> get copyWith =>
@@ -3848,10 +3769,7 @@ abstract class DefaultError implements NetworkException {
 
   String get error;
   int? get statusCode;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$DefaultErrorImplCopyWith<_$DefaultErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -3873,8 +3791,6 @@ class __$$UnexpectedErrorImplCopyWithImpl<$Res>
       _$UnexpectedErrorImpl _value, $Res Function(_$UnexpectedErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3913,9 +3829,7 @@ class _$UnexpectedErrorImpl implements UnexpectedError {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UnexpectedErrorImplCopyWith<_$UnexpectedErrorImpl> get copyWith =>
@@ -4086,10 +4000,7 @@ abstract class UnexpectedError implements NetworkException {
       _$UnexpectedErrorImpl;
 
   String? get message;
-
-  /// Create a copy of NetworkException
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$UnexpectedErrorImplCopyWith<_$UnexpectedErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
