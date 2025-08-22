@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../quickconnect/entities/auth_login/auth_login_response.dart';
 import '../../core/di/providers.dart';
+import '../../core/error/error_mapper.dart';
 
 part 'login_provider.g.dart';
 
@@ -31,13 +32,15 @@ class LoginNotifier extends _$LoginNotifier {
       if (response != null) {
         state = AsyncValue.data(response);
       } else {
+        final errorMessage = ErrorMapper.mapToUserMessage('登录失败：服务器返回无效响应');
         state = AsyncValue.error(
-          '登录失败：无效响应',
+          errorMessage,
           StackTrace.current,
         );
       }
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      final errorMessage = ErrorMapper.mapToUserMessage(e);
+      state = AsyncValue.error(errorMessage, stackTrace);
     }
   }
 

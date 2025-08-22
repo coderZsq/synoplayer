@@ -8,6 +8,7 @@ import '../../entities/query_api_info/query_api_info_request.dart';
 import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
 import '../../../core/network/api_factory.dart';
+import '../../../core/error/exceptions.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
   final ApiFactory _apiFactory;
@@ -30,8 +31,9 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       final api = _apiFactory.createQuickConnectApi(baseUrl);
       return await api.getServerInfo(request: request);
     } on DioException catch (e) {
-      print('Network error: ${e.message}');
-      rethrow;
+      throw NetworkException.fromDio(e);
+    } catch (e) {
+      throw ServerException('获取服务器信息失败: $e');
     }
   }
 
@@ -40,21 +42,27 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
     required String relayDn,
     required int relayPort
   }) async {
-    final apiInfo = QuickConnectApiInfo();
-    final request = QueryApiInfoRequest(
-      api: apiInfo.info,
-      method: 'query',
-      version: '1',
-    );
-    final baseUrl = 'https://$relayDn:$relayPort';
-    _api = _apiFactory.createQuickConnectApi(baseUrl);
-    apiInfo.apiInfo = await _api.queryApiInfo(
-        api: request.api,
-        method: request.method,
-        version: request.version,
-        request: request
-    );
-    return apiInfo.apiInfo?.success ?? false;
+    try {
+      final apiInfo = QuickConnectApiInfo();
+      final request = QueryApiInfoRequest(
+        api: apiInfo.info,
+        method: 'query',
+        version: '1',
+      );
+      final baseUrl = 'https://$relayDn:$relayPort';
+      _api = _apiFactory.createQuickConnectApi(baseUrl);
+      apiInfo.apiInfo = await _api.queryApiInfo(
+          api: request.api,
+          method: request.method,
+          version: request.version,
+          request: request
+      );
+      return apiInfo.apiInfo?.success ?? false;
+    } on DioException catch (e) {
+      throw NetworkException.fromDio(e);
+    } catch (e) {
+      throw ServerException('查询API信息失败: $e');
+    }
   }
 
   @override
@@ -62,28 +70,38 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
     required String account,
     required String passwd,
     String? otp_code,
-  }) {
-    final apiInfo = QuickConnectApiInfo();
-    final request = AuthLoginRequest(
-      api: apiInfo.auth,
-      method: 'login',
-      account: account.trim(),
-      passwd: passwd.trim(),
-      session: 'FileStation',
-      format: 'sid',
-      otp_code: otp_code,
-      version: apiInfo.authVersion,
-    );
-    return _api.authLogin(
-        api: request.api,
-        method: request.method,
-        account: request.account,
-        passwd: request.passwd,
-        session: request.session,
-        format: request.format,
+  }) async {
+    try {
+      final apiInfo = QuickConnectApiInfo();
+      final request = AuthLoginRequest(
+        api: apiInfo.auth,
+        method: 'login',
+        account: account.trim(),
+        passwd: passwd.trim(),
+        session: 'FileStation',
+        format: 'sid',
         otp_code: otp_code,
-        version: request.version,
-        request: request
-    );
+        version: apiInfo.authVersion,
+      );
+      return await _api.authLogin(
+          api: request.api,
+          method: request.method,
+          account: request.account,
+          passwd: request.passwd,
+          session: request.session,
+          format: request.format,
+          otp_code: otp_code,
+          version: request.version,
+          request: request
+      );
+    } on DioException catch (e) {
+      // 根据状态码判断是网络还是认证错误
+      if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
+        throw AuthException('用户名或密码错误');
+      }
+      throw NetworkException.fromDio(e);
+    } catch (e) {
+      throw AuthException('登录失败: $e');
+    }
   }
 }
