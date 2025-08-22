@@ -13,6 +13,25 @@ class SimpleLoginPage extends ConsumerWidget {
     final loginData = ref.watch(loginNotifierProvider);
     final loginNotifier = ref.read(loginNotifierProvider.notifier);
 
+    // 监听错误状态并显示toast
+    ref.listen<LoginData>(loginNotifierProvider, (previous, next) {
+      if (next.state == LoginState.error && next.errorMessage != null) {
+        showCupertinoDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            Future.delayed(const Duration(seconds: 3), () {
+              Navigator.of(context).pop();
+            });
+            return CupertinoAlertDialog(
+              content: Text(next.errorMessage!),
+              actions: [],
+            );
+          },
+        );
+      }
+    });
+
     void handleLogin({
       required String quickConnectId,
       required String username,

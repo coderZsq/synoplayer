@@ -32,10 +32,6 @@ class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _otpController = TextEditingController();
-  
-  String? _quickConnectIdError;
-  String? _usernameError;
-  String? _passwordError;
 
   @override
   void dispose() {
@@ -46,43 +42,51 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
+  void _showToast(String message) {
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.of(context).pop();
+        });
+        return CupertinoAlertDialog(
+          content: Text(message),
+          actions: [],
+        );
+      },
+    );
+  }
+
   bool _validateForm() {
-    bool isValid = true;
-    
     // 验证 QuickConnect ID
     if (_quickConnectIdController.text.trim().isEmpty) {
-      setState(() => _quickConnectIdError = 'QuickConnect ID 不能为空');
-      isValid = false;
+      _showToast('QuickConnect ID 不能为空');
+      return false;
     } else if (_quickConnectIdController.text.trim().length < 3) {
-      setState(() => _quickConnectIdError = 'QuickConnect ID 至少需要 3 个字符');
-      isValid = false;
-    } else {
-      setState(() => _quickConnectIdError = null);
+      _showToast('QuickConnect ID 至少需要 3 个字符');
+      return false;
     }
 
     // 验证用户名
     if (_usernameController.text.trim().isEmpty) {
-      setState(() => _usernameError = '用户名不能为空');
-      isValid = false;
+      _showToast('用户名不能为空');
+      return false;
     } else if (_usernameController.text.trim().length < 2) {
-      setState(() => _usernameError = '用户名至少需要 2 个字符');
-      isValid = false;
-    } else {
-      setState(() => _usernameError = null);
+      _showToast('用户名至少需要 2 个字符');
+      return false;
     }
 
     // 验证密码
     if (_passwordController.text.isEmpty) {
-      setState(() => _passwordError = '密码不能为空');
-      isValid = false;
+      _showToast('密码不能为空');
+      return false;
     } else if (_passwordController.text.length < 6) {
-      setState(() => _passwordError = '密码至少需要 6 个字符');
-      isValid = false;
-    } else {
-      setState(() => _passwordError = null);
+      _showToast('密码至少需要 6 个字符');
+      return false;
     }
 
-    return isValid;
+    return true;
   }
 
   void _handleSubmit() {
@@ -101,11 +105,6 @@ class _LoginFormState extends State<LoginForm> {
     _usernameController.clear();
     _passwordController.clear();
     _otpController.clear();
-    setState(() {
-      _quickConnectIdError = null;
-      _usernameError = null;
-      _passwordError = null;
-    });
     widget.onReset();
   }
 
@@ -117,49 +116,16 @@ class _LoginFormState extends State<LoginForm> {
           controller: _quickConnectIdController,
           onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
         ),
-        if (_quickConnectIdError != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8, left: 16),
-            child: Text(
-              _quickConnectIdError!,
-              style: const TextStyle(
-                color: CupertinoColors.systemRed,
-                fontSize: 12,
-              ),
-            ),
-          ),
         const SizedBox(height: 16),
         UsernameField(
           controller: _usernameController,
           onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
         ),
-        if (_usernameError != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8, left: 16),
-            child: Text(
-              _usernameError!,
-              style: const TextStyle(
-                color: CupertinoColors.systemRed,
-                fontSize: 12,
-              ),
-            ),
-          ),
         const SizedBox(height: 16),
         PasswordField(
           controller: _passwordController,
           onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
         ),
-        if (_passwordError != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8, left: 16),
-            child: Text(
-              _passwordError!,
-              style: const TextStyle(
-                color: CupertinoColors.systemRed,
-                fontSize: 12,
-              ),
-            ),
-          ),
         const SizedBox(height: 16),
         OtpField(
           controller: _otpController,
