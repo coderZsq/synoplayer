@@ -9,7 +9,7 @@ class QuickConnectService {
     _loginUseCase = getIt<LoginUseCase>();
   }
 
-  Future<AuthLoginResponse?> login({
+  Future<LoginData> login({
     required String quickConnectId,
     required String username,
     required String password,

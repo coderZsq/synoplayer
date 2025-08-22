@@ -16,7 +16,14 @@ class AuthLoginResponse with _$AuthLoginResponse {
 }
 
 extension AuthLoginResponseExt on AuthLoginResponse {
-  get needOtp => error?.errors?.types?.any((element) => element.type == 'otp') ?? false;
+  /// 是否需要二次验证（OTP）
+  bool get needOtp => error?.errors?.types?.any((element) => element.type == 'otp') ?? false;
+  
+  /// 是否登录成功（有 sid 表示成功）
+  bool get isLoginSuccess => data?.sid != null && data!.sid!.isNotEmpty;
+  
+  /// 获取会话ID
+  String? get sessionId => data?.sid;
 }
 
 @freezed

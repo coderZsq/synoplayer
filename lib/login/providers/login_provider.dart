@@ -1,14 +1,14 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../quickconnect/entities/auth_login/auth_login_response.dart';
 import '../../core/di/providers.dart';
 import '../../core/error/error_mapper.dart';
+import '../../quickconnect/entities/auth_login/auth_login_response.dart';
 
 part 'login_provider.g.dart';
 
 @riverpod
 class LoginNotifier extends _$LoginNotifier {
   @override
-  FutureOr<AuthLoginResponse?> build() {
+  FutureOr<LoginData?> build() {
     return null;
   }
 
