@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../simple/login/pages/simple_login_page.dart';
+import '../../simple/login/pages/login_page.dart';
 import '../providers/auth_providers.dart';
 import '../providers/app_providers.dart';
 import '../utils/logger.dart';
@@ -78,7 +78,7 @@ GoRouter goRouter(Ref ref) {
       // 启动页
       GoRoute(
         path: RoutePaths.splash,
-        builder: (context, state) => const SimpleLoginPage(),
+        builder: (context, state) => const LoginPage(),
       ),
     ],
     

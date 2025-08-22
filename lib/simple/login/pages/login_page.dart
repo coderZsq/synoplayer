@@ -4,8 +4,8 @@ import '../widgets/login_header.dart';
 import '../widgets/login_form.dart';
 import '../providers/login_provider.dart';
 
-class SimpleLoginPage extends ConsumerWidget {
-  const SimpleLoginPage({super.key});
+class LoginPage extends ConsumerWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
