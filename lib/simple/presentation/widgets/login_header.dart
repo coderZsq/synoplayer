@@ -5,6 +5,8 @@ class LoginHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = CupertinoTheme.of(context).textTheme;
+    
     return Column(
       children: [
         const SizedBox(height: 40),
@@ -16,14 +18,14 @@ class LoginHeader extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'Synology 登录',
-          style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle?.copyWith(
+          style: textTheme.navLargeTitleTextStyle.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           '请输入您的 QuickConnect 信息',
-          style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+          style: textTheme.textStyle.copyWith(
             color: CupertinoColors.systemGrey,
             fontSize: 16,
           ),

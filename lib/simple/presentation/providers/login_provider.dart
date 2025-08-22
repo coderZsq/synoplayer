@@ -1,41 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../quickconnect/presentation/services/quickconnect_service.dart';
 import '../../quickconnect/entities/auth_login/auth_login_response.dart';
 
 part 'login_provider.g.dart';
 
-enum LoginState { idle, loading, success, error }
-
-class LoginData {
-  final LoginState state;
-  final String? errorMessage;
-  final AuthLoginResponse? response;
-
-  const LoginData({
-    required this.state,
-    this.errorMessage,
-    this.response,
-  });
-
-  LoginData copyWith({
-    LoginState? state,
-    String? errorMessage,
-    AuthLoginResponse? response,
-  }) {
-    return LoginData(
-      state: state ?? this.state,
-      errorMessage: errorMessage ?? this.errorMessage,
-      response: response ?? this.response,
-    );
-  }
-}
-
 @riverpod
 class LoginNotifier extends _$LoginNotifier {
   @override
-  LoginData build() {
-    return const LoginData(state: LoginState.idle);
+  FutureOr<AuthLoginResponse?> build() {
+    return null;
   }
 
   Future<void> login({
@@ -44,7 +17,7 @@ class LoginNotifier extends _$LoginNotifier {
     required String password,
     String? otpCode,
   }) async {
-    state = state.copyWith(state: LoginState.loading, errorMessage: null);
+    state = const AsyncValue.loading();
 
     try {
       final quickConnectService = QuickConnectService();
@@ -56,25 +29,19 @@ class LoginNotifier extends _$LoginNotifier {
       );
 
       if (response != null) {
-        state = state.copyWith(
-          state: LoginState.success,
-          response: response,
-        );
+        state = AsyncValue.data(response);
       } else {
-        state = state.copyWith(
-          state: LoginState.error,
-          errorMessage: '登录失败：无效响应',
+        state = AsyncValue.error(
+          '登录失败：无效响应',
+          StackTrace.current,
         );
       }
-    } catch (e) {
-      state = state.copyWith(
-        state: LoginState.error,
-        errorMessage: e.toString(),
-      );
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
     }
   }
 
   void reset() {
-    state = const LoginData(state: LoginState.idle);
+    state = const AsyncValue.data(null);
   }
 }

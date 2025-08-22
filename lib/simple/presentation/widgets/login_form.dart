@@ -1,33 +1,20 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/login_provider.dart';
 import 'form_fields/quick_connect_id_field.dart';
 import 'form_fields/username_field.dart';
 import 'form_fields/password_field.dart';
 import 'form_fields/otp_field.dart';
 import 'login_button.dart';
 
-class LoginForm extends StatefulWidget {
-  final Function({
-    required String quickConnectId,
-    required String username,
-    required String password,
-    String? otpCode,
-  }) onLogin;
-  final VoidCallback onReset;
-  final bool isLoading;
-
-  const LoginForm({
-    super.key,
-    required this.onLogin,
-    required this.onReset,
-    this.isLoading = false,
-  });
+class LoginForm extends ConsumerStatefulWidget {
+  const LoginForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   final _quickConnectIdController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -43,19 +30,23 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _showToast(String message) {
-    showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.of(context).pop();
-        });
-        return CupertinoAlertDialog(
-          content: Text(message),
-          actions: [],
-        );
-      },
-    );
+    if (mounted) {
+      showCupertinoDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          Future.delayed(const Duration(seconds: 2), () {
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          });
+          return CupertinoAlertDialog(
+            content: Text(message),
+            actions: [],
+          );
+        },
+      );
+    }
   }
 
   bool _validateForm() {
@@ -91,7 +82,8 @@ class _LoginFormState extends State<LoginForm> {
 
   void _handleSubmit() {
     if (_validateForm()) {
-      widget.onLogin(
+      final loginNotifier = ref.read(loginNotifierProvider.notifier);
+      loginNotifier.login(
         quickConnectId: _quickConnectIdController.text.trim(),
         username: _usernameController.text.trim(),
         password: _passwordController.text,
@@ -100,16 +92,10 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  void _resetForm() {
-    _quickConnectIdController.clear();
-    _usernameController.clear();
-    _passwordController.clear();
-    _otpController.clear();
-    widget.onReset();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final loginAsync = ref.watch(loginNotifierProvider);
+    
     return Column(
       children: [
         QuickConnectIdField(
@@ -133,8 +119,8 @@ class _LoginFormState extends State<LoginForm> {
         ),
         const SizedBox(height: 24),
         LoginButton(
-          onPressed: widget.isLoading ? null : _handleSubmit,
-          isLoading: widget.isLoading,
+          onPressed: loginAsync.isLoading ? null : _handleSubmit,
+          isLoading: loginAsync.isLoading,
         ),
       ],
     );
