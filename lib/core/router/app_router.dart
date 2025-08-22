@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/authentication/pages/login_page.dart';
 import '../../features/quickconnect/presentation/pages/quickconnect_login_page.dart';
 import '../../features/dashboard/pages/main_page.dart';
+import '../../simple/presentation/pages/simple_login_page.dart';
 import '../providers/auth_providers.dart';
 import '../providers/app_providers.dart';
 import '../utils/logger.dart';
@@ -80,7 +81,7 @@ GoRouter goRouter(Ref ref) {
       // 启动页
       GoRoute(
         path: RoutePaths.splash,
-        builder: (context, state) => const SplashPage(),
+        builder: (context, state) => const SimpleLoginPage(),
       ),
       
       // 登录页
