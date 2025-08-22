@@ -96,4 +96,57 @@ class ErrorMapper {
     
     return false;
   }
+  
+  /// 判断是否为可重试的错误
+  static bool isRetryableError(dynamic error) {
+    if (error is NetworkException) return true;
+    
+    if (error is DioException) {
+      final statusCode = error.response?.statusCode;
+      // 5xx 服务器错误和网络错误可以重试
+      return statusCode == null || (statusCode >= 500 && statusCode < 600);
+    }
+    
+    return false;
+  }
+  
+  /// 获取错误类型描述
+  static String getErrorTypeDescription(dynamic error) {
+    if (error is NetworkException) {
+      return '网络错误';
+    }
+    
+    if (error is AuthException) {
+      return '认证错误';
+    }
+    
+    if (error is ValidationException) {
+      return '验证错误';
+    }
+    
+    if (error is BusinessException) {
+      return '业务错误';
+    }
+    
+    if (error is ServerException) {
+      return '服务器错误';
+    }
+    
+    if (error is DioException) {
+      final statusCode = error.response?.statusCode;
+      if (statusCode != null) {
+        if (statusCode >= 400 && statusCode < 500) {
+          return statusCode == 401 || statusCode == 403 
+              ? '认证错误' 
+              : '请求错误';
+        }
+        if (statusCode >= 500) {
+          return '服务器错误';
+        }
+      }
+      return '网络错误';
+    }
+    
+    return '未知错误';
+  }
 }
