@@ -1,5 +1,5 @@
-import '../../entities/auth_login_response.dart';
-import '../../entities/get_server_info_response.dart';
+import '../../entities/auth_login/auth_login_response.dart';
+import '../../entities/get_server_info/get_server_info_response.dart';
 
 abstract class QuickConnectRepository {
   Future<GetServerInfoResponse> getServerInfo({

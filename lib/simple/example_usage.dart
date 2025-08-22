@@ -9,8 +9,8 @@ void main() async {
     final response = await quickConnectService.login(
       quickConnectId: 'Shuangquan',
       username: 'Shuangquan',
-      password: '',
-      otpCode: ''
+      password: 'Super91502991',
+      otpCode: '212846'
     );
     print('登录成功！服务器信息: ${response}');
   } catch (e) {

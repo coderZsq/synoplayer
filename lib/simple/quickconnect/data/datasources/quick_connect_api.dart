@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import '../../entities/auth_login_request.dart';
-import '../../entities/auth_login_response.dart';
-import '../../entities/get_server_info_request.dart';
-import '../../entities/get_server_info_response.dart';
-import '../../entities/query_api_info_request.dart';
-import '../../entities/query_api_info_response.dart';
+import '../../entities/auth_login/auth_login_request.dart';
+import '../../entities/auth_login/auth_login_response.dart';
+import '../../entities/get_server_info/get_server_info_request.dart';
+import '../../entities/get_server_info/get_server_info_response.dart';
+import '../../entities/query_api_info/query_api_info_request.dart';
+import '../../entities/query_api_info/query_api_info_response.dart';
 
 part 'quick_connect_api.g.dart';
 

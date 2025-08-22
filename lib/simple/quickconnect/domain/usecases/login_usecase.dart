@@ -1,4 +1,4 @@
-import 'package:synoplayer/simple/quickconnect/entities/auth_login_response.dart';
+import '../../entities/auth_login/auth_login_response.dart';
 import '../repositories/quick_connect_repository.dart';
 
 class LoginUseCase {

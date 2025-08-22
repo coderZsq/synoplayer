@@ -1,4 +1,4 @@
-import '../../entities/query_api_info_response.dart';
+import '../../entities/query_api_info/query_api_info_response.dart';
 
 class QuickConnectApiInfo {
   QuickConnectApiInfo._();

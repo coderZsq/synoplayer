@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import '../../domain/repositories/quick_connect_repository.dart';
-import '../../entities/auth_login_request.dart';
-import '../../entities/auth_login_response.dart';
-import '../../entities/get_server_info_request.dart';
-import '../../entities/get_server_info_response.dart';
-import '../../entities/query_api_info_request.dart';
-import '../../entities/query_api_info_response.dart';
+import '../../entities/auth_login/auth_login_request.dart';
+import '../../entities/auth_login/auth_login_response.dart';
+import '../../entities/get_server_info/get_server_info_request.dart';
+import '../../entities/get_server_info/get_server_info_response.dart';
+import '../../entities/query_api_info/query_api_info_request.dart';
+import '../../entities/query_api_info/query_api_info_response.dart';
 import '../datasources/quick_connect_api.dart';
 import '../../../core/network/network_config.dart';
 import '../datasources/quick_connect_api_info.dart';

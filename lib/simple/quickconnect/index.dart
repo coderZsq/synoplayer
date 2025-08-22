@@ -1,8 +1,8 @@
 // QuickConnect 模块统一导出文件
 
 // 实体层
-export 'entities/get_server_info_request.dart';
-export 'entities/get_server_info_response.dart';
+export 'entities/get_server_info/get_server_info_request.dart';
+export 'entities/get_server_info/get_server_info_response.dart';
 
 // 数据层
 export 'data/datasources/quick_connect_api.dart';
