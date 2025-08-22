@@ -6,6 +6,7 @@ import 'form_fields/username_field.dart';
 import 'form_fields/password_field.dart';
 import 'form_fields/otp_field.dart';
 import 'login_button.dart';
+import '../../core/widgets/error_display_helper.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -31,20 +32,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   void _showToast(String message) {
     if (mounted) {
-      showCupertinoDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 2), () {
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          });
-          return CupertinoAlertDialog(
-            content: Text(message),
-            actions: [],
-          );
-        },
+      ErrorDisplayHelper.showError(
+        context, 
+        message,
+        duration: const Duration(seconds: 2),
       );
     }
   }
