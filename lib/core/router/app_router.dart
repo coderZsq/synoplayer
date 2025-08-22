@@ -4,9 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../features/authentication/pages/login_page.dart';
-import '../../features/quickconnect/presentation/pages/quickconnect_login_page.dart';
-import '../../features/dashboard/pages/main_page.dart';
 import '../../simple/presentation/pages/simple_login_page.dart';
 import '../providers/auth_providers.dart';
 import '../providers/app_providers.dart';
@@ -82,42 +79,6 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: RoutePaths.splash,
         builder: (context, state) => const SimpleLoginPage(),
-      ),
-      
-      // 登录页
-      GoRoute(
-        path: RoutePaths.login,
-        builder: (context, state) => const LoginPage(),
-      ),
-      
-      // QuickConnect 登录页 (新架构)
-      GoRoute(
-        path: RoutePaths.quickconnectLogin,
-        builder: (context, state) => const QuickConnectLoginPage(),
-      ),
-      
-      // 主页面
-      GoRoute(
-        path: RoutePaths.dashboard,
-        builder: (context, state) {
-          // 从查询参数获取必要信息
-          final sid = state.uri.queryParameters['sid'] ?? '';
-          final username = state.uri.queryParameters['username'] ?? '';
-          final quickConnectId = state.uri.queryParameters['quickConnectId'] ?? '';
-          final workingAddress = state.uri.queryParameters['workingAddress'] ?? '';
-          
-          if (sid.isEmpty || username.isEmpty || quickConnectId.isEmpty) {
-            // 参数不完整，重定向到登录页
-            return const LoginPage();
-          }
-          
-          return MainPage(
-            sid: sid,
-            username: username,
-            quickConnectId: quickConnectId,
-            workingAddress: workingAddress,
-          );
-        },
       ),
     ],
     
