@@ -37,13 +37,23 @@ class LoginUseCase {
   /// 尝试登录并返回 LoginData
   Future<LoginData> _attemptLogin(String username, String password, String? otpCode) async {
     final res = await repository.authLogin(account: username, passwd: password, otp_code: otpCode);
-    if (res.isLoginSuccess) {
-      return res.data!; // 登录成功时 data 一定不为空
-    } else if (res.needOtp) {
+    
+    // 检查是否需要二次验证
+    if (res.needOtp) {
       throw BusinessException('请输入二次验证码');
-    } else {
+    }
+    
+    // 检查登录是否成功
+    if (!res.isLoginSuccess) {
       throw BusinessException('登录失败，请检查用户名和密码');
     }
+    
+    // 检查数据是否为空
+    if (res.data == null) {
+      throw BusinessException('登录失败，请稍后重试');
+    }
+    
+    return res.data!;
   }
   
   /// 建立与服务器的连接

@@ -5,8 +5,6 @@ import '../providers/login_provider.dart';
 import '../widgets/login_form.dart';
 import '../widgets/login_header.dart';
 import '../../core/widgets/error_display_helper.dart';
-import '../../core/auth/auth_state_notifier.dart';
-import '../../core/router/navigation_service.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
@@ -28,16 +26,8 @@ class LoginPage extends ConsumerWidget {
             }
           });
         },
-        data: (response) {
-          if (response != null && previous?.value == null) {
-            ref.read(authStateNotifierProvider.notifier).login(response);
-            NavigationService.goToHome();
-          }
-        },
       );
     });
-    
-
 
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
