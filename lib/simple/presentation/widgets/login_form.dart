@@ -14,11 +14,13 @@ class LoginForm extends StatefulWidget {
     String? otpCode,
   }) onLogin;
   final VoidCallback onReset;
+  final bool isLoading;
 
   const LoginForm({
     super.key,
     required this.onLogin,
     required this.onReset,
+    this.isLoading = false,
   });
 
   @override
@@ -31,7 +33,6 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordController = TextEditingController();
   final _otpController = TextEditingController();
   
-  bool _isLoading = false;
   String? _quickConnectIdError;
   String? _usernameError;
   String? _passwordError;
@@ -86,16 +87,12 @@ class _LoginFormState extends State<LoginForm> {
 
   void _handleSubmit() {
     if (_validateForm()) {
-      setState(() => _isLoading = true);
-      
       widget.onLogin(
         quickConnectId: _quickConnectIdController.text.trim(),
         username: _usernameController.text.trim(),
         password: _passwordController.text,
         otpCode: _otpController.text.trim().isEmpty ? null : _otpController.text.trim(),
       );
-      
-      setState(() => _isLoading = false);
     }
   }
 
@@ -170,8 +167,8 @@ class _LoginFormState extends State<LoginForm> {
         ),
         const SizedBox(height: 24),
         LoginButton(
-          onPressed: _isLoading ? null : _handleSubmit,
-          isLoading: _isLoading,
+          onPressed: widget.isLoading ? null : _handleSubmit,
+          isLoading: widget.isLoading,
         ),
       ],
     );

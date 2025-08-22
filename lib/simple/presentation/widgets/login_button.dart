@@ -25,7 +25,7 @@ class LoginButton extends StatelessWidget {
             : const Text(
                 '登录',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
               ),

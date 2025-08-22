@@ -7,11 +7,12 @@ export 'pages/simple_login_page.dart';
 export 'widgets/login_header.dart';
 export 'widgets/login_form.dart';
 export 'widgets/login_button.dart';
-export 'widgets/login_status.dart';
-export 'widgets/error_display.dart';
 
 // 表单字段组件
 export 'widgets/form_fields/quick_connect_id_field.dart';
 export 'widgets/form_fields/username_field.dart';
 export 'widgets/form_fields/password_field.dart';
 export 'widgets/form_fields/otp_field.dart';
+
+// 状态管理
+export 'providers/index.dart';

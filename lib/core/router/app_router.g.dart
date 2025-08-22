@@ -6,7 +6,7 @@ part of 'app_router.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$goRouterHash() => r'31a4a597188a9176636150a51746ff5162086f21';
+String _$goRouterHash() => r'b416bc3de28d018ffc41da00348143934f6cdfcc';
 
 /// 应用路由配置
 ///
