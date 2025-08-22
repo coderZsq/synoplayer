@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../../entities/get_server_info/get_server_info_response.freezed.dart';
+part 'get_server_info_response.freezed.dart';
 part 'get_server_info_response.g.dart';
 
 @freezed

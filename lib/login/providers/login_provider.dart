@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../quickconnect/entities/auth_login/auth_login_response.dart';
-import '../../quickconnect/presentation/services/quickconnect_service.dart';
+import '../../core/di/providers.dart';
 
 part 'login_provider.g.dart';
 
@@ -20,7 +20,7 @@ class LoginNotifier extends _$LoginNotifier {
     state = const AsyncValue.loading();
 
     try {
-      final quickConnectService = QuickConnectService();
+      final quickConnectService = ref.read(quickConnectServiceProvider);
       final response = await quickConnectService.login(
         quickConnectId: quickConnectId,
         username: username,
