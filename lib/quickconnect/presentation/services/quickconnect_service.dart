@@ -1,12 +1,12 @@
-import '../../data/repositories/quick_connect_repository_impl.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../entities/auth_login/auth_login_response.dart';
+import '../../../core/di/injection.dart';
 
 class QuickConnectService {
   late final LoginUseCase _loginUseCase;
 
   QuickConnectService() {
-    _loginUseCase = LoginUseCase(QuickConnectRepositoryImpl());
+    _loginUseCase = getIt<LoginUseCase>();
   }
 
   Future<AuthLoginResponse?> login({

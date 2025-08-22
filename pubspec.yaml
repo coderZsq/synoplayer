@@ -66,6 +66,9 @@ dependencies:
   
   # 函数式编程工具
   dartz: ^0.10.1
+  
+  # 依赖注入
+  get_it: ^7.6.4
 
 dev_dependencies:
   flutter_test:

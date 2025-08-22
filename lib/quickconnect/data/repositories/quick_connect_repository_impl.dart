@@ -4,14 +4,16 @@ import '../../entities/auth_login/auth_login_request.dart';
 import '../../entities/auth_login/auth_login_response.dart';
 import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
-import '../../../core/network/network_config.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
 import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
+import '../../../core/network/api_factory.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
-
+  final ApiFactory _apiFactory;
   late QuickConnectApi _api;
+
+  QuickConnectRepositoryImpl(this._apiFactory);
 
   @override
   Future<GetServerInfoResponse> getServerInfo({
@@ -24,12 +26,9 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       command: 'get_server_info',
     );
     try {
-      final dio = NetworkConfig.createDio();
-      if (site != null) {
-        return await QuickConnectApi(dio, baseUrl: 'https://$site').getServerInfo(request: request);
-      } else {
-        return await QuickConnectApi(dio, baseUrl: 'https://global.quickconnect.to').getServerInfo(request: request);
-      }
+      final baseUrl = site != null ? 'https://$site' : 'https://global.quickconnect.to';
+      final api = _apiFactory.createQuickConnectApi(baseUrl);
+      return await api.getServerInfo(request: request);
     } on DioException catch (e) {
       print('Network error: ${e.message}');
       rethrow;
@@ -47,7 +46,8 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       method: 'query',
       version: '1',
     );
-    _api = QuickConnectApi(NetworkConfig.createDio(), baseUrl: 'https://$relayDn:$relayPort');
+    final baseUrl = 'https://$relayDn:$relayPort';
+    _api = _apiFactory.createQuickConnectApi(baseUrl);
     apiInfo.apiInfo = await _api.queryApiInfo(
         api: request.api,
         method: request.method,
