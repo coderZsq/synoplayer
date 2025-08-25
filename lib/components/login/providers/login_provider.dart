@@ -47,7 +47,6 @@ class LoginNotifier extends _$LoginNotifier {
         
         if (data.sid != null) {
           // 保存登录凭证和会话ID
-          print('🔍 LoginProvider: 开始保存登录凭证...');
           await authStorage.saveLoginCredentials(
             quickConnectId: quickConnectId,
             username: username,
@@ -55,25 +54,10 @@ class LoginNotifier extends _$LoginNotifier {
             rememberPassword: rememberPassword,
           );
           await authStorage.saveSessionId(data.sid!);
-          
-          // 验证凭证是否已保存
-          print('🔍 LoginProvider: 验证凭证是否已保存...');
-          final savedCredentials = await authStorage.getLoginCredentials();
-          final savedSessionId = await authStorage.getSessionId();
-          
-          if (savedCredentials['quickConnectId'] == quickConnectId && 
-              savedSessionId == data.sid) {
-            print('✅ LoginProvider: 凭证保存成功，开始跳转路由');
-            
-            // 登录成功
-            ref.read(authStateNotifierProvider.notifier).login(data);
-            NavigationService.goToHome();
-            state = AsyncValue.data(data);
-            print('✅ LoginProvider: 登录成功，已保存会话ID并跳转路由');
-          } else {
-            print('❌ LoginProvider: 凭证保存验证失败');
-            state = AsyncValue.error('登录失败：凭证保存失败', StackTrace.current);
-          }
+          // 登录成功
+          ref.read(authStateNotifierProvider.notifier).login(data);
+          NavigationService.goToHome();
+          state = AsyncValue.data(data);
         } else {
           // 登录失败 - 没有 sid
           print('❌ LoginProvider: 登录失败 - 没有会话ID');
