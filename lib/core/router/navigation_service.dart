@@ -16,7 +16,7 @@ class NavigationService {
   static void goToHome({Map<String, dynamic>? extra}) {
     final context = currentContext;
     if (context != null) {
-      context.go(RouteNames.home, extra: extra);
+      context.go(RouteNames.audioList, extra: extra);
     }
   }
   
@@ -32,7 +32,7 @@ class NavigationService {
   static void replaceWithHome({Map<String, dynamic>? extra}) {
     final context = currentContext;
     if (context != null) {
-      context.pushReplacement(RouteNames.home, extra: extra);
+      context.pushReplacement(RouteNames.audioList, extra: extra);
     }
   }
   
