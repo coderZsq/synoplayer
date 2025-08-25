@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'exceptions.dart';
+import 'result.dart';
 
 /// 简化的错误处理工具类
 class SimpleErrorHandler {
@@ -130,6 +131,117 @@ class SimpleErrorHandler {
         );
         
         if (!shouldRetry) {
+          return null;
+        }
+        
+        // 等待延迟时间
+        await Future.delayed(delay * attempts);
+      }
+    }
+    
+    return null;
+  }
+
+  /// 处理 Result 类型的结果
+  static void handleResult<T>(
+    BuildContext context,
+    Result<T> result, {
+    void Function(T)? onSuccess,
+    void Function(AppException)? onFailure,
+    bool showErrorDialog = true,
+  }) {
+    result.fold(
+      (data) {
+        onSuccess?.call(data);
+      },
+      (error) {
+        onFailure?.call(error);
+        if (showErrorDialog) {
+          showError(context, error);
+        }
+      },
+    );
+  }
+
+  /// 安全执行返回 Result 的操作
+  static Future<T?> safeExecuteResult<T>(
+    Future<Result<T>> Function() operation,
+    BuildContext context, {
+    String? errorTitle,
+    String? errorMessage,
+    bool showErrorDialog = true,
+  }) async {
+    try {
+      final result = await operation();
+      return result.fold(
+        (data) => data,
+        (error) {
+          if (showErrorDialog) {
+            showError(context, error);
+          }
+          return null;
+        },
+      );
+    } catch (e) {
+      if (showErrorDialog) {
+        showError(context, e);
+      }
+      return null;
+    }
+  }
+
+  /// 带重试的 Result 操作执行
+  static Future<T?> executeResultWithRetry<T>(
+    Future<Result<T>> Function() operation,
+    BuildContext context, {
+    int maxRetries = 3,
+    Duration delay = const Duration(seconds: 1),
+    String? errorTitle,
+    String? errorMessage,
+  }) async {
+    int attempts = 0;
+    
+    while (attempts < maxRetries) {
+      try {
+        final result = await operation();
+        
+        if (result.isSuccess) {
+          return result.value;
+        }
+        
+        // 检查是否为可重试的错误
+        if (!isRetryableError(result.error)) {
+          showError(context, result.error);
+          return null;
+        }
+        
+        attempts++;
+        
+        if (attempts >= maxRetries) {
+          // 达到最大重试次数，显示错误
+          showError(context, result.error);
+          return null;
+        }
+        
+        // 询问是否重试
+        final shouldRetry = await showRetryDialog(
+          context, 
+          result.error,
+          title: errorTitle ?? '操作失败',
+          message: errorMessage ?? '是否重试？',
+        );
+        
+        if (!shouldRetry) {
+          return null;
+        }
+        
+        // 等待延迟时间
+        await Future.delayed(delay * attempts);
+      } catch (e) {
+        attempts++;
+        
+        if (attempts >= maxRetries) {
+          showError(context, e);
           return null;
         }
         

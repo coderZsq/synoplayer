@@ -1,20 +1,22 @@
 import '../../entities/song_list_all/song_list_all_response.dart';
 import '../repositories/quick_connect_repository.dart';
 import '../../../core/error/exceptions.dart';
+import '../../../core/error/result.dart';
 
 class GetSongListUseCase {
   final QuickConnectRepository repository;
 
   GetSongListUseCase(this.repository);
 
-  Future<SongListAllResponse> call() async {
+  Future<Result<SongListAllResponse>> call() async {
     try {
-      return await repository.getAudioStationSongListAll();
+      final result = await repository.getAudioStationSongListAll();
+      return result;
     } catch (e) {
       if (e is AppException) {
-        rethrow;
+        return Failure(e);
       }
-      throw ServerException('获取歌曲列表失败: ${e.toString()}');
+      return Failure(ServerException('获取歌曲列表失败: ${e.toString()}'));
     }
   }
 }

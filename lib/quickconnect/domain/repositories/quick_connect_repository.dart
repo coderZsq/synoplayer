@@ -1,24 +1,25 @@
 import 'package:synoplayer/quickconnect/entities/song_list_all/song_list_all_response.dart';
+import '../../../core/error/result.dart';
 
 import '../../entities/auth_login/auth_login_response.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 
 abstract class QuickConnectRepository {
-  Future<GetServerInfoResponse> getServerInfo({
+  Future<Result<GetServerInfoResponse>> getServerInfo({
     required String serverID,
     String? site,
   });
 
-  Future<bool> queryApiInfo({
+  Future<Result<bool>> queryApiInfo({
     required String relayDn,
     required int relayPort,
   });
 
-  Future<AuthLoginResponse> authLogin({
+  Future<Result<AuthLoginResponse>> authLogin({
     required String account,
     required String passwd,
     String? otp_code,
   });
 
-  Future<SongListAllResponse> getAudioStationSongListAll();
+  Future<Result<SongListAllResponse>> getAudioStationSongListAll();
 }

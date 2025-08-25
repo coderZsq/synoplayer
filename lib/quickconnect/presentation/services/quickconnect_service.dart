@@ -1,12 +1,13 @@
 import '../../domain/usecases/login_usecase.dart';
 import '../../entities/auth_login/auth_login_response.dart';
+import '../../../core/error/result.dart';
 
 class QuickConnectService {
   final LoginUseCase _loginUseCase;
 
   QuickConnectService(this._loginUseCase);
 
-  Future<LoginData> login({
+  Future<Result<LoginData>> login({
     required String quickConnectId,
     required String username,
     required String password,

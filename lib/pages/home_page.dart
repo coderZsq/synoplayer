@@ -16,7 +16,11 @@ class SongListNotifier extends StateNotifier<AsyncValue<SongListAllResponse?>> {
     state = const AsyncValue.loading();
     try {
       final result = await _songListService.getSongList();
-      state = AsyncValue.data(result);
+      if (result.isSuccess) {
+        state = AsyncValue.data(result.value);
+      } else {
+        state = AsyncValue.error(result.error, StackTrace.current);
+      }
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
     }

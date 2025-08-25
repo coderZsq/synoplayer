@@ -10,6 +10,7 @@ import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
 import '../../../core/network/api_factory.dart';
 import '../../../core/error/exceptions.dart';
+import '../../../core/error/result.dart';
 import '../../../core/storage/auth_storage_service.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
@@ -20,7 +21,7 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
   QuickConnectRepositoryImpl(this._apiFactory, this._authStorage);
 
   @override
-  Future<GetServerInfoResponse> getServerInfo({
+  Future<Result<GetServerInfoResponse>> getServerInfo({
     required String serverID,
     String? site,
   }) async {
@@ -32,16 +33,17 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
     try {
       final baseUrl = site != null ? 'https://$site' : 'https://global.quickconnect.to';
       final api = _apiFactory.createQuickConnectApi(baseUrl);
-      return await api.getServerInfo(request: request);
+      final response = await api.getServerInfo(request: request);
+      return Success(response);
     } on DioException catch (e) {
-      throw NetworkException.fromDio(e);
+      return Failure(NetworkException.fromDio(e));
     } catch (e) {
-      throw ServerException('获取服务器信息失败: $e');
+      return Failure(ServerException('获取服务器信息失败: $e'));
     }
   }
 
   @override
-  Future<bool> queryApiInfo({
+  Future<Result<bool>> queryApiInfo({
     required String relayDn,
     required int relayPort
   }) async {
@@ -60,16 +62,17 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
           version: request.version,
           request: request
       );
-      return apiInfo.apiInfo?.success ?? false;
+      final success = apiInfo.apiInfo?.success ?? false;
+      return Success(success);
     } on DioException catch (e) {
-      throw NetworkException.fromDio(e);
+      return Failure(NetworkException.fromDio(e));
     } catch (e) {
-      throw ServerException('查询API信息失败: $e');
+      return Failure(ServerException('查询API信息失败: $e'));
     }
   }
 
   @override
-  Future<AuthLoginResponse> authLogin({
+  Future<Result<AuthLoginResponse>> authLogin({
     required String account,
     required String passwd,
     String? otp_code,
@@ -86,7 +89,7 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
         otp_code: otp_code,
         version: apiInfo.authVersion,
       );
-      return await _api.authLogin(
+      final response = await _api.authLogin(
           api: request.api,
           method: request.method,
           account: request.account,
@@ -97,31 +100,39 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
           version: request.version,
           request: request
       );
+      return Success(response);
     } on DioException catch (e) {
       // 根据状态码判断是网络还是认证错误
       if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
-        throw AuthException('用户名或密码错误');
+        return Failure(AuthException('用户名或密码错误'));
       }
-      throw NetworkException.fromDio(e);
+      return Failure(NetworkException.fromDio(e));
     } catch (e) {
-      throw AuthException('登录失败: $e');
+      return Failure(AuthException('登录失败: $e'));
     }
   }
 
   @override
-  Future<SongListAllResponse> getAudioStationSongListAll() async {
-    final apiInfo = QuickConnectApiInfo();
-    final sessionId = await _authStorage.getSessionId();
-    if (sessionId == null || sessionId.isEmpty) {
-      throw AuthException('未登录或会话已过期');
+  Future<Result<SongListAllResponse>> getAudioStationSongListAll() async {
+    try {
+      final apiInfo = QuickConnectApiInfo();
+      final sessionId = await _authStorage.getSessionId();
+      if (sessionId == null || sessionId.isEmpty) {
+        return Failure(AuthException('未登录或会话已过期'));
+      }
+      final response = await _api.getAudioStationSongListAll(
+          api: apiInfo.song,
+          method: 'list',
+          library: 'all',
+          limit: '10',
+          sid: sessionId,
+          version: apiInfo.songVersion
+      );
+      return Success(response);
+    } on DioException catch (e) {
+      return Failure(NetworkException.fromDio(e));
+    } catch (e) {
+      return Failure(ServerException('获取歌曲列表失败: $e'));
     }
-    return await _api.getAudioStationSongListAll(
-        api: apiInfo.song,
-        method: 'list',
-        library: 'all',
-        limit: '10',
-        sid: sessionId,
-        version: apiInfo.songVersion
-    );
   }
 }
