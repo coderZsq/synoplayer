@@ -153,6 +153,53 @@ class _QuickConnectApi implements QuickConnectApi {
     return _value;
   }
 
+  @override
+  Future<SongListAllResponse> getAudioStationSongListAll({
+    required String api,
+    required String method,
+    required String library,
+    required String limit,
+    required String sid,
+    required String version,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api': api,
+      r'method': method,
+      r'library': library,
+      r'limit': limit,
+      r'_sid': sid,
+      r'version': version,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<SongListAllResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/webapi/AudioStation/song.cgi',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SongListAllResponse _value;
+    try {
+      _value = SongListAllResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

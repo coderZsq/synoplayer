@@ -9,8 +9,10 @@ class QuickConnectApiInfo {
 
   final String info = 'SYNO.API.Info';
   final String auth = 'SYNO.API.Auth';
+  final String song = 'SYNO.API.Song';
 
   get authVersion => apiInfo?.data?[auth]?.maxVersion.toString();
+  get songVersion => apiInfo?.data?[song]?.maxVersion.toString();
 }
 
 

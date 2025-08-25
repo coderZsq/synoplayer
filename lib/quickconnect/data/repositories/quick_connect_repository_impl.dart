@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:synoplayer/quickconnect/entities/song_list_all/song_list_all_response.dart';
 import '../../domain/repositories/quick_connect_repository.dart';
 import '../../entities/auth_login/auth_login_request.dart';
 import '../../entities/auth_login/auth_login_response.dart';
@@ -103,5 +104,18 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
     } catch (e) {
       throw AuthException('登录失败: $e');
     }
+  }
+
+  @override
+  Future<SongListAllResponse> getAudioStationSongListAll() async {
+    final apiInfo = QuickConnectApiInfo();
+    return await _api.getAudioStationSongListAll(
+        api: apiInfo.song,
+        method: 'list',
+        library: 'all',
+        limit: '10',
+        sid: '',
+        version: apiInfo.songVersion
+    );
   }
 }
