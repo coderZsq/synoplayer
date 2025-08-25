@@ -10,9 +10,6 @@ void main() async {
     ProviderScope(
       child: Consumer(
         builder: (context, ref, child) {
-          // 设置路由器的 Riverpod 引用
-          AppRouter.setRef(ref);
-          
           // 获取全局错误处理服务（确保初始化）
           ref.read(globalErrorHandlerProvider);
           

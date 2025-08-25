@@ -3,6 +3,7 @@ import '../../core/router/navigation_service.dart';
 import '../../core/di/providers.dart';
 import '../../core/error/error_mapper.dart';
 import '../../core/auth/auth_state_notifier.dart';
+import '../../core/storage/auth_storage_service.dart';
 import '../../quickconnect/entities/auth_login/auth_login_response.dart';
 
 part 'login_provider.g.dart';
@@ -19,11 +20,13 @@ class LoginNotifier extends _$LoginNotifier {
     required String username,
     required String password,
     String? otpCode,
+    required bool rememberPassword,
   }) async {
     state = const AsyncValue.loading();
 
     try {
       final quickConnectService = ref.read(quickConnectServiceProvider);
+      final authStorage = ref.read(authStorageServiceProvider);
       
       // 使用重试机制执行登录
       final data = await _executeLoginWithRetry(
@@ -35,6 +38,15 @@ class LoginNotifier extends _$LoginNotifier {
       );
       
       if (data != null) {
+        // 保存登录凭证和会话ID
+        await authStorage.saveLoginCredentials(
+          quickConnectId: quickConnectId,
+          username: username,
+          password: password,
+          rememberPassword: rememberPassword,
+        );
+        await authStorage.saveSessionId(data.sid!);
+        
         // 登录成功
         ref.read(authStateNotifierProvider.notifier).login(data);
         NavigationService.goToHome();

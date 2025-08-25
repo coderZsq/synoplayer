@@ -7,6 +7,7 @@ import 'form_fields/password_field.dart';
 import 'form_fields/otp_field.dart';
 import 'login_button.dart';
 import '../../core/widgets/error_display_helper.dart';
+import '../../core/storage/auth_storage_service.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -20,6 +21,30 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _otpController = TextEditingController();
+  bool _rememberPassword = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    final authStorage = ref.read(authStorageServiceProvider);
+    final shouldRemember = await authStorage.shouldRememberPassword();
+    
+    if (shouldRemember) {
+      final credentials = await authStorage.getLoginCredentials();
+      if (credentials['quickConnectId'] != null) {
+        setState(() {
+          _quickConnectIdController.text = credentials['quickConnectId']!;
+          _usernameController.text = credentials['username'] ?? '';
+          _passwordController.text = credentials['password'] ?? '';
+          _rememberPassword = true;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -79,6 +104,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         username: _usernameController.text.trim(),
         password: _passwordController.text,
         otpCode: _otpController.text.trim().isEmpty ? null : _otpController.text.trim(),
+        rememberPassword: _rememberPassword,
       );
     }
   }
@@ -108,6 +134,23 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           controller: _otpController,
           onFieldSubmitted: (_) => _handleSubmit(),
         ),
+        const SizedBox(height: 16),
+        
+        // 记住密码复选框
+        Row(
+          children: [
+            CupertinoCheckbox(
+              value: _rememberPassword,
+              onChanged: (value) {
+                setState(() {
+                  _rememberPassword = value ?? false;
+                });
+              },
+            ),
+            const Text('记住密码'),
+          ],
+        ),
+        
         const SizedBox(height: 24),
         LoginButton(
           onPressed: loginAsync.isLoading ? null : _handleSubmit,
