@@ -29,7 +29,7 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: const Text('🏠 主页'),
+        middle: const Text('音频'),
         backgroundColor: CupertinoColors.systemBackground,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
@@ -41,50 +41,51 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              songListState.when(
-                loading: () => const Column(
+        child: songListState.when(
+          loading: () => const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CupertinoActivityIndicator(),
+                SizedBox(height: 16),
+                Text('正在加载歌曲列表...'),
+              ],
+            ),
+          ),
+          error: (error, stackTrace) => Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: CupertinoColors.systemRed.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    CupertinoActivityIndicator(),
-                    SizedBox(height: 16),
-                    Text('正在加载歌曲列表...'),
+                    Text(
+                      '错误: $error',
+                      style: const TextStyle(color: CupertinoColors.systemRed),
+                    ),
+                    const SizedBox(height: 8),
+                    CupertinoButton.filled(
+                      onPressed: () => ref.read(songListNotifierProvider.notifier).getSongList(),
+                      child: const Text('重试'),
+                    ),
                   ],
                 ),
-                error: (error, stackTrace) => Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: CupertinoColors.systemRed.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        '错误: $error',
-                        style: const TextStyle(color: CupertinoColors.systemRed),
-                      ),
-                      const SizedBox(height: 8),
-                      CupertinoButton.filled(
-                        onPressed: () => ref.read(songListNotifierProvider.notifier).getSongList(),
-                        child: const Text('重试'),
-                      ),
-                    ],
-                  ),
-                ),
-                data: (songList) => songList == null
-                    ? const Text('暂无数据')
-                    : Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: CupertinoColors.systemGreen.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+              ),
+            ),
+          ),
+          data: (songList) => songList == null
+              ? const Center(child: Text('暂无数据'))
+              : Column(
+                  children: [
+                    // 标题和刷新按钮
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
@@ -92,6 +93,7 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
                             style: TextStyle(
                               color: CupertinoColors.systemGreen,
                               fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                           ),
                           CupertinoButton(
@@ -99,110 +101,132 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
                             onPressed: () => ref.read(songListNotifierProvider.notifier).refresh(),
                             child: const Icon(
                               CupertinoIcons.refresh,
-                              size: 16,
+                              size: 20,
                               color: CupertinoColors.systemBlue,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      if (songList.songs != null && songList.songs?.isNotEmpty == true) ...[
-                        Text(
+                    ),
+                    // 歌曲总数
+                    if (songList.songs != null && songList.songs?.isNotEmpty == true) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
                           '共 ${songList.total ?? 0} 首歌曲',
                           style: const TextStyle(
                             color: CupertinoColors.systemGreen,
                             fontSize: 12,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Container(
-                          constraints: const BoxConstraints(maxHeight: 200),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: songList.songs?.length,
-                            itemBuilder: (context, index) {
-                              final song = songList.songs?[index];
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 4),
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: CupertinoColors.systemBackground,
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(
-                                    color: CupertinoColors.systemGrey4,
-                                    width: 1,
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                    // 歌曲列表
+                    Expanded(
+                      child: songList.songs != null && songList.songs?.isNotEmpty == true
+                          ? ListView.builder(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              itemCount: songList.songs?.length,
+                              itemBuilder: (context, index) {
+                                final song = songList.songs?[index];
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: CupertinoColors.systemBackground,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: CupertinoColors.systemGrey4,
+                                      width: 1,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: CupertinoColors.systemGrey.withOpacity(0.1),
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      CupertinoIcons.music_note,
-                                      size: 16,
-                                      color: CupertinoColors.systemBlue,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            song?.title ?? '未知标题',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w500,
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        CupertinoIcons.music_note,
+                                        size: 20,
+                                        color: CupertinoColors.systemBlue,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              song?.title ?? '未知标题',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            song?.path ?? '未知路径',
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                              color: CupertinoColors.systemGrey,
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              song?.path ?? '未知路径',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: CupertinoColors.systemGrey,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 6,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: CupertinoColors.systemGrey5,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Text(
-                                        song?.type ?? 'unknown',
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          color: CupertinoColors.systemGrey,
+                                          ],
                                         ),
                                       ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: CupertinoColors.systemGrey5,
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        child: Text(
+                                          song?.type ?? 'unknown',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: CupertinoColors.systemGrey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.music_note,
+                                    size: 48,
+                                    color: CupertinoColors.systemGrey,
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    '暂无歌曲数据',
+                                    style: TextStyle(
+                                      color: CupertinoColors.systemGrey,
+                                      fontSize: 16,
                                     ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ] else ...[
-                        const Text(
-                          '暂无歌曲数据',
-                          style: TextStyle(
-                            color: CupertinoColors.systemGrey,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
