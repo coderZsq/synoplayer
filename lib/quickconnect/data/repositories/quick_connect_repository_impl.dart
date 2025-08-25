@@ -11,7 +11,7 @@ import '../datasources/quick_connect_api_info.dart';
 import '../../../core/network/api_factory.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/error/result.dart';
-import '../../../core/storage/auth_storage_service.dart';
+import '../../../core/auth/storage/auth_storage_service.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
   final ApiFactory _apiFactory;

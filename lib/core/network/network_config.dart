@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import '../interceptors/logging_interceptor.dart';
-import '../interceptors/json_response_interceptor.dart';
-import '../interceptors/retry_interceptor.dart';
+import 'interceptors/logging_interceptor.dart';
+import 'interceptors/json_response_interceptor.dart';
+import 'interceptors/retry_interceptor.dart';
 
 class NetworkConfig {
   static Dio createDio({

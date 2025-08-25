@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import '../utils/logger.dart';
+import '../../utils/logger.dart';
 
 class JsonResponseInterceptor extends Interceptor {
   @override

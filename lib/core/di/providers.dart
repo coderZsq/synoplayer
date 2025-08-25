@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
+import '../auth/storage/storage_service.dart';
+import '../auth/storage/auth_storage_service.dart';
 import '../network/network_config.dart';
 import '../network/api_factory.dart';
-import '../storage/storage_service.dart';
-import '../storage/auth_storage_service.dart';
 import '../../quickconnect/domain/repositories/quick_connect_repository.dart';
 import '../../quickconnect/data/repositories/quick_connect_repository_impl.dart';
 import '../../quickconnect/domain/usecases/login_usecase.dart';
