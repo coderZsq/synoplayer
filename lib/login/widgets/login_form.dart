@@ -7,7 +7,7 @@ import 'form_fields/password_field.dart';
 import 'form_fields/otp_field.dart';
 import 'login_button.dart';
 import '../../core/widgets/error_display_helper.dart';
-import '../../core/storage/auth_storage_service.dart';
+import '../../core/di/providers.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});

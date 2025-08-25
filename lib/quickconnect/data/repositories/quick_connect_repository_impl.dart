@@ -10,12 +10,14 @@ import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
 import '../../../core/network/api_factory.dart';
 import '../../../core/error/exceptions.dart';
+import '../../../core/storage/auth_storage_service.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
   final ApiFactory _apiFactory;
+  final AuthStorageService _authStorage;
   late QuickConnectApi _api;
 
-  QuickConnectRepositoryImpl(this._apiFactory);
+  QuickConnectRepositoryImpl(this._apiFactory, this._authStorage);
 
   @override
   Future<GetServerInfoResponse> getServerInfo({
@@ -109,12 +111,16 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
   @override
   Future<SongListAllResponse> getAudioStationSongListAll() async {
     final apiInfo = QuickConnectApiInfo();
+    final sessionId = await _authStorage.getSessionId();
+    if (sessionId == null || sessionId.isEmpty) {
+      throw AuthException('未登录或会话已过期');
+    }
     return await _api.getAudioStationSongListAll(
         api: apiInfo.song,
         method: 'list',
         library: 'all',
         limit: '10',
-        sid: '',
+        sid: sessionId,
         version: apiInfo.songVersion
     );
   }

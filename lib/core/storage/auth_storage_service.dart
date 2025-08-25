@@ -1,7 +1,4 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'storage_service.dart';
-
-part 'auth_storage_service.g.dart';
 
 class AuthStorageService {
   static const String _keyQuickConnectId = 'quick_connect_id';
@@ -66,10 +63,19 @@ class AuthStorageService {
     await _storage.remove(_keySessionId);
     await _storage.remove(_keyRememberPassword);
   }
-}
 
-@riverpod
-AuthStorageService authStorageService(AuthStorageServiceRef ref) {
-  final storage = ref.watch(storageServiceProvider);
-  return AuthStorageService(storage);
+  /// 保存任意字符串数据
+  Future<void> saveString(String key, String value) async {
+    await _storage.saveString(key, value);
+  }
+
+  /// 获取任意字符串数据
+  Future<String?> getString(String key) async {
+    return await _storage.getString(key);
+  }
+
+  /// 移除任意字符串数据
+  Future<void> remove(String key) async {
+    await _storage.remove(key);
+  }
 }

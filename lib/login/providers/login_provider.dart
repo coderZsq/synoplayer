@@ -37,7 +37,7 @@ class LoginNotifier extends _$LoginNotifier {
         otpCode: otpCode,
       );
       
-      if (data != null) {
+      if (data != null && data.sid != null) {
         // 保存登录凭证和会话ID
         await authStorage.saveLoginCredentials(
           quickConnectId: quickConnectId,

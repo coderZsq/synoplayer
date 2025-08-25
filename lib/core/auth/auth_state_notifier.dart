@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../quickconnect/entities/auth_login/auth_login_response.dart';
-import '../storage/auth_storage_service.dart';
+import '../di/providers.dart';
 
 part 'auth_state_notifier.g.dart';
 
