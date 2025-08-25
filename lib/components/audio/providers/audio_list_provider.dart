@@ -1,20 +1,24 @@
 // 歌曲列表状态管理
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/di/providers.dart';
 import '../../../quickconnect/entities/song_list_all/song_list_all_response.dart';
-import '../../../quickconnect/presentation/services/song_list_service.dart';
 
-class SongListNotifier extends StateNotifier<AsyncValue<SongListAllResponse?>> {
-  final SongListService _songListService;
+part 'audio_list_provider.g.dart';
 
-  SongListNotifier(this._songListService) : super(const AsyncValue.loading());
+@riverpod
+class SongListNotifier extends _$SongListNotifier {
+  @override
+  FutureOr<SongListData?> build() {
+    return null;
+  }
 
   Future<void> getSongList() async {
     state = const AsyncValue.loading();
     try {
-      final result = await _songListService.getSongList();
+      final songListService = ref.read(songListServiceProvider);
+      final result = await songListService.getSongList();
       if (result.isSuccess) {
-        state = AsyncValue.data(result.value);
+        state = AsyncValue.data(result.value.data);
       } else {
         state = AsyncValue.error(result.error, StackTrace.current);
       }
@@ -27,8 +31,3 @@ class SongListNotifier extends StateNotifier<AsyncValue<SongListAllResponse?>> {
     getSongList();
   }
 }
-
-final songListNotifierProvider = StateNotifierProvider<SongListNotifier, AsyncValue<SongListAllResponse?>>((ref) {
-  final songListService = ref.watch(songListServiceProvider);
-  return SongListNotifier(songListService);
-});

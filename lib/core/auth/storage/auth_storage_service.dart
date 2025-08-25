@@ -18,13 +18,14 @@ class AuthStorageService {
     required String password,
     required bool rememberPassword,
   }) async {
+    // quickConnectId 总是需要保存，因为它是建立连接所必需的
+    await _storage.saveString(_keyQuickConnectId, quickConnectId);
+    
     if (rememberPassword) {
-      await _storage.saveString(_keyQuickConnectId, quickConnectId);
       await _storage.saveString(_keyUsername, username);
       await _storage.saveString(_keyPassword, password);
       await _storage.saveBool(_keyRememberPassword, true);
     } else {
-      await _storage.remove(_keyQuickConnectId);
       await _storage.remove(_keyUsername);
       await _storage.remove(_keyPassword);
       await _storage.saveBool(_keyRememberPassword, false);

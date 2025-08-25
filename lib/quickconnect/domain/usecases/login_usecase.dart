@@ -1,14 +1,14 @@
 import '../../entities/auth_login/auth_login_response.dart';
 import '../repositories/quick_connect_repository.dart';
+import '../services/connection_manager.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/error/result.dart';
 
 class LoginUseCase {
   final QuickConnectRepository repository;
+  final ConnectionManager connectionManager;
 
-  LoginUseCase(this.repository);
-
-  bool? isConnected;
+  LoginUseCase(this.repository, this.connectionManager);
 
   Future<Result<LoginData>> call({
     required String quickConnectId,
@@ -18,12 +18,12 @@ class LoginUseCase {
   }) async {
     try {
       // 如果已经连接，直接尝试登录
-      if (isConnected == true) {
+      if (connectionManager.connected) {
         return await _attemptLogin(username, password, otpCode);
       }
       
       // 获取服务器信息并建立连接
-      final connectionResult = await _establishConnection(quickConnectId);
+      final connectionResult = await connectionManager.establishConnection(quickConnectId);
       if (connectionResult.isFailure) {
         return Failure(connectionResult.error);
       }
@@ -70,46 +70,5 @@ class LoginUseCase {
     
     print('🔍 LoginUseCase: 登录成功 - sid: ${res.data!.sid}');
     return Success(res.data!);
-  }
-  
-  /// 建立与服务器的连接
-  Future<Result<void>> _establishConnection(String quickConnectId) async {
-    final serverInfoResult = await repository.getServerInfo(serverID: quickConnectId);
-    
-    if (serverInfoResult.isFailure) {
-      return serverInfoResult.mapError((_) => serverInfoResult.error);
-    }
-    
-    final r1 = serverInfoResult.value;
-    final sites = r1.sites;
-    if (sites == null || sites.isEmpty) {
-      return Failure(BusinessException('未找到可用的连接站点'));
-    }
-    
-    final site = sites.first;
-    final siteResult = await repository.getServerInfo(
-      serverID: quickConnectId,
-      site: site,
-    );
-    
-    if (siteResult.isFailure) {
-      return siteResult.mapError((_) => siteResult.error);
-    }
-    
-    final r2 = siteResult.value;
-    final relayDn = r2.service?.relay_dn;
-    final relayPort = r2.service?.relay_port;
-    
-    if (relayDn == null || relayPort == null) {
-      return Failure(BusinessException('无法获取服务器连接信息'));
-    }
-    
-    final queryResult = await repository.queryApiInfo(relayDn: relayDn, relayPort: relayPort);
-    if (queryResult.isFailure) {
-      return queryResult.mapError((_) => queryResult.error);
-    }
-    
-    isConnected = queryResult.value;
-    return const Success(null);
   }
 }

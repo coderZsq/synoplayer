@@ -5,28 +5,27 @@ import 'package:go_router/go_router.dart';
 import '../../../core/auth/auth_state_notifier.dart';
 import '../providers/audio_list_provider.dart';
 
-class AudioListPage extends ConsumerWidget {
+class AudioListPage extends ConsumerStatefulWidget {
   const AudioListPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AudioListPage> createState() => _AudioListPageState();
+}
+
+class _AudioListPageState extends ConsumerState<AudioListPage> {
+  @override
+  void initState() {
+    super.initState();
+    // 在 initState 中调用接口获取歌曲列表
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(songListNotifierProvider.notifier).getSongList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // 监听歌曲列表状态
     final songListState = ref.watch(songListNotifierProvider);
-
-    // 页面初始化时自动加载歌曲列表
-    ref.listen(songListNotifierProvider, (previous, next) {
-      // 只在首次加载时触发
-      if (previous == null && next.isLoading) {
-        // 已经在初始化时加载了
-      }
-    });
-
-    // 使用 Future.microtask 确保在 build 完成后执行
-    Future.microtask(() {
-      if (songListState.isLoading && songListState.value == null) {
-        ref.read(songListNotifierProvider.notifier).getSongList();
-      }
-    });
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -107,9 +106,9 @@ class AudioListPage extends ConsumerWidget {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      if (songList.data?.songs != null && songList.data!.songs!.isNotEmpty) ...[
+                      if (songList.songs != null && songList.songs?.isNotEmpty == true) ...[
                         Text(
-                          '共 ${songList.data?.total ?? 0} 首歌曲',
+                          '共 ${songList.total ?? 0} 首歌曲',
                           style: const TextStyle(
                             color: CupertinoColors.systemGreen,
                             fontSize: 12,
@@ -120,9 +119,9 @@ class AudioListPage extends ConsumerWidget {
                           constraints: const BoxConstraints(maxHeight: 200),
                           child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: songList.data!.songs!.length,
+                            itemCount: songList.songs?.length,
                             itemBuilder: (context, index) {
-                              final song = songList.data!.songs![index];
+                              final song = songList.songs?[index];
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 4),
                                 padding: const EdgeInsets.all(8),
@@ -147,7 +146,7 @@ class AudioListPage extends ConsumerWidget {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            song.title ?? '未知标题',
+                                            song?.title ?? '未知标题',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -155,7 +154,7 @@ class AudioListPage extends ConsumerWidget {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            song.path ?? '未知路径',
+                                            song?.path ?? '未知路径',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: CupertinoColors.systemGrey,
@@ -176,7 +175,7 @@ class AudioListPage extends ConsumerWidget {
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
-                                        song.type ?? 'unknown',
+                                        song?.type ?? 'unknown',
                                         style: const TextStyle(
                                           fontSize: 10,
                                           color: CupertinoColors.systemGrey,

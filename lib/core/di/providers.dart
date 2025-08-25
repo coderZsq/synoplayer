@@ -6,6 +6,7 @@ import '../network/network_config.dart';
 import '../network/api_factory.dart';
 import '../../quickconnect/domain/repositories/quick_connect_repository.dart';
 import '../../quickconnect/data/repositories/quick_connect_repository_impl.dart';
+import '../../quickconnect/domain/services/connection_manager.dart';
 import '../../quickconnect/domain/usecases/login_usecase.dart';
 import '../../quickconnect/domain/usecases/get_song_list_usecase.dart';
 import '../../quickconnect/presentation/services/quickconnect_service.dart';
@@ -34,15 +35,24 @@ final quickConnectRepositoryProvider = Provider<QuickConnectRepository>((ref) {
   return QuickConnectRepositoryImpl(apiFactory, authStorage);
 });
 
+/// 连接管理依赖
+final connectionManagerProvider = Provider<ConnectionManager>((ref) {
+  final repository = ref.watch(quickConnectRepositoryProvider);
+  return ConnectionManager(repository);
+});
+
 /// 用例层依赖
 final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
   final repository = ref.watch(quickConnectRepositoryProvider);
-  return LoginUseCase(repository);
+  final connectionManager = ref.watch(connectionManagerProvider);
+  return LoginUseCase(repository, connectionManager);
 });
 
 final getSongListUseCaseProvider = Provider<GetSongListUseCase>((ref) {
   final repository = ref.watch(quickConnectRepositoryProvider);
-  return GetSongListUseCase(repository);
+  final authStorage = ref.watch(authStorageServiceProvider);
+  final connectionManager = ref.watch(connectionManagerProvider);
+  return GetSongListUseCase(repository, authStorage, connectionManager);
 });
 
 /// 服务层依赖
