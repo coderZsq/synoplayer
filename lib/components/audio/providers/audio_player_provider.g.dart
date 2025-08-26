@@ -6,30 +6,13 @@ part of 'audio_player_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$audioPlayerServiceHash() =>
-    r'deb28a8b570aa4da62d8852133cedcfd77a313c9';
-
-/// See also [audioPlayerService].
-@ProviderFor(audioPlayerService)
-final audioPlayerServiceProvider =
-    AutoDisposeProvider<AudioPlayerService>.internal(
-  audioPlayerService,
-  name: r'audioPlayerServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$audioPlayerServiceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef AudioPlayerServiceRef = AutoDisposeProviderRef<AudioPlayerService>;
 String _$audioPlayerNotifierHash() =>
-    r'd38608fe05a008569c6fcc4f3ffb52dad7d1bf7b';
+    r'ce5c5916727808c38bbe716e7444434135d6ccb1';
 
 /// See also [AudioPlayerNotifier].
 @ProviderFor(AudioPlayerNotifier)
-final audioPlayerNotifierProvider = AutoDisposeNotifierProvider<
-    AudioPlayerNotifier, AudioPlayerService>.internal(
+final audioPlayerNotifierProvider =
+    AutoDisposeNotifierProvider<AudioPlayerNotifier, AudioPlayerState>.internal(
   AudioPlayerNotifier.new,
   name: r'audioPlayerNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -39,6 +22,6 @@ final audioPlayerNotifierProvider = AutoDisposeNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$AudioPlayerNotifier = AutoDisposeNotifier<AudioPlayerService>;
+typedef _$AudioPlayerNotifier = AutoDisposeNotifier<AudioPlayerState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

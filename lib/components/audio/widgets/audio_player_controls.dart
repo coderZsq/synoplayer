@@ -7,17 +7,31 @@ class AudioPlayerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final audioPlayerService = ref.watch(audioPlayerNotifierProvider);
-    final isPlaying = audioPlayerService.isPlaying;
-    final isLoading = audioPlayerService.isLoading;
-    final currentSongTitle = audioPlayerService.currentSongTitle;
-    final position = audioPlayerService.position;
-    final duration = audioPlayerService.duration;
-    final error = audioPlayerService.error;
+    print('AudioPlayerControls - build() 被调用');
+    final audioPlayerState = ref.watch(audioPlayerNotifierProvider);
+    final isPlaying = audioPlayerState.isPlaying;
+    final isLoading = audioPlayerState.isLoading;
+    final currentSongTitle = audioPlayerState.currentSongTitle;
+    final position = audioPlayerState.position;
+    final duration = audioPlayerState.duration;
+    final error = audioPlayerState.error;
 
-    if (currentSongTitle == null || currentSongTitle.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    // 调试信息
+    print('AudioPlayerControls - currentSongTitle: $currentSongTitle');
+    print('AudioPlayerControls - isPlaying: $isPlaying');
+    print('AudioPlayerControls - isLoading: $isLoading');
+    print('AudioPlayerControls - error: $error');
+    print('AudioPlayerControls - Provider 实例: $audioPlayerState');
+
+    // 临时强制显示控件，用于调试
+    // if (currentSongTitle == null || currentSongTitle.isEmpty) {
+    //   print('AudioPlayerControls - 隐藏控件，因为 currentSongTitle 为空');
+    //   return const SizedBox.shrink();
+    // }
+
+    // 强制显示控件，显示当前状态
+    final displayTitle = currentSongTitle ?? '未选择歌曲';
+    final displayStatus = isPlaying ? '播放中' : (isLoading ? '加载中' : '已停止');
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -41,13 +55,20 @@ class AudioPlayerControls extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      currentSongTitle,
+                      displayTitle,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      displayStatus,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: CupertinoColors.systemGrey,
+                      ),
                     ),
                     if (error != null)
                       Text(

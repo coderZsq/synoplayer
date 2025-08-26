@@ -10,6 +10,7 @@ import '../../quickconnect/domain/services/connection_manager.dart';
 import '../../quickconnect/domain/usecases/login_usecase.dart';
 import '../../quickconnect/domain/usecases/get_song_list_usecase.dart';
 import '../../quickconnect/presentation/services/quickconnect_service.dart';
+import '../../components/audio/services/audio_player_service.dart';
 
 /// 网络层依赖
 final dioProvider = Provider<Dio>((ref) {
@@ -62,4 +63,10 @@ final quickConnectServiceProvider = Provider<QuickConnectService>((ref) {
     loginUseCase,
     getSongListUseCase,
   );
+});
+
+/// 音频播放服务依赖 - 确保单例
+final audioPlayerServiceProvider = Provider<AudioPlayerService>((ref) {
+  final connectionManager = ref.read(connectionManagerProvider);
+  return AudioPlayerService(connectionManager);
 });
