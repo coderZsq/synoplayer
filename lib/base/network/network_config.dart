@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'interceptors/logging_interceptor.dart';
 import 'interceptors/json_response_interceptor.dart';
 import 'interceptors/retry_interceptor.dart';
+import 'interceptors/cookie_interceptor.dart';
 
 class NetworkConfig {
   static Dio createDio({
@@ -25,6 +26,9 @@ class NetworkConfig {
     
     // 添加响应拦截器
     dio.interceptors.add(JsonResponseInterceptor());
+    
+    // 添加cookie拦截器（在重试拦截器之前）
+    dio.interceptors.add(CookieInterceptor());
     
     // 添加重试拦截器（在日志拦截器之前）
     if (enableRetry) {

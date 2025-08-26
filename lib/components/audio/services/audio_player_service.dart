@@ -69,30 +69,11 @@ class AudioPlayerService extends ChangeNotifier {
       if (result.isSuccess) {
         final response = result.value;
         
-        // 从响应头中获取音频URL或直接使用响应数据
-        String? audioUrl;
+        // 音频流接口直接返回音频数据，不需要解析JSON
+        // 直接使用响应的URL作为音频源
+        final audioUrl = response.requestOptions.uri.toString();
         
-        // 尝试从响应头获取Location
-        final location = response.headers.value('Location');
-        if (location != null && location.isNotEmpty) {
-          audioUrl = location;
-        } else {
-          // 如果没有Location头，尝试从响应数据中获取
-          // 这里需要根据实际的API响应格式来调整
-          if (response.data != null) {
-            // 如果响应数据是字符串，可能是直接的URL
-            if (response.data is String) {
-              audioUrl = response.data as String;
-            }
-            // 如果响应数据是Map，尝试获取url字段
-            else if (response.data is Map<String, dynamic>) {
-              final data = response.data as Map<String, dynamic>;
-              audioUrl = data['url'] ?? data['stream_url'];
-            }
-          }
-        }
-        
-        if (audioUrl != null && audioUrl.isNotEmpty) {
+        if (audioUrl.isNotEmpty) {
           _currentSongId = songId;
           _currentSongTitle = songTitle;
           
@@ -100,7 +81,7 @@ class AudioPlayerService extends ChangeNotifier {
           await _audioPlayer.setUrl(audioUrl);
           await _audioPlayer.play();
         } else {
-          _error = '无法获取音频URL，响应数据: ${response.data}';
+          _error = '无法获取音频URL';
         }
       } else {
         _error = result.error?.message ?? '播放失败';

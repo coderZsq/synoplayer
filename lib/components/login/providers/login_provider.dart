@@ -5,6 +5,7 @@ import '../../../base/error/error_mapper.dart';
 import '../../../base/error/result.dart';
 import '../../../base/error/exceptions.dart';
 import '../../../base/auth/auth_state_notifier.dart';
+import '../../../base/network/interceptors/cookie_interceptor.dart';
 import '../../../quickconnect/entities/auth_login/auth_login_response.dart';
 
 part 'login_provider.g.dart';
@@ -54,6 +55,10 @@ class LoginNotifier extends _$LoginNotifier {
             rememberPassword: rememberPassword,
           );
           await authStorage.saveSessionId(data.sid!);
+          
+          // 设置cookie拦截器的sessionId
+          CookieInterceptor.setSessionId(data.sid!);
+          
           // 登录成功
           ref.read(authStateNotifierProvider.notifier).login(data);
           NavigationService.goToHome();

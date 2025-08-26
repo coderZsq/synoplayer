@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../quickconnect/entities/auth_login/auth_login_response.dart';
 import '../di/providers.dart';
+import '../network/interceptors/cookie_interceptor.dart';
 
 part 'auth_state_notifier.g.dart';
 
@@ -50,6 +51,10 @@ class AuthStateNotifier extends _$AuthStateNotifier {
   void logout() async {
     final authStorage = ref.read(authStorageServiceProvider);
     await authStorage.clearAuthData();
+    
+    // 清除cookie拦截器的sessionId
+    CookieInterceptor.clearSessionId();
+    
     state = const AuthState(isAuthenticated: false, isInitialized: true);
   }
   
@@ -89,6 +94,10 @@ class AuthStateNotifier extends _$AuthStateNotifier {
       );
       
       state = newState;
+      
+      // 设置cookie拦截器的sessionId
+      CookieInterceptor.setSessionId(sessionId);
+      
       print('✅ 自动登录成功，状态已更新');
       return true;
     } else {
