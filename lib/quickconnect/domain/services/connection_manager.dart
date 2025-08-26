@@ -5,6 +5,7 @@ import '../../../base/error/result.dart';
 class ConnectionManager {
   final QuickConnectRepository repository;
   bool? isConnected;
+  String? _baseUrl;
 
   ConnectionManager(this.repository);
 
@@ -46,14 +47,24 @@ class ConnectionManager {
     }
     
     isConnected = queryResult.value;
+    
+    // 保存baseUrl
+    if (isConnected == true) {
+      _baseUrl = 'https://$relayDn:$relayPort';
+    }
+    
     return const Success(null);
   }
 
   /// 检查是否已连接
   bool get connected => isConnected == true;
 
+  /// 获取baseUrl
+  String? get baseUrl => _baseUrl;
+
   /// 重置连接状态
   void resetConnection() {
     isConnected = null;
+    _baseUrl = null;
   }
 }

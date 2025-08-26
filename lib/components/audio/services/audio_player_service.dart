@@ -1,9 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import '../../../base/network/interceptors/cookie_interceptor.dart';
+import '../../../quickconnect/data/datasources/quick_connect_api_info.dart';
 import '../../../quickconnect/presentation/services/quickconnect_service.dart';
+import '../../../quickconnect/domain/services/connection_manager.dart';
 
 class AudioPlayerService extends ChangeNotifier {
   final QuickConnectService _quickConnectService;
+  final ConnectionManager _connectionManager;
   final AudioPlayer _audioPlayer = AudioPlayer();
   
   String? _currentSongId;
@@ -14,7 +18,7 @@ class AudioPlayerService extends ChangeNotifier {
   Duration _duration = Duration.zero;
   String? _error;
 
-  AudioPlayerService(this._quickConnectService) {
+  AudioPlayerService(this._quickConnectService, this._connectionManager) {
     _initAudioPlayer();
   }
 
@@ -59,14 +63,24 @@ class AudioPlayerService extends ChangeNotifier {
       _isLoading = true;
       _error = null;
       notifyListeners();
-      
-      //final sessionId = await _quickConnectService.getSessionId();
 
       // 停止当前播放
       await _audioPlayer.stop();
       
-      // 构建完整的音频流URL，使用传入的songId
-      final audioUrl = 'https://synr-cn4.shuangquan.direct.quickconnect.cn:47562/webapi/AudioStation/stream.cgi?api=SYNO.AudioStation.Stream&version=2&id=$songId&seek_position=0&method=stream';
+      // 检查连接状态和baseUrl
+      if (!_connectionManager.connected) {
+        _error = '未连接到服务器，请先登录';
+        return;
+      }
+      
+      final baseUrl = _connectionManager.baseUrl;
+      if (baseUrl == null || baseUrl.isEmpty) {
+        _error = '无法获取服务器地址';
+        return;
+      }
+      final apiInfo = QuickConnectApiInfo();
+      // 构建完整的音频流URL，使用ConnectionManager中的baseUrl
+      final audioUrl = '$baseUrl/webapi/AudioStation/stream.cgi?api=${apiInfo.stream}&method=stream&id=$songId&seek_position=0&version=${apiInfo.streamVersion}';
       
       if (audioUrl.isNotEmpty) {
         _currentSongId = songId;
@@ -74,7 +88,7 @@ class AudioPlayerService extends ChangeNotifier {
 
         // 设置音频源并播放
         await _audioPlayer.setUrl(audioUrl, headers: {
-            //'Cookie': 'id=$sessionId'
+            'Cookie': 'id=${CookieInterceptor.getSessionId()}'
         });
         await _audioPlayer.play();
       }

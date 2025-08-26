@@ -7,7 +7,8 @@ part 'audio_player_provider.g.dart';
 @riverpod
 AudioPlayerService audioPlayerService(AudioPlayerServiceRef ref) {
   final quickConnectService = ref.read(quickConnectServiceProvider);
-  return AudioPlayerService(quickConnectService);
+  final connectionManager = ref.read(connectionManagerProvider);
+  return AudioPlayerService(quickConnectService, connectionManager);
 }
 
 @riverpod

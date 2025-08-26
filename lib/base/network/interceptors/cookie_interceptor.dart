@@ -5,6 +5,10 @@ class CookieInterceptor extends Interceptor {
 
   CookieInterceptor();
 
+  static String? getSessionId() {
+    return _sessionId;
+  }
+
   /// 设置sessionId，在登录成功后调用
   static void setSessionId(String sessionId) {
     _sessionId = sessionId;
