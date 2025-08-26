@@ -27,8 +27,8 @@ class SongListNotifier extends _$SongListNotifier {
       } else {
         state = AsyncValue.error(result.error, StackTrace.current);
       }
-    } catch (error, _) {
-      state = AsyncValue.error(error, StackTrace.current);
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 
@@ -64,8 +64,8 @@ class SongListNotifier extends _$SongListNotifier {
     }
   }
 
-  void refresh() {
-    getSongList(isRefresh: true);
+  Future<void> refresh() async {
+    await getSongList(isRefresh: true);
   }
 
   bool get hasMoreData {
@@ -76,5 +76,11 @@ class SongListNotifier extends _$SongListNotifier {
     final total = currentState.total ?? 0;
     
     return currentSongs.length < total;
+  }
+
+  bool get isLoadingMore {
+    // 可以通过检查当前状态来判断是否正在加载更多
+    // 这里可以根据需要实现更复杂的逻辑
+    return false;
   }
 }
