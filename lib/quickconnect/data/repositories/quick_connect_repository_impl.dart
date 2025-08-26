@@ -8,10 +8,10 @@ import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
 import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
-import '../../../core/network/api_factory.dart';
-import '../../../core/error/exceptions.dart';
-import '../../../core/error/result.dart';
-import '../../../core/auth/storage/auth_storage_service.dart';
+import '../../../base/network/api_factory.dart';
+import '../../../base/error/exceptions.dart';
+import '../../../base/error/result.dart';
+import '../../../base/auth/storage/auth_storage_service.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
   final ApiFactory _apiFactory;

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/widgets/error_display_helper.dart';
+import '../../../base/widgets/error_display_helper.dart';
 import '../providers/login_provider.dart';
 import '../widgets/login_form.dart';
 import '../widgets/login_header.dart';

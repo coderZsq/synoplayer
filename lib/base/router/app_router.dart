@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../components/audio/pages/audio_list_page.dart';
 import '../../components/login/pages/login_page.dart';
 import '../auth/auth_state_notifier.dart';
-import 'route_names.dart';
+import '../router/route_names.dart';
 import 'navigation_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

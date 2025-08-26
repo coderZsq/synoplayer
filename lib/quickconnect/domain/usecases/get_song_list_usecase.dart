@@ -1,9 +1,9 @@
 import '../../entities/song_list_all/song_list_all_response.dart';
 import '../repositories/quick_connect_repository.dart';
 import '../services/connection_manager.dart';
-import '../../../core/error/exceptions.dart';
-import '../../../core/error/result.dart';
-import '../../../core/auth/storage/auth_storage_service.dart';
+import '../../../base/error/exceptions.dart';
+import '../../../base/error/result.dart';
+import '../../../base/auth/storage/auth_storage_service.dart';
 
 class GetSongListUseCase {
   final QuickConnectRepository repository;

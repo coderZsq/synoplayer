@@ -5,8 +5,8 @@ import 'form_fields/quick_connect_id_field.dart';
 import 'form_fields/username_field.dart';
 import 'form_fields/password_field.dart';
 import 'form_fields/otp_field.dart';
-import '../../../core/widgets/error_display_helper.dart';
-import '../../../core/di/providers.dart';
+import '../../../base/widgets/error_display_helper.dart';
+import '../../../base/di/providers.dart';
 import 'login_button.dart';
 
 class LoginForm extends ConsumerStatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/auth/auth_state_notifier.dart';
+import '../../../base/auth/auth_state_notifier.dart';
 import '../providers/audio_list_provider.dart';
 import '../widgets/audio_list_state.dart';
 

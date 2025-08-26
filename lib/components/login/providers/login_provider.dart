@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../core/router/navigation_service.dart';
-import '../../../core/di/providers.dart';
-import '../../../core/error/error_mapper.dart';
-import '../../../core/error/result.dart';
-import '../../../core/error/exceptions.dart';
-import '../../../core/auth/auth_state_notifier.dart';
+import '../../../base/router/navigation_service.dart';
+import '../../../base/di/providers.dart';
+import '../../../base/error/error_mapper.dart';
+import '../../../base/error/result.dart';
+import '../../../base/error/exceptions.dart';
+import '../../../base/auth/auth_state_notifier.dart';
 import '../../../quickconnect/entities/auth_login/auth_login_response.dart';
 
 part 'login_provider.g.dart';

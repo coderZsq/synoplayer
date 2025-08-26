@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:synoplayer/core/router/app_router.dart';
-import 'package:synoplayer/core/error/global_error_handler.dart';
+import 'package:synoplayer/base/router/app_router.dart';
+import 'package:synoplayer/base/error/global_error_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'route_names.dart';
+import '../router/route_names.dart';
 
 /// 全局导航服务（统一的路由导航工具）
 class NavigationService {

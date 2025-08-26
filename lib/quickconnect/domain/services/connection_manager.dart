@@ -1,6 +1,6 @@
 import '../repositories/quick_connect_repository.dart';
-import '../../../core/error/exceptions.dart';
-import '../../../core/error/result.dart';
+import '../../../base/error/exceptions.dart';
+import '../../../base/error/result.dart';
 
 class ConnectionManager {
   final QuickConnectRepository repository;
