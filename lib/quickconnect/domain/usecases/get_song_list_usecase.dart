@@ -12,7 +12,10 @@ class GetSongListUseCase {
 
   GetSongListUseCase(this.repository, this.authStorage, this.connectionManager);
 
-  Future<Result<SongListAllResponse>> call() async {
+  Future<Result<SongListAllResponse>> call({
+    int offset = 0,
+    int limit = 20,
+  }) async {
     try {
       // 从缓存中获取 quickConnectId
       final credentials = await authStorage.getLoginCredentials();
@@ -24,7 +27,7 @@ class GetSongListUseCase {
       
       // 如果已经连接，直接获取歌曲列表
       if (connectionManager.connected) {
-        return await _getSongList();
+        return await _getSongList(offset: offset, limit: limit);
       }
       
       // 获取服务器信息并建立连接
@@ -34,7 +37,7 @@ class GetSongListUseCase {
       }
       
       // 连接成功后获取歌曲列表
-      return await _getSongList();
+      return await _getSongList(offset: offset, limit: limit);
     } catch (e) {
       if (e is AppException) {
         return Failure(e);
@@ -44,8 +47,14 @@ class GetSongListUseCase {
   }
 
   /// 获取歌曲列表
-  Future<Result<SongListAllResponse>> _getSongList() async {
-    final result = await repository.getAudioStationSongListAll();
+  Future<Result<SongListAllResponse>> _getSongList({
+    int offset = 0,
+    int limit = 20,
+  }) async {
+    final result = await repository.getAudioStationSongListAll(
+      offset: offset,
+      limit: limit,
+    );
     return result;
   }
 }

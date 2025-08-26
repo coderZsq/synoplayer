@@ -158,7 +158,8 @@ class _QuickConnectApi implements QuickConnectApi {
     required String api,
     required String method,
     required String library,
-    required String limit,
+    required int offset,
+    required int limit,
     required String sid,
     required String version,
   }) async {
@@ -167,6 +168,7 @@ class _QuickConnectApi implements QuickConnectApi {
       r'api': api,
       r'method': method,
       r'library': library,
+      r'offset': offset,
       r'limit': limit,
       r'_sid': sid,
       r'version': version,

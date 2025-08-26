@@ -21,5 +21,8 @@ abstract class QuickConnectRepository {
     String? otp_code,
   });
 
-  Future<Result<SongListAllResponse>> getAudioStationSongListAll();
+  Future<Result<SongListAllResponse>> getAudioStationSongListAll({
+    required int offset,
+    required int limit
+  });
 }

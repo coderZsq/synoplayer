@@ -6,7 +6,7 @@ part of 'audio_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$songListNotifierHash() => r'68a2992a1ff4929c814b16a5fab9104fce85c5c2';
+String _$songListNotifierHash() => r'7bbd87475ee2e980cd227c38a47f15e29e15b7fd';
 
 /// See also [SongListNotifier].
 @ProviderFor(SongListNotifier)

@@ -45,7 +45,8 @@ abstract class QuickConnectApi {
     @Query('api') required String api,
     @Query('method') required String method,
     @Query('library') required String library,
-    @Query('limit') required String limit,
+    @Query('offset') required int offset,
+    @Query('limit') required int limit,
     @Query('_sid') required String sid,
     @Query('version') required String version,
   });

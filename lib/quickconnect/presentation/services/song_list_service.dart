@@ -7,7 +7,10 @@ class SongListService {
 
   SongListService(this._getSongListUseCase);
 
-  Future<Result<SongListAllResponse>> getSongList() async {
-    return await _getSongListUseCase();
+  Future<Result<SongListAllResponse>> getSongList({
+    int offset = 0,
+    int limit = 20,
+  }) async {
+    return await _getSongListUseCase(offset: offset, limit: limit);
   }
 }

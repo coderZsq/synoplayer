@@ -13,13 +13,53 @@ class AudioListPage extends ConsumerStatefulWidget {
 }
 
 class _AudioListPageState extends ConsumerState<AudioListPage> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
   @override
   void initState() {
     super.initState();
     // 在 initState 中调用接口获取歌曲列表
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(songListNotifierProvider.notifier).getSongList();
+      ref.read(songListNotifierProvider.notifier).getSongList(isRefresh: true);
     });
+    
+    // 添加滚动监听器
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= 
+        _scrollController.position.maxScrollExtent - 200) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore) return;
+    
+    final notifier = ref.read(songListNotifierProvider.notifier);
+    if (!notifier.hasMoreData) return;
+    
+    setState(() {
+      _isLoadingMore = true;
+    });
+    
+    await notifier.loadMore();
+    
+    setState(() {
+      _isLoadingMore = false;
+    });
+  }
+
+  Future<void> _onRefresh() async {
+    ref.read(songListNotifierProvider.notifier).refresh();
   }
 
   @override
@@ -70,7 +110,7 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
                     ),
                     const SizedBox(height: 8),
                     CupertinoButton.filled(
-                      onPressed: () => ref.read(songListNotifierProvider.notifier).getSongList(),
+                      onPressed: () => ref.read(songListNotifierProvider.notifier).getSongList(isRefresh: true),
                       child: const Text('重试'),
                     ),
                   ],
@@ -98,7 +138,7 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
                           ),
                           CupertinoButton(
                             padding: EdgeInsets.zero,
-                            onPressed: () => ref.read(songListNotifierProvider.notifier).refresh(),
+                            onPressed: _onRefresh,
                             child: const Icon(
                               CupertinoIcons.refresh,
                               size: 20,
@@ -125,84 +165,132 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
                     // 歌曲列表
                     Expanded(
                       child: songList.songs != null && songList.songs?.isNotEmpty == true
-                          ? ListView.builder(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              itemCount: songList.songs?.length,
-                              itemBuilder: (context, index) {
-                                final song = songList.songs?[index];
-                                return Container(
-                                  margin: const EdgeInsets.only(bottom: 8),
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: CupertinoColors.systemBackground,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: CupertinoColors.systemGrey4,
-                                      width: 1,
+                          ? CupertinoScrollbar(
+                              controller: _scrollController,
+                              child: CustomScrollView(
+                                controller: _scrollController,
+                                slivers: [
+                                  CupertinoSliverRefreshControl(
+                                    onRefresh: _onRefresh,
+                                  ),
+                                  SliverPadding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                    sliver: SliverList(
+                                      delegate: SliverChildBuilderDelegate(
+                                        (context, index) {
+                                          // 显示加载更多指示器
+                                          if (index == songList.songs!.length) {
+                                            if (ref.read(songListNotifierProvider.notifier).hasMoreData) {
+                                              return Container(
+                                                padding: const EdgeInsets.all(16),
+                                                child: Center(
+                                                  child: _isLoadingMore
+                                                      ? const CupertinoActivityIndicator()
+                                                      : const Text(
+                                                          '上拉加载更多',
+                                                          style: TextStyle(
+                                                            color: CupertinoColors.systemGrey,
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                ),
+                                              );
+                                            } else {
+                                              return Container(
+                                                padding: const EdgeInsets.all(16),
+                                                child: const Center(
+                                                  child: Text(
+                                                    '没有更多数据了',
+                                                    style: TextStyle(
+                                                      color: CupertinoColors.systemGrey,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                          
+                                          final song = songList.songs![index];
+                                          return Container(
+                                            margin: const EdgeInsets.only(bottom: 8),
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: BoxDecoration(
+                                              color: CupertinoColors.systemBackground,
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: CupertinoColors.systemGrey4,
+                                                width: 1,
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: CupertinoColors.systemGrey.withOpacity(0.1),
+                                                  blurRadius: 2,
+                                                  offset: const Offset(0, 1),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  CupertinoIcons.music_note,
+                                                  size: 20,
+                                                  color: CupertinoColors.systemBlue,
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        song.title ?? '未知标题',
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.w600,
+                                                          fontSize: 16,
+                                                        ),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      Text(
+                                                        song.path ?? '未知路径',
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color: CupertinoColors.systemGrey,
+                                                        ),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 4,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: CupertinoColors.systemGrey5,
+                                                    borderRadius: BorderRadius.circular(6),
+                                                  ),
+                                                  child: Text(
+                                                    song.type ?? 'unknown',
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: CupertinoColors.systemGrey,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        childCount: (songList.songs?.length ?? 0) + 1,
+                                      ),
                                     ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: CupertinoColors.systemGrey.withOpacity(0.1),
-                                        blurRadius: 2,
-                                        offset: const Offset(0, 1),
-                                      ),
-                                    ],
                                   ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        CupertinoIcons.music_note,
-                                        size: 20,
-                                        color: CupertinoColors.systemBlue,
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              song?.title ?? '未知标题',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              song?.path ?? '未知路径',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: CupertinoColors.systemGrey,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: CupertinoColors.systemGrey5,
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        child: Text(
-                                          song?.type ?? 'unknown',
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            color: CupertinoColors.systemGrey,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                ],
+                              ),
                             )
                           : const Center(
                               child: Column(

@@ -113,7 +113,10 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
   }
 
   @override
-  Future<Result<SongListAllResponse>> getAudioStationSongListAll() async {
+  Future<Result<SongListAllResponse>> getAudioStationSongListAll({
+    required int offset,
+    required int limit
+  }) async {
     try {
       final apiInfo = QuickConnectApiInfo();
       final sessionId = await _authStorage.getSessionId();
@@ -124,7 +127,8 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
           api: apiInfo.song,
           method: 'list',
           library: 'all',
-          limit: '10',
+          offset: offset,
+          limit: limit,
           sid: sessionId,
           version: apiInfo.songVersion
       );
