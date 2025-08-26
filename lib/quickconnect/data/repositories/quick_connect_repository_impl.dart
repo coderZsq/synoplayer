@@ -6,6 +6,7 @@ import '../../entities/auth_login/auth_login_response.dart';
 import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
+import '../../entities/audio_stream/audio_stream_request.dart';
 import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
 import '../../../base/network/api_factory.dart';
@@ -137,6 +138,35 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       return Failure(NetworkException.fromDio(e));
     } catch (e) {
       return Failure(ServerException('获取歌曲列表失败: $e'));
+    }
+  }
+
+  @override
+  Future<Result<Response>> getAudioStream({
+    required String id,
+    int seekPosition = 0,
+  }) async {
+    try {
+      final apiInfo = QuickConnectApiInfo();
+      final sessionId = await _authStorage.getSessionId();
+      if (sessionId == null || sessionId.isEmpty) {
+        return Failure(AuthException('未登录或会话已过期'));
+      }
+      
+      final request = AudioStreamRequest(
+        api: 'SYNO.AudioStation.Stream',
+        method: 'stream',
+        version: '1',
+        id: id,
+        seekPosition: seekPosition,
+      );
+      
+      final response = await _api.getAudioStream(request: request);
+      return Success(response);
+    } on DioException catch (e) {
+      return Failure(NetworkException.fromDio(e));
+    } catch (e) {
+      return Failure(ServerException('获取音频流失败: $e'));
     }
   }
 }

@@ -9,8 +9,8 @@ import '../../quickconnect/data/repositories/quick_connect_repository_impl.dart'
 import '../../quickconnect/domain/services/connection_manager.dart';
 import '../../quickconnect/domain/usecases/login_usecase.dart';
 import '../../quickconnect/domain/usecases/get_song_list_usecase.dart';
+import '../../quickconnect/domain/usecases/get_audio_stream_usecase.dart';
 import '../../quickconnect/presentation/services/quickconnect_service.dart';
-import '../../quickconnect/presentation/services/song_list_service.dart';
 
 /// 网络层依赖
 final dioProvider = Provider<Dio>((ref) {
@@ -55,13 +55,21 @@ final getSongListUseCaseProvider = Provider<GetSongListUseCase>((ref) {
   return GetSongListUseCase(repository, authStorage, connectionManager);
 });
 
+final getAudioStreamUseCaseProvider = Provider<GetAudioStreamUseCase>((ref) {
+  final repository = ref.watch(quickConnectRepositoryProvider);
+  final authStorage = ref.watch(authStorageServiceProvider);
+  final connectionManager = ref.watch(connectionManagerProvider);
+  return GetAudioStreamUseCase(repository, authStorage, connectionManager);
+});
+
 /// 服务层依赖
 final quickConnectServiceProvider = Provider<QuickConnectService>((ref) {
   final loginUseCase = ref.watch(loginUseCaseProvider);
-  return QuickConnectService(loginUseCase);
-});
-
-final songListServiceProvider = Provider<SongListService>((ref) {
   final getSongListUseCase = ref.watch(getSongListUseCaseProvider);
-  return SongListService(getSongListUseCase);
+  final getAudioStreamUseCase = ref.watch(getAudioStreamUseCaseProvider);
+  return QuickConnectService(
+    loginUseCase,
+    getSongListUseCase,
+    getAudioStreamUseCase,
+  );
 });

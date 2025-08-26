@@ -7,6 +7,7 @@ import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
 import '../../entities/query_api_info/query_api_info_response.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
+import '../../entities/audio_stream/audio_stream_request.dart';
 
 part 'quick_connect_api.g.dart';
 
@@ -49,5 +50,11 @@ abstract class QuickConnectApi {
     @Query('limit') required int limit,
     @Query('_sid') required String sid,
     @Query('version') required String version,
+  });
+
+  @POST('/webapi/AudioStation/stream.cgi')
+  @DioResponseType(ResponseType.stream)
+  Future<Response> getAudioStream({
+    @Body() required AudioStreamRequest request,
   });
 }

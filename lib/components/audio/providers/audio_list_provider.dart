@@ -20,8 +20,8 @@ class SongListNotifier extends _$SongListNotifier {
     }
     
     try {
-      final songListService = ref.read(songListServiceProvider);
-      final result = await songListService.getSongList(offset: 0, limit: _pageSize);
+      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final result = await quickConnectService.getSongList(offset: 0, limit: _pageSize);
       if (result.isSuccess) {
         state = AsyncValue.data(result.value.data);
       } else {
@@ -43,8 +43,8 @@ class SongListNotifier extends _$SongListNotifier {
     if (currentSongs.length >= total) return;
     
     try {
-      final songListService = ref.read(songListServiceProvider);
-      final result = await songListService.getSongList(
+      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final result = await quickConnectService.getSongList(
         offset: currentSongs.length,
         limit: _pageSize,
       );
