@@ -59,32 +59,24 @@ class AudioPlayerService extends ChangeNotifier {
       _isLoading = true;
       _error = null;
       notifyListeners();
+      
+      //final sessionId = await _quickConnectService.getSessionId();
 
       // 停止当前播放
       await _audioPlayer.stop();
-
-      // 获取音频流
-      final result = await _quickConnectService.getAudioStream(id: songId);
       
-      if (result.isSuccess) {
-        final response = result.value;
-        
-        // 音频流接口直接返回音频数据，不需要解析JSON
-        // 直接使用响应的URL作为音频源
-        final audioUrl = response.requestOptions.uri.toString();
-        
-        if (audioUrl.isNotEmpty) {
-          _currentSongId = songId;
-          _currentSongTitle = songTitle;
-          
-          // 设置音频源并播放
-          await _audioPlayer.setUrl(audioUrl);
-          await _audioPlayer.play();
-        } else {
-          _error = '无法获取音频URL';
-        }
-      } else {
-        _error = result.error?.message ?? '播放失败';
+      // 构建完整的音频流URL，使用传入的songId
+      final audioUrl = 'https://synr-cn4.shuangquan.direct.quickconnect.cn:47562/webapi/AudioStation/stream.cgi?api=SYNO.AudioStation.Stream&version=2&id=$songId&seek_position=0&method=stream';
+      
+      if (audioUrl.isNotEmpty) {
+        _currentSongId = songId;
+        _currentSongTitle = songTitle;
+
+        // 设置音频源并播放
+        await _audioPlayer.setUrl(audioUrl, headers: {
+            //'Cookie': 'id=$sessionId'
+        });
+        await _audioPlayer.play();
       }
     } catch (e) {
       _error = '播放出错: $e';

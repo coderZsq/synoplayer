@@ -50,14 +50,4 @@ abstract class QuickConnectApi {
     @Query('_sid') required String sid,
     @Query('version') required String version,
   });
-
-  @GET('/webapi/AudioStation/stream.cgi')
-  @DioResponseType(ResponseType.stream)
-  Future<Response> getAudioStream({
-    @Query('api') required String api,
-    @Query('method') required String method,
-    @Query('id') required String id,
-    @Query('seek_position') required String seek_position,
-    @Query('version') required String version,
-  });
 }
