@@ -203,15 +203,25 @@ class _QuickConnectApi implements QuickConnectApi {
   }
 
   @override
-  Future<Response<dynamic>> getAudioStream(
-      {required AudioStreamRequest request}) async {
+  Future<Response<dynamic>> getAudioStream({
+    required String api,
+    required String method,
+    required String id,
+    required String seek_position,
+    required String version,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api': api,
+      r'method': method,
+      r'id': id,
+      r'seek_position': seek_position,
+      r'version': version,
+    };
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(request.toJson());
+    const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<Response<dynamic>>(Options(
-      method: 'POST',
+      method: 'GET',
       headers: _headers,
       extra: _extra,
       responseType: ResponseType.stream,
@@ -227,7 +237,7 @@ class _QuickConnectApi implements QuickConnectApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<dynamic>(_options);
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     return _result;
   }
 

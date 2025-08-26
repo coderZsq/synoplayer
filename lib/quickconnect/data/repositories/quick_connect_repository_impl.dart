@@ -6,7 +6,6 @@ import '../../entities/auth_login/auth_login_response.dart';
 import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
-import '../../entities/audio_stream/audio_stream_request.dart';
 import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
 import '../../../base/network/api_factory.dart';
@@ -152,16 +151,13 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       if (sessionId == null || sessionId.isEmpty) {
         return Failure(AuthException('未登录或会话已过期'));
       }
-      
-      final request = AudioStreamRequest(
-        api: apiInfo.stream,
-        method: 'stream',
-        version: apiInfo.streamVersion,
-        id: id,
-        seekPosition: seekPosition,
+      final response = await _api.getAudioStream(
+          api: apiInfo.stream,
+          method: 'stream',
+          id: id,
+          seek_position: seekPosition.toString(),
+          version: apiInfo.streamVersion
       );
-      
-      final response = await _api.getAudioStream(request: request);
       return Success(response);
     } on DioException catch (e) {
       return Failure(NetworkException.fromDio(e));
