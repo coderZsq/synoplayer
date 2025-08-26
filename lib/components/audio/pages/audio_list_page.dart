@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../base/auth/auth_state_notifier.dart';
 import '../providers/audio_list_provider.dart';
+import '../providers/audio_player_provider.dart';
 import '../widgets/audio_list_state.dart';
+import '../widgets/audio_player_controls.dart';
 
 class AudioListPage extends ConsumerStatefulWidget {
   const AudioListPage({super.key});
@@ -55,8 +57,8 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
     ref.read(songListNotifierProvider.notifier).getSongList(isRefresh: true);
   }
 
-  void _onSongTap() {
-    // TODO: 处理歌曲点击事件
+  void _onSongTap(String songId, String songTitle) {
+    ref.read(audioPlayerNotifierProvider.notifier).playSong(songId, songTitle);
   }
 
   @override
@@ -94,11 +96,18 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
         ),
       ),
       child: SafeArea(
-        child: AudioListState(
-          songListState: songListState,
-          scrollController: _scrollController,
-          onRetry: _onRetry,
-          onSongTap: _onSongTap,
+        child: Column(
+          children: [
+            Expanded(
+              child: AudioListState(
+                songListState: songListState,
+                scrollController: _scrollController,
+                onRetry: _onRetry,
+                onSongTap: _onSongTap,
+              ),
+            ),
+            const AudioPlayerControls(),
+          ],
         ),
       ),
     );

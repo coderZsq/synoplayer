@@ -154,9 +154,9 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       }
       
       final request = AudioStreamRequest(
-        api: 'SYNO.AudioStation.Stream',
+        api: apiInfo.stream,
         method: 'stream',
-        version: '1',
+        version: apiInfo.streamVersion,
         id: id,
         seekPosition: seekPosition,
       );

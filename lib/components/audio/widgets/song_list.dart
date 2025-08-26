@@ -8,7 +8,7 @@ import 'load_more_indicator.dart';
 class SongList extends ConsumerWidget {
   final SongListData songList;
   final ScrollController scrollController;
-  final VoidCallback? onSongTap;
+  final Function(String songId, String songTitle)? onSongTap;
   final Future<void> Function()? onRefresh;
 
   const SongList({

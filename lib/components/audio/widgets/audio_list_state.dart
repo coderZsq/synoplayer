@@ -9,7 +9,7 @@ class AudioListState extends ConsumerWidget {
   final AsyncValue<SongListData?> songListState;
   final ScrollController scrollController;
   final VoidCallback onRetry;
-  final VoidCallback? onSongTap;
+  final Function(String songId, String songTitle)? onSongTap;
 
   const AudioListState({
     super.key,

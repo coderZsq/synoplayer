@@ -67,6 +67,9 @@ dependencies:
   # 函数式编程工具
   dartz: ^0.10.1
   
+  # 音频播放
+  just_audio: ^0.9.36
+  
   # 依赖注入 - 已移除，统一使用 Riverpod
 
 dev_dependencies:

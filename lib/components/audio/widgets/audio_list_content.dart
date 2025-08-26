@@ -8,7 +8,7 @@ import 'empty_state.dart';
 class AudioListContent extends ConsumerWidget {
   final SongListData songList;
   final ScrollController scrollController;
-  final VoidCallback? onSongTap;
+  final Function(String songId, String songTitle)? onSongTap;
 
   const AudioListContent({
     super.key,

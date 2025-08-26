@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../quickconnect/entities/song_list_all/song_list_all_response.dart';
+import '../providers/audio_player_provider.dart';
 
-class SongItem extends StatelessWidget {
+class SongItem extends ConsumerWidget {
   final Song song;
-  final VoidCallback? onTap;
+  final Function(String songId, String songTitle)? onTap;
 
   const SongItem({
     super.key,
@@ -12,18 +14,37 @@ class SongItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final audioPlayerService = ref.watch(audioPlayerNotifierProvider);
+    final isCurrentSong = audioPlayerService.currentSongId == song.id;
+    final isPlaying = isCurrentSong && audioPlayerService.isPlaying;
+    
     return GestureDetector(
-      onTap: onTap,
+              onTap: () {
+          if (isCurrentSong && isPlaying) {
+            // 如果当前歌曲正在播放，则暂停
+            ref.read(audioPlayerNotifierProvider.notifier).pause();
+          } else if (isCurrentSong && !isPlaying) {
+            // 如果当前歌曲已暂停，则继续播放
+            ref.read(audioPlayerNotifierProvider.notifier).resume();
+          } else {
+            // 播放新歌曲
+            onTap?.call(song.id ?? '', song.title ?? '未知标题');
+          }
+        },
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: CupertinoColors.systemBackground,
+          color: isCurrentSong 
+              ? CupertinoColors.systemBlue.withOpacity(0.1)
+              : CupertinoColors.systemBackground,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: CupertinoColors.systemGrey4,
-            width: 1,
+            color: isCurrentSong 
+                ? CupertinoColors.systemBlue
+                : CupertinoColors.systemGrey4,
+            width: isCurrentSong ? 2 : 1,
           ),
           boxShadow: [
             BoxShadow(
@@ -35,10 +56,12 @@ class SongItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(
-              CupertinoIcons.music_note,
+            Icon(
+              isPlaying ? CupertinoIcons.pause_circle_fill : CupertinoIcons.music_note,
               size: 20,
-              color: CupertinoColors.systemBlue,
+              color: isCurrentSong 
+                  ? CupertinoColors.systemBlue
+                  : CupertinoColors.systemGrey,
             ),
             const SizedBox(width: 12),
             Expanded(
