@@ -23,15 +23,19 @@ class AudioListContent extends ConsumerWidget {
     final hasData = songs.isNotEmpty;
     final notifier = ref.read(songListNotifierProvider.notifier);
 
-    return Expanded(
-      child: hasData
-          ? SongList(
-        songList: songList,
-        scrollController: scrollController,
-        onSongTap: onSongTap,
-        onRefresh: () => notifier.refresh(),
-      )
-          : const EmptyState(),
+    return Column(
+      children: [
+        Expanded(
+          child: hasData
+              ? SongList(
+                  songList: songList,
+                  scrollController: scrollController,
+                  onSongTap: onSongTap,
+                  onRefresh: () => notifier.refresh(),
+                )
+              : const EmptyState(),
+        ),
+      ],
     );
   }
 }
