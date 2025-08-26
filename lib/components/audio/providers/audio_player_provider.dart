@@ -48,15 +48,19 @@ class AudioPlayerState {
 @riverpod
 class AudioPlayerNotifier extends _$AudioPlayerNotifier {
   late final AudioPlayerService _audioPlayerService;
+  bool _callbackSet = false;
   
   @override
   AudioPlayerState build() {
     _audioPlayerService = ref.read(audioPlayerServiceProvider);
     
-    // 设置状态变化回调，直接更新 state
-    _audioPlayerService.setStateChangedCallback(() {
-      _updateState();
-    });
+    // 只在第一次设置状态变化回调，避免重复设置
+    if (!_callbackSet) {
+      _audioPlayerService.setStateChangedCallback(() {
+        _updateState();
+      });
+      _callbackSet = true;
+    }
     
     return const AudioPlayerState();
   }

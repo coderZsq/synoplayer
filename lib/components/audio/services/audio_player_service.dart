@@ -72,26 +72,8 @@ class AudioPlayerService {
         print('AudioPlayerService - 状态变化，通知监听器: playing=$_isPlaying, loading=$_isLoading');
         _notifyStateChanged();
       }
-    });
-
-    _audioPlayer.positionStream.listen((position) {
-      // 减少位置更新的频率，避免过度通知
-      if ((position - _position).inMilliseconds.abs() > 100) {
-        _position = position;
-        _notifyStateChanged();
-      }
-    });
-
-    _audioPlayer.durationStream.listen((duration) {
-      final newDuration = duration ?? Duration.zero;
-      if (newDuration != _duration) {
-        _duration = newDuration;
-        _notifyStateChanged();
-      }
-    });
-
-    // 处理播放完成状态
-    _audioPlayer.playerStateStream.listen((state) {
+      
+      // 处理播放完成状态
       if (state.processingState == ProcessingState.completed) {
         _isPlaying = false;
         _isLoading = false;
@@ -99,9 +81,24 @@ class AudioPlayerService {
         _notifyStateChanged();
       }
     });
-    
-    // 简化错误处理 - just_audio 会自动处理大部分错误
-    // 如果需要错误处理，可以在 playSong 的 catch 块中处理
+
+    // 重新启用监听器，但使用更保守的更新策略
+    _audioPlayer.positionStream.listen((position) {
+      // 只在位置变化超过500ms时才更新，平衡性能和响应性
+      if ((position - _position).inMilliseconds.abs() > 500) {
+        _position = position;
+        _notifyStateChanged();
+      }
+    });
+
+    _audioPlayer.durationStream.listen((duration) {
+      final newDuration = duration ?? Duration.zero;
+      // 只在时长真正发生变化时才更新
+      if (newDuration != _duration && newDuration.inSeconds > 0) {
+        _duration = newDuration;
+        _notifyStateChanged();
+      }
+    });
   }
 
   Future<void> playSong(String songId, String songTitle) async {
