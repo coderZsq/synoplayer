@@ -67,8 +67,7 @@ final audioRepositoryProvider = Provider<AudioRepository>((ref) {
   final connectionManager = ref.watch(connectionManagerProvider);
   final dataSourceRemote = ref.watch(audioDatasourceRemoteProvider);
   final dataSourceLocal = ref.watch(audioDatasourceLocalProvider);
-  final dio = ref.watch(dioProvider);
-  return AudioRepositoryImpl(authStorage, connectionManager, dataSourceRemote, dataSourceLocal, dio);
+  return AudioRepositoryImpl(authStorage, connectionManager, dataSourceRemote, dataSourceLocal);
 });
 
 /// 用例层依赖

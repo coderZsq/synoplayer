@@ -16,9 +16,8 @@ class AudioRepositoryImpl implements AudioRepository {
   final ConnectionManager connectionManager;
   final AudioDataSourceRemote _dataSourceRemote;
   final AudioDataSourceLocal _dataSourceLocal;
-  final Dio _dio;
 
-  AudioRepositoryImpl(this._authStorage, this.connectionManager, this._dataSourceRemote, this._dataSourceLocal, this._dio);
+  AudioRepositoryImpl(this._authStorage, this.connectionManager, this._dataSourceRemote, this._dataSourceLocal);
 
   @override
   Future<Result<SongListAllResponse>> getAudioStationSongListAll({
