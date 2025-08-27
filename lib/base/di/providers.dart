@@ -90,8 +90,7 @@ final audioRepositoryProvider = Provider<AudioRepository>((ref) {
 /// 音频播放用例依赖
 final playSongUseCaseProvider = Provider<PlaySongUseCase>((ref) {
   final audioRepository = ref.watch(audioRepositoryProvider);
-  final audioDatasource = ref.watch(audioDatasourceProvider);
-  return PlaySongUseCase(audioRepository, audioDatasource);
+  return PlaySongUseCase(audioRepository);
 });
 
 /// 音频服务依赖

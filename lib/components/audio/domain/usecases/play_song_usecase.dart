@@ -1,31 +1,29 @@
 import '../../../../base/error/result.dart';
 import '../../../../base/error/exceptions.dart';
 import '../repositories/audio_repository.dart';
-import '../../data/datasources/audio_datasource.dart';
+import '../../entities/audio_stream_info.dart';
 
 class PlaySongUseCase {
   final AudioRepository _audioRepository;
-  final AudioDatasource _audioDatasource;
 
-  PlaySongUseCase(this._audioRepository, this._audioDatasource);
+  PlaySongUseCase(this._audioRepository);
 
   Future<Result<Map<String, dynamic>>> execute(String songId, String songTitle) async {
     try {
-      // 获取音频流URL
-      final urlResult = await _audioRepository.getAudioStreamUrl(songId);
-      if (urlResult.isFailure) {
-        return Failure(urlResult.error);
+      // 获取音频流信息（包含URL和认证头）
+      final audioInfoResult = await _audioRepository.getAudioStreamUrl(songId);
+      if (audioInfoResult.isFailure) {
+        return Failure(audioInfoResult.error);
       }
 
-      final audioUrl = urlResult.value;
-      final authHeaders = _audioDatasource.getAuthHeaders();
+      final audioInfo = audioInfoResult.value;
       
-      // 返回音频URL和认证头，由service层处理播放
+      // 返回音频信息，由service层处理播放
       return Success({
         'songId': songId,
         'songTitle': songTitle,
-        'audioUrl': audioUrl,
-        'authHeaders': authHeaders,
+        'audioUrl': audioInfo.url,
+        'authHeaders': audioInfo.authHeader,
       });
     } catch (e) {
       return Failure(BusinessException('播放歌曲失败: $e'));
