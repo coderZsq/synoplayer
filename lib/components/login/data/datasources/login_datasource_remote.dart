@@ -6,13 +6,12 @@ import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
 import '../../entities/query_api_info/query_api_info_response.dart';
-import '../../../components/audio/entities/song_list_all/song_list_all_response.dart';
 
-part 'quick_connect_api.g.dart';
+part 'login_datasource_remote.g.dart';
 
 @RestApi()
-abstract class QuickConnectApi {
-  factory QuickConnectApi(Dio dio, {String baseUrl}) = _QuickConnectApi;
+abstract class LoginDataSourceRemote {
+  factory LoginDataSourceRemote(Dio dio, {String baseUrl}) = _LoginDataSourceRemote;
 
   @POST('/Serv.php')
   Future<GetServerInfoResponse> getServerInfo({

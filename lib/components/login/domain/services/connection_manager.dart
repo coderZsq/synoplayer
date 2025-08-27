@@ -1,10 +1,10 @@
-import '../repositories/quick_connect_repository.dart';
-import '../../../base/error/exceptions.dart';
-import '../../../base/error/result.dart';
-import '../../../base/network/global_dio_manager.dart';
+import '../../../../base/error/exceptions.dart';
+import '../../../../base/error/result.dart';
+import '../../../../base/network/global_dio_manager.dart';
+import '../repositories/login_repository.dart';
 
 class ConnectionManager {
-  final QuickConnectRepository repository;
+  final LoginRepository repository;
   final GlobalDioManager? _globalDioManager;
   bool? isConnected;
   String? _baseUrl;

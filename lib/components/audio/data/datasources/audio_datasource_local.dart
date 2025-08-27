@@ -1,6 +1,6 @@
 import '../../../../base/network/interceptors/cookie_interceptor.dart';
-import '../../../../quickconnect/data/datasources/quick_connect_api_info.dart';
-import '../../../../quickconnect/domain/services/connection_manager.dart';
+import '../../../../base/network/quick_connect_api_info.dart';
+import '../../../login/domain/services/connection_manager.dart';
 
 class AudioDataSourceLocal {
   final ConnectionManager _connectionManager;

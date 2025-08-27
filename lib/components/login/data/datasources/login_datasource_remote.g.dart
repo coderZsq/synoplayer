@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'quick_connect_api.dart';
+part of 'login_datasource_remote.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'quick_connect_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _QuickConnectApi implements QuickConnectApi {
-  _QuickConnectApi(
+class _LoginDataSourceRemote implements LoginDataSourceRemote {
+  _LoginDataSourceRemote(
     this._dio, {
     this.baseUrl,
     this.errorLogger,

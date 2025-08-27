@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../quickconnect/entities/auth_login/auth_login_response.dart';
+import '../../components/login/entities/auth_login/auth_login_response.dart';
 import '../di/providers.dart';
 import '../network/interceptors/cookie_interceptor.dart';
 

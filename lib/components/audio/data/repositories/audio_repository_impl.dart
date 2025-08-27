@@ -4,8 +4,8 @@ import 'package:synoplayer/components/audio/data/datasources/audio_datasource_re
 import '../../../../base/auth/storage/auth_storage_service.dart';
 import '../../../../base/error/result.dart';
 import '../../../../base/error/exceptions.dart';
-import '../../../../quickconnect/data/datasources/quick_connect_api_info.dart';
-import '../../../../quickconnect/domain/services/connection_manager.dart';
+import '../../../../base/network/quick_connect_api_info.dart';
+import '../../../login/domain/services/connection_manager.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
 import '../datasources/audio_datasource_local.dart';
 import '../../domain/repositories/audio_repository.dart';
@@ -13,11 +13,11 @@ import '../../entities/audio_stream/audio_stream_info.dart';
 
 class AudioRepositoryImpl implements AudioRepository {
   final AuthStorageService _authStorage;
-  final ConnectionManager connectionManager;
+  final ConnectionManager _connectionManager;
   final AudioDataSourceRemote _dataSourceRemote;
   final AudioDataSourceLocal _dataSourceLocal;
 
-  AudioRepositoryImpl(this._authStorage, this.connectionManager, this._dataSourceRemote, this._dataSourceLocal);
+  AudioRepositoryImpl(this._authStorage, this._connectionManager, this._dataSourceRemote, this._dataSourceLocal);
 
   @override
   Future<Result<SongListAllResponse>> getAudioStationSongListAll({
@@ -32,7 +32,7 @@ class AudioRepositoryImpl implements AudioRepository {
       }
       
       // 获取已连接的 baseUrl
-      final baseUrl = connectionManager.baseUrl;
+      final baseUrl = _connectionManager.baseUrl;
       if (baseUrl == null) {
         return Failure(BusinessException('未连接到服务器，请先建立连接'));
       }

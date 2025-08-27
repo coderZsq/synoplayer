@@ -1,13 +1,13 @@
-import '../../domain/usecases/get_song_list_usecase.dart';
-import '../../domain/usecases/play_song_usecase.dart';
+import '../../domain/usecases/get_audio_list_usecase.dart';
+import '../../domain/usecases/play_audio_usecase.dart';
 import '../../../../../base/error/result.dart';
 import '../../entities/audio_player/audio_player_info.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
 import 'audio_player_service.dart';
 
 class AudioService {
-  final GetSongListUseCase _getSongListUseCase;
-  final PlaySongUseCase _playSongUseCase;
+  final GetAudioListUseCase _getSongListUseCase;
+  final PlayAudioUseCase _playSongUseCase;
   final AudioPlayerService _audioPlayerService;
   AudioPlayerStateCallback? _onStateChanged;
 

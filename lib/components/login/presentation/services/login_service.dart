@@ -1,11 +1,11 @@
 import '../../domain/usecases/login_usecase.dart';
 import '../../entities/auth_login/auth_login_response.dart';
-import '../../../base/error/result.dart';
+import '../../../../base/error/result.dart';
 
-class QuickConnectService {
+class LoginService {
   final LoginUseCase _loginUseCase;
 
-  QuickConnectService(
+  LoginService(
     this._loginUseCase,
   );
 

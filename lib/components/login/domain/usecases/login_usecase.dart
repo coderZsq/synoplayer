@@ -1,11 +1,11 @@
 import '../../entities/auth_login/auth_login_response.dart';
-import '../repositories/quick_connect_repository.dart';
+import '../../../../base/error/exceptions.dart';
+import '../../../../base/error/result.dart';
+import '../repositories/login_repository.dart';
 import '../services/connection_manager.dart';
-import '../../../base/error/exceptions.dart';
-import '../../../base/error/result.dart';
 
 class LoginUseCase {
-  final QuickConnectRepository repository;
+  final LoginRepository repository;
   final ConnectionManager connectionManager;
 
   LoginUseCase(this.repository, this.connectionManager);

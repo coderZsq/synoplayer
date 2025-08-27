@@ -1,21 +1,21 @@
 import 'package:dio/dio.dart';
-import '../../domain/repositories/quick_connect_repository.dart';
+import '../../domain/repositories/login_repository.dart';
 import '../../entities/auth_login/auth_login_request.dart';
 import '../../entities/auth_login/auth_login_response.dart';
 import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
-import '../datasources/quick_connect_api.dart';
-import '../datasources/quick_connect_api_info.dart';
-import '../../../base/network/global_dio_manager.dart';
-import '../../../base/error/exceptions.dart';
-import '../../../base/error/result.dart';
+import '../../../../base/network/quick_connect_api_info.dart';
+import '../../../../base/network/global_dio_manager.dart';
+import '../../../../base/error/exceptions.dart';
+import '../../../../base/error/result.dart';
+import '../datasources/login_datasource_remote.dart';
 
-class QuickConnectRepositoryImpl implements QuickConnectRepository {
+class LoginRepositoryImpl implements LoginRepository {
   final GlobalDioManager _globalDioManager;
-  late QuickConnectApi _api;
+  late LoginDataSourceRemote _dataSourceRemote;
 
-  QuickConnectRepositoryImpl(this._globalDioManager);
+  LoginRepositoryImpl(this._globalDioManager);
 
   @override
   Future<Result<GetServerInfoResponse>> getServerInfo({
@@ -29,7 +29,7 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
     );
     try {
       final baseUrl = site != null ? 'https://$site' : 'https://global.quickconnect.to';
-      final api = QuickConnectApi(_globalDioManager.dio, baseUrl: baseUrl);
+      final api = LoginDataSourceRemote(_globalDioManager.dio, baseUrl: baseUrl);
       final response = await api.getServerInfo(request: request);
       return Success(response);
     } on DioException catch (e) {
@@ -52,8 +52,8 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
         version: '1',
       );
       final baseUrl = 'https://$relayDn:$relayPort';
-      _api = QuickConnectApi(_globalDioManager.dio, baseUrl: baseUrl);
-      apiInfo.apiInfo = await _api.queryApiInfo(
+      _dataSourceRemote = LoginDataSourceRemote(_globalDioManager.dio, baseUrl: baseUrl);
+      apiInfo.apiInfo = await _dataSourceRemote.queryApiInfo(
           api: request.api,
           method: request.method,
           version: request.version,
@@ -86,7 +86,7 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
         otp_code: otp_code,
         version: apiInfo.authVersion,
       );
-      final response = await _api.authLogin(
+      final response = await _dataSourceRemote.authLogin(
           api: request.api,
           method: request.method,
           account: request.account,

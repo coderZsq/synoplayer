@@ -1,12 +1,13 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../base/router/navigation_service.dart';
-import '../../../base/di/providers.dart';
-import '../../../base/error/error_mapper.dart';
-import '../../../base/error/result.dart';
-import '../../../base/error/exceptions.dart';
-import '../../../base/auth/auth_state_notifier.dart';
-import '../../../base/network/interceptors/cookie_interceptor.dart';
-import '../../../quickconnect/entities/auth_login/auth_login_response.dart';
+
+import '../../../../base/auth/auth_state_notifier.dart';
+import '../../../../base/di/providers.dart';
+import '../../../../base/error/error_mapper.dart';
+import '../../../../base/error/exceptions.dart';
+import '../../../../base/error/result.dart';
+import '../../../../base/network/interceptors/cookie_interceptor.dart';
+import '../../../../base/router/navigation_service.dart';
+import '../../entities/auth_login/auth_login_response.dart';
 
 part 'login_provider.g.dart';
 

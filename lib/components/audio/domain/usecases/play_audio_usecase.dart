@@ -3,10 +3,10 @@ import '../../../../base/error/exceptions.dart';
 import '../repositories/audio_repository.dart';
 import '../../entities/audio_stream/audio_stream_info.dart';
 
-class PlaySongUseCase {
+class PlayAudioUseCase {
   final AudioRepository _audioRepository;
 
-  PlaySongUseCase(this._audioRepository);
+  PlayAudioUseCase(this._audioRepository);
 
   Future<Result<AudioStreamInfo>> call(String songId) async {
     try {
