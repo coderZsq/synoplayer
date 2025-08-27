@@ -1,13 +1,15 @@
 import '../repositories/quick_connect_repository.dart';
 import '../../../base/error/exceptions.dart';
 import '../../../base/error/result.dart';
+import '../../../base/network/global_dio_manager.dart';
 
 class ConnectionManager {
   final QuickConnectRepository repository;
+  final GlobalDioManager? _globalDioManager;
   bool? isConnected;
   String? _baseUrl;
 
-  ConnectionManager(this.repository);
+  ConnectionManager(this.repository, [this._globalDioManager]);
 
   /// 建立与服务器的连接
   Future<Result<void>> establishConnection(String quickConnectId) async {
@@ -48,9 +50,10 @@ class ConnectionManager {
     
     isConnected = queryResult.value;
     
-    // 保存baseUrl
+    // 保存baseUrl 并更新全局 Dio
     if (isConnected == true) {
       _baseUrl = 'https://$relayDn:$relayPort';
+      _updateGlobalDioBaseUrl(_baseUrl!);
     }
     
     return const Success(null);
@@ -62,9 +65,15 @@ class ConnectionManager {
   /// 获取baseUrl
   String? get baseUrl => _baseUrl;
 
+  /// 更新全局 Dio 的 baseUrl
+  void _updateGlobalDioBaseUrl(String baseUrl) {
+    _globalDioManager?.updateBaseUrl(baseUrl);
+  }
+
   /// 重置连接状态
   void resetConnection() {
     isConnected = null;
     _baseUrl = null;
+    _globalDioManager?.resetBaseUrl();
   }
 }

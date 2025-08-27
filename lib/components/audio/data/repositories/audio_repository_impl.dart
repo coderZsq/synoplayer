@@ -38,10 +38,7 @@ class AudioRepositoryImpl implements AudioRepository {
         return Failure(BusinessException('未连接到服务器，请先建立连接'));
       }
       
-      // 创建带有正确 baseUrl 的 AudioDataSourceRemote 实例
-      final dataSourceRemote = AudioDataSourceRemote(_dio, baseUrl: baseUrl);
-      
-      final response = await dataSourceRemote.getAudioStationSongListAll(
+      final response = await _dataSourceRemote.getAudioStationSongListAll(
           api: apiInfo.song,
           method: 'list',
           library: 'all',

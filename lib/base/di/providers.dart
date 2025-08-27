@@ -4,7 +4,7 @@ import '../../components/audio/presentation/services/audio_player_service.dart';
 import '../auth/storage/storage_service.dart';
 import '../auth/storage/auth_storage_service.dart';
 import '../network/network_config.dart';
-import '../network/api_factory.dart';
+import '../network/global_dio_manager.dart';
 import '../../quickconnect/domain/repositories/quick_connect_repository.dart';
 import '../../quickconnect/data/repositories/quick_connect_repository_impl.dart';
 import '../../quickconnect/domain/services/connection_manager.dart';
@@ -23,9 +23,12 @@ final dioProvider = Provider<Dio>((ref) {
   return NetworkConfig.createDio();
 });
 
-final apiFactoryProvider = Provider<ApiFactory>((ref) {
+/// 全局 Dio 管理器
+final globalDioManagerProvider = Provider<GlobalDioManager>((ref) {
+  final manager = GlobalDioManager();
   final dio = ref.watch(dioProvider);
-  return ApiFactoryImpl(dio);
+  manager.initialize(dio);
+  return manager;
 });
 
 /// 存储层依赖
@@ -36,14 +39,15 @@ final authStorageServiceProvider = Provider<AuthStorageService>((ref) {
 
 /// 数据层依赖
 final quickConnectRepositoryProvider = Provider<QuickConnectRepository>((ref) {
-  final apiFactory = ref.watch(apiFactoryProvider);
-  return QuickConnectRepositoryImpl(apiFactory);
+  final globalDioManager = ref.watch(globalDioManagerProvider);
+  return QuickConnectRepositoryImpl(globalDioManager);
 });
 
 /// 连接管理依赖
 final connectionManagerProvider = Provider<ConnectionManager>((ref) {
   final repository = ref.watch(quickConnectRepositoryProvider);
-  return ConnectionManager(repository);
+  final globalDioManager = ref.watch(globalDioManagerProvider);
+  return ConnectionManager(repository, globalDioManager);
 });
 
 /// 音频数据源依赖
@@ -53,9 +57,8 @@ final audioDatasourceLocalProvider = Provider<AudioDataSourceLocal>((ref) {
 });
 
 final audioDatasourceRemoteProvider = Provider<AudioDataSourceRemote>((ref) {
-  final dio = ref.watch(dioProvider);
-  // 这里不设置 baseUrl，因为 baseUrl 是动态的，需要在运行时设置
-  return AudioDataSourceRemote(dio);
+  final globalDioManager = ref.watch(globalDioManagerProvider);
+  return AudioDataSourceRemote(globalDioManager.dio);
 });
 
 /// 音频仓库依赖

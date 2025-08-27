@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:synoplayer/components/audio/entities/song_list_all/song_list_all_response.dart';
 import '../../domain/repositories/quick_connect_repository.dart';
 import '../../entities/auth_login/auth_login_request.dart';
 import '../../entities/auth_login/auth_login_response.dart';
@@ -8,15 +7,15 @@ import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
 import '../datasources/quick_connect_api.dart';
 import '../datasources/quick_connect_api_info.dart';
-import '../../../base/network/api_factory.dart';
+import '../../../base/network/global_dio_manager.dart';
 import '../../../base/error/exceptions.dart';
 import '../../../base/error/result.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
-  final ApiFactory _apiFactory;
+  final GlobalDioManager _globalDioManager;
   late QuickConnectApi _api;
 
-  QuickConnectRepositoryImpl(this._apiFactory);
+  QuickConnectRepositoryImpl(this._globalDioManager);
 
   @override
   Future<Result<GetServerInfoResponse>> getServerInfo({
@@ -30,7 +29,7 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
     );
     try {
       final baseUrl = site != null ? 'https://$site' : 'https://global.quickconnect.to';
-      final api = _apiFactory.createQuickConnectApi(baseUrl);
+      final api = QuickConnectApi(_globalDioManager.dio, baseUrl: baseUrl);
       final response = await api.getServerInfo(request: request);
       return Success(response);
     } on DioException catch (e) {
@@ -53,7 +52,7 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
         version: '1',
       );
       final baseUrl = 'https://$relayDn:$relayPort';
-      _api = _apiFactory.createQuickConnectApi(baseUrl);
+      _api = QuickConnectApi(_globalDioManager.dio, baseUrl: baseUrl);
       apiInfo.apiInfo = await _api.queryApiInfo(
           api: request.api,
           method: request.method,
