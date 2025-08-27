@@ -1,9 +1,7 @@
+import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../base/di/providers.dart';
-import '../services/audio_player_service.dart';
-import '../domain/usecases/play_song_usecase.dart';
-import '../data/repositories/audio_repository_impl.dart';
-import '../data/datasources/audio_datasource.dart';
+import '../services/audio_service.dart';
 
 part 'audio_player_provider.g.dart';
 
@@ -50,69 +48,100 @@ class AudioPlayerState {
 
 @riverpod
 class AudioPlayerNotifier extends _$AudioPlayerNotifier {
-  late final AudioPlayerService _audioPlayerService;
-  late final PlaySongUseCase _playSongUseCase;
-  bool _callbackSet = false;
+  late final AudioService _audioService;
+  Timer? _stateUpdateTimer;
+  bool _isTimerActive = false;
   
   @override
   AudioPlayerState build() {
-    _audioPlayerService = ref.read(audioPlayerServiceProvider);
+    _audioService = ref.read(audioServiceProvider);
     
-    // 创建依赖
-    final connectionManager = ref.read(connectionManagerProvider);
-    final audioDatasource = AudioDatasource(connectionManager);
-    final audioRepository = AudioRepositoryImpl(audioDatasource);
-    _playSongUseCase = PlaySongUseCase(audioRepository, _audioPlayerService, audioDatasource);
-    
-    // 只在第一次设置状态变化回调，避免重复设置
-    if (!_callbackSet) {
-      _audioPlayerService.setStateChangedCallback(() {
-        _updateState();
-      });
-      _callbackSet = true;
-    }
+    // 设置状态变化回调
+    _audioService.setStateChangedCallback(() {
+      _updateState();
+    });
     
     return const AudioPlayerState();
   }
 
-  // 更新状态
-  void _updateState() {
-    state = AudioPlayerState(
-      currentSongId: _audioPlayerService.currentSongId,
-      currentSongTitle: _audioPlayerService.currentSongTitle,
-      isPlaying: _audioPlayerService.isPlaying,
-      isLoading: _audioPlayerService.isLoading,
-      position: _audioPlayerService.position,
-      duration: _audioPlayerService.duration,
-      error: _audioPlayerService.error,
-    );
+  void _startStateUpdateTimer() {
+    if (_isTimerActive) return;
+    
+    _isTimerActive = true;
+    _stateUpdateTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      if (!_isTimerActive) {
+        timer.cancel();
+        return;
+      }
+      _updateState();
+    });
+  }
+
+  void _stopStateUpdateTimer() {
+    _isTimerActive = false;
+    _stateUpdateTimer?.cancel();
+    _stateUpdateTimer = null;
   }
 
   Future<void> playSong(String songId, String songTitle) async {
-    final result = await _playSongUseCase.execute(songId, songTitle);
+    final result = await _audioService.playSong(songId, songTitle);
     if (result.isFailure) {
       // 处理错误状态
       print('播放歌曲失败: ${result.error}');
+    } else {
+      // 播放成功后启动定时器
+      _startStateUpdateTimer();
     }
+    // 立即更新一次状态
     _updateState();
   }
 
   Future<void> pause() async {
-    await _audioPlayerService.pause();
+    await _audioService.pause();
     _updateState();
   }
 
   Future<void> resume() async {
-    await _audioPlayerService.resume();
+    await _audioService.resume();
+    // 恢复播放时重新启动定时器
+    _startStateUpdateTimer();
     _updateState();
   }
 
   Future<void> stop() async {
-    await _audioPlayerService.stop();
+    await _audioService.stop();
+    // 停止播放时停止定时器
+    _stopStateUpdateTimer();
     _updateState();
   }
 
   Future<void> seekTo(Duration position) async {
-    await _audioPlayerService.seekTo(position);
+    await _audioService.seekTo(position);
+  }
+
+  // 更新状态 - 从 AudioService 获取当前状态
+  void _updateState() {
+    final currentState = _audioService.getCurrentState();
+    final newState = AudioPlayerState(
+      currentSongId: currentState['currentSongId'],
+      currentSongTitle: currentState['currentSongTitle'],
+      isPlaying: currentState['isPlaying'] ?? false,
+      isLoading: currentState['isLoading'] ?? false,
+      position: currentState['position'] ?? Duration.zero,
+      duration: currentState['duration'] ?? Duration.zero,
+      error: currentState['error'],
+    );
+    
+    // 如果播放完成且没有在加载，停止定时器
+    if (!newState.isPlaying && !newState.isLoading && newState.currentSongId != null) {
+      _stopStateUpdateTimer();
+    }
+    
+    state = newState;
+  }
+
+  // 清理资源
+  void dispose() {
+    _stopStateUpdateTimer();
   }
 }

@@ -11,6 +11,11 @@ import '../../quickconnect/domain/usecases/login_usecase.dart';
 import '../../quickconnect/domain/usecases/get_song_list_usecase.dart';
 import '../../quickconnect/presentation/services/quickconnect_service.dart';
 import '../../components/audio/services/audio_player_service.dart';
+import '../../components/audio/services/audio_service.dart';
+import '../../components/audio/domain/repositories/audio_repository.dart';
+import '../../components/audio/data/repositories/audio_repository_impl.dart';
+import '../../components/audio/data/datasources/audio_datasource.dart';
+import '../../components/audio/domain/usecases/play_song_usecase.dart';
 
 /// 网络层依赖
 final dioProvider = Provider<Dio>((ref) {
@@ -68,4 +73,30 @@ final quickConnectServiceProvider = Provider<QuickConnectService>((ref) {
 /// 音频播放服务依赖 - 确保单例
 final audioPlayerServiceProvider = Provider<AudioPlayerService>((ref) {
   return AudioPlayerService();
+});
+
+/// 音频数据源依赖
+final audioDatasourceProvider = Provider<AudioDatasource>((ref) {
+  final connectionManager = ref.watch(connectionManagerProvider);
+  return AudioDatasource(connectionManager);
+});
+
+/// 音频仓库依赖
+final audioRepositoryProvider = Provider<AudioRepository>((ref) {
+  final audioDatasource = ref.watch(audioDatasourceProvider);
+  return AudioRepositoryImpl(audioDatasource);
+});
+
+/// 音频播放用例依赖
+final playSongUseCaseProvider = Provider<PlaySongUseCase>((ref) {
+  final audioRepository = ref.watch(audioRepositoryProvider);
+  final audioDatasource = ref.watch(audioDatasourceProvider);
+  return PlaySongUseCase(audioRepository, audioDatasource);
+});
+
+/// 音频服务依赖
+final audioServiceProvider = Provider<AudioService>((ref) {
+  final playSongUseCase = ref.watch(playSongUseCaseProvider);
+  final audioPlayerService = ref.watch(audioPlayerServiceProvider);
+  return AudioService(playSongUseCase, audioPlayerService);
 });
