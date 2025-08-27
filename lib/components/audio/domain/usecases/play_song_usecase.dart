@@ -1,7 +1,7 @@
 import '../../../../base/error/result.dart';
 import '../../../../base/error/exceptions.dart';
 import '../repositories/audio_repository.dart';
-import '../../entities/audio_stream_info.dart';
+import '../../entities/audio_stream/audio_stream_info.dart';
 
 class PlaySongUseCase {
   final AudioRepository _audioRepository;

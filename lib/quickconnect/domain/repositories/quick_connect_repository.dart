@@ -1,4 +1,4 @@
-import 'package:synoplayer/quickconnect/entities/song_list_all/song_list_all_response.dart';
+import 'package:synoplayer/components/audio/entities/song_list_all/song_list_all_response.dart';
 import '../../../base/error/result.dart';
 
 import '../../entities/auth_login/auth_login_response.dart';
@@ -19,10 +19,5 @@ abstract class QuickConnectRepository {
     required String account,
     required String passwd,
     String? otp_code,
-  });
-
-  Future<Result<SongListAllResponse>> getAudioStationSongListAll({
-    required int offset,
-    required int limit
   });
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../quickconnect/entities/song_list_all/song_list_all_response.dart';
+import '../../entities/song_list_all/song_list_all_response.dart';
 import 'loading_state.dart';
 import 'error_state.dart';
 import 'audio_list_content.dart';

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:synoplayer/quickconnect/entities/song_list_all/song_list_all_response.dart';
+import 'package:synoplayer/components/audio/entities/song_list_all/song_list_all_response.dart';
 import '../../domain/repositories/quick_connect_repository.dart';
 import '../../entities/auth_login/auth_login_request.dart';
 import '../../entities/auth_login/auth_login_response.dart';
@@ -11,14 +11,12 @@ import '../datasources/quick_connect_api_info.dart';
 import '../../../base/network/api_factory.dart';
 import '../../../base/error/exceptions.dart';
 import '../../../base/error/result.dart';
-import '../../../base/auth/storage/auth_storage_service.dart';
 
 class QuickConnectRepositoryImpl implements QuickConnectRepository {
   final ApiFactory _apiFactory;
-  final AuthStorageService _authStorage;
   late QuickConnectApi _api;
 
-  QuickConnectRepositoryImpl(this._apiFactory, this._authStorage);
+  QuickConnectRepositoryImpl(this._apiFactory);
 
   @override
   Future<Result<GetServerInfoResponse>> getServerInfo({
@@ -109,34 +107,6 @@ class QuickConnectRepositoryImpl implements QuickConnectRepository {
       return Failure(NetworkException.fromDio(e));
     } catch (e) {
       return Failure(AuthException('登录失败: $e'));
-    }
-  }
-
-  @override
-  Future<Result<SongListAllResponse>> getAudioStationSongListAll({
-    required int offset,
-    required int limit
-  }) async {
-    try {
-      final apiInfo = QuickConnectApiInfo();
-      final sessionId = await _authStorage.getSessionId();
-      if (sessionId == null || sessionId.isEmpty) {
-        return Failure(AuthException('未登录或会话已过期'));
-      }
-      final response = await _api.getAudioStationSongListAll(
-          api: apiInfo.song,
-          method: 'list',
-          library: 'all',
-          offset: offset,
-          limit: limit,
-          sid: sessionId,
-          version: apiInfo.songVersion
-      );
-      return Success(response);
-    } on DioException catch (e) {
-      return Failure(NetworkException.fromDio(e));
-    } catch (e) {
-      return Failure(ServerException('获取歌曲列表失败: $e'));
     }
   }
 }

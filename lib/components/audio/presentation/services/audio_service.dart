@@ -1,14 +1,17 @@
+import '../../domain/usecases/get_song_list_usecase.dart';
 import '../../domain/usecases/play_song_usecase.dart';
 import '../../../../../base/error/result.dart';
-import '../../entities/audio_player_info.dart';
+import '../../entities/audio_player/audio_player_info.dart';
+import '../../entities/song_list_all/song_list_all_response.dart';
 import 'audio_player_service.dart';
 
 class AudioService {
+  final GetSongListUseCase _getSongListUseCase;
   final PlaySongUseCase _playSongUseCase;
   final AudioPlayerService _audioPlayerService;
   AudioPlayerStateCallback? _onStateChanged;
 
-  AudioService(this._playSongUseCase, this._audioPlayerService) {
+  AudioService(this._getSongListUseCase, this._playSongUseCase, this._audioPlayerService) {
     // 设置状态变化回调
     _audioPlayerService.setStateChangedCallback((state) {
       _onStateChanged?.call(state);
@@ -18,6 +21,17 @@ class AudioService {
   /// 设置状态变化回调
   void setStateChangedCallback(AudioPlayerStateCallback callback) {
     _onStateChanged = callback;
+  }
+
+  /// 获取歌曲列表
+  Future<Result<SongListAllResponse>> getSongList({
+    int offset = 0,
+    int limit = 20,
+  }) async {
+    return await _getSongListUseCase(
+      offset: offset,
+      limit: limit,
+    );
   }
 
   /// 播放歌曲

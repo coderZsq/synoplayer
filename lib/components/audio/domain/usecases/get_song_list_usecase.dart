@@ -1,12 +1,12 @@
+import 'package:synoplayer/components/audio/domain/repositories/audio_repository.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
-import '../repositories/quick_connect_repository.dart';
-import '../services/connection_manager.dart';
-import '../../../base/error/exceptions.dart';
-import '../../../base/error/result.dart';
-import '../../../base/auth/storage/auth_storage_service.dart';
+import '../../../../quickconnect/domain/services/connection_manager.dart';
+import '../../../../base/error/exceptions.dart';
+import '../../../../base/error/result.dart';
+import '../../../../base/auth/storage/auth_storage_service.dart';
 
 class GetSongListUseCase {
-  final QuickConnectRepository repository;
+  final AudioRepository repository;
   final AuthStorageService authStorage;
   final ConnectionManager connectionManager;
 

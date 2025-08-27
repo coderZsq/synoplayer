@@ -6,7 +6,7 @@ import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
 import '../../entities/query_api_info/query_api_info_response.dart';
-import '../../entities/song_list_all/song_list_all_response.dart';
+import '../../../components/audio/entities/song_list_all/song_list_all_response.dart';
 
 part 'quick_connect_api.g.dart';
 
@@ -38,16 +38,5 @@ abstract class QuickConnectApi {
     @Query('otp_code') String? otp_code,
     @Query('version') required String version,
     @Body() required AuthLoginRequest request
-  });
-
-  @GET('/webapi/AudioStation/song.cgi')
-  Future<SongListAllResponse> getAudioStationSongListAll({
-    @Query('api') required String api,
-    @Query('method') required String method,
-    @Query('library') required String library,
-    @Query('offset') required int offset,
-    @Query('limit') required int limit,
-    @Query('_sid') required String sid,
-    @Query('version') required String version,
   });
 }

@@ -1,7 +1,7 @@
 // 歌曲列表状态管理
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../entities/song_list_all/song_list_all_response.dart';
 import '../../../../base/di/providers.dart';
-import '../../../../quickconnect/entities/song_list_all/song_list_all_response.dart';
 
 part 'audio_list_provider.g.dart';
 
@@ -18,10 +18,9 @@ class SongListNotifier extends _$SongListNotifier {
     if (isRefresh) {
       state = const AsyncValue.loading();
     }
-    
     try {
-      final quickConnectService = ref.read(quickConnectServiceProvider);
-      final result = await quickConnectService.getSongList(offset: 0, limit: _pageSize);
+      final audioService = ref.read(audioServiceProvider);
+      final result = await audioService.getSongList(offset: 0, limit: _pageSize);
       if (result.isSuccess) {
         state = AsyncValue.data(result.value.data);
       } else {
@@ -43,12 +42,11 @@ class SongListNotifier extends _$SongListNotifier {
     if (currentSongs.length >= total) return;
     
     try {
-      final quickConnectService = ref.read(quickConnectServiceProvider);
-      final result = await quickConnectService.getSongList(
+      final audioService = ref.read(audioServiceProvider);
+      final result = await audioService.getSongList(
         offset: currentSongs.length,
         limit: _pageSize,
       );
-      
       if (result.isSuccess && result.value.data != null) {
         final newSongs = result.value.data!.songs ?? [];
         final updatedSongs = [...currentSongs, ...newSongs];

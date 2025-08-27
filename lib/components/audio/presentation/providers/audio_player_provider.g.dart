@@ -7,7 +7,7 @@ part of 'audio_player_provider.dart';
 // **************************************************************************
 
 String _$audioPlayerNotifierHash() =>
-    r'9500d112aeefb13f0f22447da2cf468e2965258e';
+    r'c898124714062a4b7d6c9d63d23d301ce1d446cd';
 
 /// See also [AudioPlayerNotifier].
 @ProviderFor(AudioPlayerNotifier)
