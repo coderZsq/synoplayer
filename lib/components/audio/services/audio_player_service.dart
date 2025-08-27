@@ -1,11 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
-import '../../../base/network/interceptors/cookie_interceptor.dart';
-import '../../../quickconnect/data/datasources/quick_connect_api_info.dart';
-import '../../../quickconnect/domain/services/connection_manager.dart';
 
 class AudioPlayerService {
-  final ConnectionManager _connectionManager;
   final AudioPlayer _audioPlayer = AudioPlayer();
   
   String? _currentSongId;
@@ -19,7 +15,7 @@ class AudioPlayerService {
   // 状态变化回调
   VoidCallback? _onStateChanged;
 
-  AudioPlayerService(this._connectionManager) {
+  AudioPlayerService() {
     _initAudioPlayer();
   }
 
@@ -101,7 +97,8 @@ class AudioPlayerService {
     });
   }
 
-  Future<void> playSong(String songId, String songTitle) async {
+  // 新的播放方法，接收预构建的URL和认证头
+  Future<void> playSongWithUrl(String songId, String songTitle, String audioUrl, {String? authHeaders}) async {
     try {
       print('AudioPlayerService - 开始播放歌曲: $songTitle (ID: $songId)');
       _isLoading = true;
@@ -110,52 +107,29 @@ class AudioPlayerService {
       _currentSongTitle = songTitle;
       print('AudioPlayerService - 设置状态: currentSongTitle=$_currentSongTitle, isLoading=$_isLoading');
       _notifyStateChanged();
-      // notifyListeners(); // Removed ChangeNotifier dependency
 
       // 停止当前播放
       await _audioPlayer.stop();
       
-      // 检查连接状态和baseUrl
-      if (!_connectionManager.connected) {
-        _error = '未连接到服务器，请先登录';
-        _isLoading = false;
-        print('AudioPlayerService - 连接错误: $_error');
-        _notifyStateChanged();
-        return;
-      }
-      
-      final baseUrl = _connectionManager.baseUrl;
-      if (baseUrl == null || baseUrl.isEmpty) {
-        _error = '无法获取服务器地址';
-        _isLoading = false;
-        print('AudioPlayerService - baseUrl 错误: $_error');
-        _notifyStateChanged();
-        return;
-      }
-      
-      final apiInfo = QuickConnectApiInfo();
-      // 构建完整的音频流URL，使用ConnectionManager中的baseUrl
-      final audioUrl = '$baseUrl/webapi/AudioStation/stream.cgi?api=${apiInfo.stream}&method=stream&id=$songId&seek_position=0&version=${apiInfo.streamVersion}';
-      
       print('AudioPlayerService - 音频URL: $audioUrl');
       
-      if (audioUrl.isNotEmpty) {
-        // 设置音频源并播放
-        await _audioPlayer.setUrl(audioUrl, headers: {
-            'Cookie': 'id=${CookieInterceptor.getSessionId()}'
-        });
-        await _audioPlayer.play();
-        
-        print('AudioPlayerService - 音频播放已启动');
-        // 播放成功后，状态会通过 _initAudioPlayer 中的监听器自动更新
+      // 设置音频源并播放
+      final headers = <String, String>{};
+      if (authHeaders != null && authHeaders.isNotEmpty) {
+        headers['Cookie'] = authHeaders;
       }
+      
+      await _audioPlayer.setUrl(audioUrl, headers: headers);
+      await _audioPlayer.play();
+      
+      print('AudioPlayerService - 音频播放已启动');
+      // 播放成功后，状态会通过 _initAudioPlayer 中的监听器自动更新
     } catch (e) {
       _error = '播放出错: $e';
       _isLoading = false;
       print('AudioPlayerService - 播放异常: $_error');
       _notifyStateChanged();
     }
-    // 移除 finally 块，让状态通过监听器自动管理
   }
 
   Future<void> pause() async {

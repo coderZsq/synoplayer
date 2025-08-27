@@ -67,6 +67,5 @@ final quickConnectServiceProvider = Provider<QuickConnectService>((ref) {
 
 /// 音频播放服务依赖 - 确保单例
 final audioPlayerServiceProvider = Provider<AudioPlayerService>((ref) {
-  final connectionManager = ref.read(connectionManagerProvider);
-  return AudioPlayerService(connectionManager);
+  return AudioPlayerService();
 });

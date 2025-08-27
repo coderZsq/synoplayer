@@ -1,6 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../base/di/providers.dart';
 import '../services/audio_player_service.dart';
+import '../domain/usecases/play_song_usecase.dart';
+import '../data/repositories/audio_repository_impl.dart';
+import '../data/datasources/audio_datasource.dart';
 
 part 'audio_player_provider.g.dart';
 
@@ -48,11 +51,18 @@ class AudioPlayerState {
 @riverpod
 class AudioPlayerNotifier extends _$AudioPlayerNotifier {
   late final AudioPlayerService _audioPlayerService;
+  late final PlaySongUseCase _playSongUseCase;
   bool _callbackSet = false;
   
   @override
   AudioPlayerState build() {
     _audioPlayerService = ref.read(audioPlayerServiceProvider);
+    
+    // 创建依赖
+    final connectionManager = ref.read(connectionManagerProvider);
+    final audioDatasource = AudioDatasource(connectionManager);
+    final audioRepository = AudioRepositoryImpl(audioDatasource);
+    _playSongUseCase = PlaySongUseCase(audioRepository, _audioPlayerService, audioDatasource);
     
     // 只在第一次设置状态变化回调，避免重复设置
     if (!_callbackSet) {
@@ -79,7 +89,11 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
   }
 
   Future<void> playSong(String songId, String songTitle) async {
-    await _audioPlayerService.playSong(songId, songTitle);
+    final result = await _playSongUseCase.execute(songId, songTitle);
+    if (result.isFailure) {
+      // 处理错误状态
+      print('播放歌曲失败: ${result.error}');
+    }
     _updateState();
   }
 
@@ -100,6 +114,5 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
 
   Future<void> seekTo(Duration position) async {
     await _audioPlayerService.seekTo(position);
-    _updateState();
   }
 }
