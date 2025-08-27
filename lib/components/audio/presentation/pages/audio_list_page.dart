@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../base/auth/auth_state_notifier.dart';
+import '../../../../../base/auth/auth_state_notifier.dart';
 import '../providers/audio_list_provider.dart';
 import '../providers/audio_player_provider.dart';
 import '../widgets/audio_list_state.dart';
@@ -99,7 +99,7 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
         child: Column(
           children: [
             Expanded(
-              child: AudioListState(
+              child: AudioList(
                 songListState: songListState,
                 scrollController: _scrollController,
                 onRetry: _onRetry,

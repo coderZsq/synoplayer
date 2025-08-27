@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../base/di/providers.dart';
+import '../../../../base/di/providers.dart';
 import '../services/audio_service.dart';
-import '../entities/audio_player_info.dart';
+import '../../entities/audio_player_info.dart';
 
 part 'audio_player_provider.g.dart';
 

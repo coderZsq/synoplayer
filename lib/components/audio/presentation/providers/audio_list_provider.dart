@@ -1,7 +1,7 @@
 // 歌曲列表状态管理
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../base/di/providers.dart';
-import '../../../quickconnect/entities/song_list_all/song_list_all_response.dart';
+import '../../../../base/di/providers.dart';
+import '../../../../quickconnect/entities/song_list_all/song_list_all_response.dart';
 
 part 'audio_list_provider.g.dart';
 

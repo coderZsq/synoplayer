@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:just_audio/just_audio.dart';
-import '../entities/audio_player_info.dart';
+
+import '../../entities/audio_player_info.dart';
 
 /// 音频播放器状态变化回调
 typedef AudioPlayerStateCallback = void Function(AudioPlayerInfo state);

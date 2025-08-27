@@ -1,7 +1,7 @@
-import '../domain/usecases/play_song_usecase.dart';
-import '../../../../base/error/result.dart';
+import '../../domain/usecases/play_song_usecase.dart';
+import '../../../../../base/error/result.dart';
+import '../../entities/audio_player_info.dart';
 import 'audio_player_service.dart';
-import '../entities/audio_player_info.dart';
 
 class AudioService {
   final PlaySongUseCase _playSongUseCase;

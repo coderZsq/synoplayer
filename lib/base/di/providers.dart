@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
+import '../../components/audio/presentation/services/audio_player_service.dart';
 import '../auth/storage/storage_service.dart';
 import '../auth/storage/auth_storage_service.dart';
 import '../network/network_config.dart';
@@ -10,8 +11,7 @@ import '../../quickconnect/domain/services/connection_manager.dart';
 import '../../quickconnect/domain/usecases/login_usecase.dart';
 import '../../quickconnect/domain/usecases/get_song_list_usecase.dart';
 import '../../quickconnect/presentation/services/quickconnect_service.dart';
-import '../../components/audio/services/audio_player_service.dart';
-import '../../components/audio/services/audio_service.dart';
+import '../../components/audio/presentation/services/audio_service.dart';
 import '../../components/audio/domain/repositories/audio_repository.dart';
 import '../../components/audio/data/repositories/audio_repository_impl.dart';
 import '../../components/audio/data/datasources/audio_datasource.dart';
