@@ -2,49 +2,9 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../base/di/providers.dart';
 import '../services/audio_service.dart';
+import '../entities/audio_player_info.dart';
 
 part 'audio_player_provider.g.dart';
-
-// 音频播放状态数据类
-class AudioPlayerState {
-  final String? currentSongId;
-  final String? currentSongTitle;
-  final bool isPlaying;
-  final bool isLoading;
-  final Duration position;
-  final Duration duration;
-  final String? error;
-
-  const AudioPlayerState({
-    this.currentSongId,
-    this.currentSongTitle,
-    this.isPlaying = false,
-    this.isLoading = false,
-    this.position = Duration.zero,
-    this.duration = Duration.zero,
-    this.error,
-  });
-
-  AudioPlayerState copyWith({
-    String? currentSongId,
-    String? currentSongTitle,
-    bool? isPlaying,
-    bool? isLoading,
-    Duration? position,
-    Duration? duration,
-    String? error,
-  }) {
-    return AudioPlayerState(
-      currentSongId: currentSongId ?? this.currentSongId,
-      currentSongTitle: currentSongTitle ?? this.currentSongTitle,
-      isPlaying: isPlaying ?? this.isPlaying,
-      isLoading: isLoading ?? this.isLoading,
-      position: position ?? this.position,
-      duration: duration ?? this.duration,
-      error: error ?? this.error,
-    );
-  }
-}
 
 @riverpod
 class AudioPlayerNotifier extends _$AudioPlayerNotifier {
@@ -53,7 +13,7 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
   bool _isTimerActive = false;
   
   @override
-  AudioPlayerState build() {
+  FutureOr<AudioPlayerInfo> build() async {
     _audioService = ref.read(audioServiceProvider);
     
     // 设置状态变化回调
@@ -61,7 +21,8 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
       _updateState();
     });
     
-    return const AudioPlayerState();
+    // 返回初始状态
+    return _audioService.getCurrentState();
   }
 
   void _startStateUpdateTimer() {
@@ -88,12 +49,13 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
     if (result.isFailure) {
       // 处理错误状态
       print('播放歌曲失败: ${result.error}');
+      state = AsyncValue.error(result.error, StackTrace.current);
     } else {
       // 播放成功后启动定时器
       _startStateUpdateTimer();
+      // 立即更新一次状态
+      _updateState();
     }
-    // 立即更新一次状态
-    _updateState();
   }
 
   Future<void> pause() async {
@@ -122,22 +84,13 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
   // 更新状态 - 从 AudioService 获取当前状态
   void _updateState() {
     final currentState = _audioService.getCurrentState();
-    final newState = AudioPlayerState(
-      currentSongId: currentState['currentSongId'],
-      currentSongTitle: currentState['currentSongTitle'],
-      isPlaying: currentState['isPlaying'] ?? false,
-      isLoading: currentState['isLoading'] ?? false,
-      position: currentState['position'] ?? Duration.zero,
-      duration: currentState['duration'] ?? Duration.zero,
-      error: currentState['error'],
-    );
     
     // 如果播放完成且没有在加载，停止定时器
-    if (!newState.isPlaying && !newState.isLoading && newState.currentSongId != null) {
+    if (!currentState.isPlaying && !currentState.isLoading && currentState.currentSongId != null) {
       _stopStateUpdateTimer();
     }
     
-    state = newState;
+    state = AsyncValue.data(currentState);
   }
 
   // 清理资源

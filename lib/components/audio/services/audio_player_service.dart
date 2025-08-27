@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import '../entities/audio_player_info.dart';
 
 class AudioPlayerService {
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -42,15 +43,15 @@ class AudioPlayerService {
   AudioPlayer get audioPlayer => _audioPlayer;
 
   // 获取当前状态的快照
-  Map<String, dynamic> get currentState => {
-    'currentSongId': _currentSongId,
-    'currentSongTitle': _currentSongTitle,
-    'isPlaying': _isPlaying,
-    'isLoading': _isLoading,
-    'position': _position,
-    'duration': _duration,
-    'error': _error,
-  };
+  AudioPlayerInfo get currentState => AudioPlayerInfo(
+    currentSongId: _currentSongId,
+    currentSongTitle: _currentSongTitle,
+    isPlaying: _isPlaying,
+    isLoading: _isLoading,
+    position: _position,
+    duration: _duration,
+    error: _error,
+  );
 
   void _initAudioPlayer() {
     _audioPlayer.playerStateStream.listen((state) {

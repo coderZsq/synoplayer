@@ -8,159 +8,160 @@ class AudioPlayerControls extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print('AudioPlayerControls - build() 被调用');
-    final audioPlayerState = ref.watch(audioPlayerNotifierProvider);
-    final isPlaying = audioPlayerState.isPlaying;
-    final isLoading = audioPlayerState.isLoading;
-    final currentSongTitle = audioPlayerState.currentSongTitle;
-    final position = audioPlayerState.position;
-    final duration = audioPlayerState.duration;
-    final error = audioPlayerState.error;
+    final audioPlayerStateAsync = ref.watch(audioPlayerNotifierProvider);
+    
+    return audioPlayerStateAsync.when(
+      data: (audioPlayerState) {
+        final isPlaying = audioPlayerState.isPlaying;
+        final isLoading = audioPlayerState.isLoading;
+        final currentSongTitle = audioPlayerState.currentSongTitle;
+        final position = audioPlayerState.position;
+        final duration = audioPlayerState.duration;
+        final error = audioPlayerState.error;
 
-    // 调试信息
-    print('AudioPlayerControls - currentSongTitle: $currentSongTitle');
-    print('AudioPlayerControls - isPlaying: $isPlaying');
-    print('AudioPlayerControls - isLoading: $isLoading');
-    print('AudioPlayerControls - error: $error');
-    print('AudioPlayerControls - Provider 实例: $audioPlayerState');
+        // 调试信息
+        print('AudioPlayerControls - currentSongTitle: $currentSongTitle');
+        print('AudioPlayerControls - isPlaying: $isPlaying');
+        print('AudioPlayerControls - isLoading: $isLoading');
+        print('AudioPlayerControls - error: $error');
+        print('AudioPlayerControls - Provider 实例: $audioPlayerState');
 
-    // 临时强制显示控件，用于调试
-    // if (currentSongTitle == null || currentSongTitle.isEmpty) {
-    //   print('AudioPlayerControls - 隐藏控件，因为 currentSongTitle 为空');
-    //   return const SizedBox.shrink();
-    // }
+        // 强制显示控件，显示当前状态
+        final displayTitle = currentSongTitle ?? '未选择歌曲';
+        final displayStatus = isPlaying ? '播放中' : (isLoading ? '加载中' : '已停止');
 
-    // 强制显示控件，显示当前状态
-    final displayTitle = currentSongTitle ?? '未选择歌曲';
-    final displayStatus = isPlaying ? '播放中' : (isLoading ? '加载中' : '已停止');
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: CupertinoColors.systemBackground,
-        border: Border(
-          top: BorderSide(
-            color: CupertinoColors.systemGrey4,
-            width: 1,
-          ),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // 歌曲信息
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      displayTitle,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      displayStatus,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                    ),
-                    if (error != null)
-                      Text(
-                        error,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                  ],
-                ),
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: CupertinoColors.systemBackground,
+            border: Border(
+              top: BorderSide(
+                color: CupertinoColors.systemGrey4,
+                width: 1,
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          
-          // 进度条
-          if (duration.inSeconds > 0)
-            Column(
-              children: [
-                CupertinoSlider(
-                  value: position.inSeconds.toDouble(),
-                  max: duration.inSeconds.toDouble(),
-                  onChanged: (value) {
-                    ref.read(audioPlayerNotifierProvider.notifier).seekTo(
-                      Duration(seconds: value.toInt()),
-                    );
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _formatDuration(position),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                    ),
-                    Text(
-                      _formatDuration(duration),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ),
-          
-          const SizedBox(height: 12),
-          
-          // 控制按钮
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              CupertinoButton(
-                padding: const EdgeInsets.all(12),
-                onPressed: isLoading ? null : () {
-                  ref.read(audioPlayerNotifierProvider.notifier).stop();
-                },
-                child: const Icon(
-                  CupertinoIcons.stop_fill,
-                  size: 24,
-                  color: CupertinoColors.systemRed,
-                ),
+              // 歌曲信息
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          displayTitle,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          displayStatus,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: CupertinoColors.systemGrey,
+                          ),
+                        ),
+                        if (error != null)
+                          Text(
+                            error,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: CupertinoColors.systemRed,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 16),
-              CupertinoButton(
-                padding: const EdgeInsets.all(16),
-                onPressed: isLoading ? null : () {
-                  if (isPlaying) {
-                    ref.read(audioPlayerNotifierProvider.notifier).pause();
-                  } else {
-                    ref.read(audioPlayerNotifierProvider.notifier).resume();
-                  }
-                },
-                child: Icon(
-                  isLoading
-                      ? CupertinoIcons.clock
-                      : isPlaying
-                          ? CupertinoIcons.pause_fill
-                          : CupertinoIcons.play_fill,
-                  size: 32,
-                  color: CupertinoColors.systemBlue,
+              const SizedBox(height: 12),
+              
+              // 进度条
+              if (duration.inSeconds > 0)
+                Column(
+                  children: [
+                    CupertinoSlider(
+                      value: position.inSeconds.toDouble(),
+                      max: duration.inSeconds.toDouble(),
+                      onChanged: (value) {
+                        ref.read(audioPlayerNotifierProvider.notifier).seekTo(
+                          Duration(seconds: value.toInt()),
+                        );
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatDuration(position),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: CupertinoColors.systemGrey,
+                          ),
+                        ),
+                        Text(
+                          _formatDuration(duration),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: CupertinoColors.systemGrey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+              
+              const SizedBox(height: 12),
+              
+              // 控制按钮
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(12),
+                    onPressed: isLoading ? null : () {
+                      ref.read(audioPlayerNotifierProvider.notifier).stop();
+                    },
+                    child: const Icon(
+                      CupertinoIcons.stop_fill,
+                      size: 24,
+                      color: CupertinoColors.systemRed,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(16),
+                    onPressed: isLoading ? null : () {
+                      if (isPlaying) {
+                        ref.read(audioPlayerNotifierProvider.notifier).pause();
+                      } else {
+                        ref.read(audioPlayerNotifierProvider.notifier).resume();
+                      }
+                    },
+                    child: Icon(
+                      isLoading
+                          ? CupertinoIcons.clock
+                          : isPlaying
+                              ? CupertinoIcons.pause_fill
+                              : CupertinoIcons.play_fill,
+                      size: 32,
+                      color: CupertinoColors.systemBlue,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
+      loading: () => const CupertinoActivityIndicator(),
+      error: (error, stack) => Text('Error: $error'),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../domain/usecases/play_song_usecase.dart';
 import '../../../../base/error/result.dart';
 import 'audio_player_service.dart';
+import '../entities/audio_player_info.dart';
 
 class AudioService {
   final PlaySongUseCase _playSongUseCase;
@@ -22,15 +23,15 @@ class AudioService {
 
   /// 播放歌曲
   Future<Result<void>> playSong(String songId, String songTitle) async {
-    final result = await _playSongUseCase.execute(songId, songTitle);
+    final result = await _playSongUseCase(songId);
     
     if (result.isSuccess) {
-      final data = result.value;
+      final audioInfo = result.value;
       await _audioPlayerService.playSongWithUrl(
-        data['songId'],
-        data['songTitle'],
-        data['audioUrl'],
-        authHeaders: data['authHeaders'],
+        songId,
+        songTitle,
+        audioInfo.url,
+        authHeaders: audioInfo.authHeader,
       );
       return const Success(null);
     } else {
@@ -59,7 +60,7 @@ class AudioService {
   }
 
   /// 获取当前播放状态
-  Map<String, dynamic> getCurrentState() {
+  AudioPlayerInfo getCurrentState() {
     return _audioPlayerService.currentState;
   }
 }

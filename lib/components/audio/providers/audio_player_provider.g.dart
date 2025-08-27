@@ -7,12 +7,12 @@ part of 'audio_player_provider.dart';
 // **************************************************************************
 
 String _$audioPlayerNotifierHash() =>
-    r'6dbebe78ecf601f90e8a7c7415c0f7c3e8ca2dec';
+    r'9500d112aeefb13f0f22447da2cf468e2965258e';
 
 /// See also [AudioPlayerNotifier].
 @ProviderFor(AudioPlayerNotifier)
-final audioPlayerNotifierProvider =
-    AutoDisposeNotifierProvider<AudioPlayerNotifier, AudioPlayerState>.internal(
+final audioPlayerNotifierProvider = AutoDisposeAsyncNotifierProvider<
+    AudioPlayerNotifier, AudioPlayerInfo>.internal(
   AudioPlayerNotifier.new,
   name: r'audioPlayerNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final audioPlayerNotifierProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$AudioPlayerNotifier = AutoDisposeNotifier<AudioPlayerState>;
+typedef _$AudioPlayerNotifier = AutoDisposeAsyncNotifier<AudioPlayerInfo>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

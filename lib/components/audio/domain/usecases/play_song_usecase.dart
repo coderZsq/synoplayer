@@ -8,7 +8,7 @@ class PlaySongUseCase {
 
   PlaySongUseCase(this._audioRepository);
 
-  Future<Result<Map<String, dynamic>>> execute(String songId, String songTitle) async {
+  Future<Result<AudioStreamInfo>> call(String songId) async {
     try {
       // 获取音频流信息（包含URL和认证头）
       final audioInfoResult = await _audioRepository.getAudioStreamUrl(songId);
@@ -16,15 +16,7 @@ class PlaySongUseCase {
         return Failure(audioInfoResult.error);
       }
 
-      final audioInfo = audioInfoResult.value;
-      
-      // 返回音频信息，由service层处理播放
-      return Success({
-        'songId': songId,
-        'songTitle': songTitle,
-        'audioUrl': audioInfo.url,
-        'authHeaders': audioInfo.authHeader,
-      });
+      return audioInfoResult;
     } catch (e) {
       return Failure(BusinessException('播放歌曲失败: $e'));
     }
