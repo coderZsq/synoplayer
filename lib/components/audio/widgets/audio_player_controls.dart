@@ -7,10 +7,9 @@ class AudioPlayerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('AudioPlayerControls - build() 被调用');
-    final audioPlayerStateAsync = ref.watch(audioPlayerNotifierProvider);
+    final audioPlayerState = ref.watch(audioPlayerNotifierProvider);
     
-    return audioPlayerStateAsync.when(
+    return audioPlayerState.when(
       data: (audioPlayerState) {
         final isPlaying = audioPlayerState.isPlaying;
         final isLoading = audioPlayerState.isLoading;
@@ -18,15 +17,6 @@ class AudioPlayerControls extends ConsumerWidget {
         final position = audioPlayerState.position;
         final duration = audioPlayerState.duration;
         final error = audioPlayerState.error;
-
-        // 调试信息
-        print('AudioPlayerControls - currentSongTitle: $currentSongTitle');
-        print('AudioPlayerControls - isPlaying: $isPlaying');
-        print('AudioPlayerControls - isLoading: $isLoading');
-        print('AudioPlayerControls - error: $error');
-        print('AudioPlayerControls - Provider 实例: $audioPlayerState');
-
-        // 强制显示控件，显示当前状态
         final displayTitle = currentSongTitle ?? '未选择歌曲';
         final displayStatus = isPlaying ? '播放中' : (isLoading ? '加载中' : '已停止');
 

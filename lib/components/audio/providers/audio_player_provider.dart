@@ -17,7 +17,7 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
     _audioService = ref.read(audioServiceProvider);
     
     // 设置状态变化回调
-    _audioService.setStateChangedCallback(() {
+    _audioService.setStateChangedCallback((state) {
       _updateState();
     });
     

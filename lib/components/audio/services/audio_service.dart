@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../domain/usecases/play_song_usecase.dart';
 import '../../../../base/error/result.dart';
 import 'audio_player_service.dart';
@@ -7,17 +6,17 @@ import '../entities/audio_player_info.dart';
 class AudioService {
   final PlaySongUseCase _playSongUseCase;
   final AudioPlayerService _audioPlayerService;
-  VoidCallback? _onStateChanged;
+  AudioPlayerStateCallback? _onStateChanged;
 
   AudioService(this._playSongUseCase, this._audioPlayerService) {
     // 设置状态变化回调
-    _audioPlayerService.setStateChangedCallback(() {
-      _onStateChanged?.call();
+    _audioPlayerService.setStateChangedCallback((state) {
+      _onStateChanged?.call(state);
     });
   }
 
   /// 设置状态变化回调
-  void setStateChangedCallback(VoidCallback callback) {
+  void setStateChangedCallback(AudioPlayerStateCallback callback) {
     _onStateChanged = callback;
   }
 
