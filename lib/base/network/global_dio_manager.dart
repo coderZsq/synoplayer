@@ -26,7 +26,3 @@ class GlobalDioManager {
     }
   }
 }
-
-final globalDioManagerProvider = Provider<GlobalDioManager>((ref) {
-  return GlobalDioManager();
-});
