@@ -1,6 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../components/login/entities/auth_login/auth_login_response.dart';
 import '../di/providers.dart';
+import '../error/result.dart';
+import '../error/exceptions.dart';
 import '../network/interceptors/cookie_interceptor.dart';
 import '../utils/logger.dart';
 
@@ -32,7 +34,7 @@ class AuthState {
 }
 
 /// 全局认证状态管理
-@riverpod
+@Riverpod(keepAlive: true)
 class AuthStateNotifier extends _$AuthStateNotifier {
   @override
   AuthState build() {
@@ -49,14 +51,57 @@ class AuthStateNotifier extends _$AuthStateNotifier {
   }
   
   /// 登出
-  void logout() async {
+  Future<Result<void>> logout() async {
+    Logger.info('开始执行登出操作...', tag: 'AuthStateNotifier');
+    
+    try {
+      // 从内存状态获取会话ID（现在状态不会丢失）
+      final currentSessionId = state.loginData?.sid;
+      
+      if (currentSessionId != null) {
+        // 调用群辉登出API
+        final loginService = ref.read(loginServiceProvider);
+        final logoutResult = await loginService.logout(sessionId: currentSessionId);
+        
+        if (logoutResult.isSuccess) {
+          Logger.info('群辉登出API调用成功，开始清理本地状态', tag: 'AuthStateNotifier');
+          
+          // 远程登出成功后，清理本地状态
+          await _clearLocalState();
+          
+          Logger.info('登出操作完成，远程和本地状态已同步', tag: 'AuthStateNotifier');
+          return const Success(null);
+        } else {
+          Logger.error('群辉登出API调用失败: ${logoutResult.error.message}', tag: 'AuthStateNotifier');
+          // 远程登出失败，不清理本地状态，返回错误
+          return Failure(logoutResult.error);
+        }
+      } else {
+        Logger.info('没有找到会话ID，跳过群辉登出API调用', tag: 'AuthStateNotifier');
+        // 没有会话ID，直接清理本地状态
+        await _clearLocalState();
+        return const Success(null);
+      }
+    } catch (e) {
+      Logger.error('登出过程中发生异常: $e', tag: 'AuthStateNotifier');
+      // 发生异常，不清理本地状态，返回错误
+      return Failure(ServerException('登出过程发生未知错误: ${e.toString()}'));
+    }
+  }
+  
+  /// 清理本地状态
+  Future<void> _clearLocalState() async {
+    // 清理本地认证数据
     final authStorage = ref.read(authStorageServiceProvider);
     await authStorage.clearAuthData();
     
     // 清除cookie拦截器的sessionId
     CookieInterceptor.clearSessionId();
     
+    // 更新状态为未登录
     state = const AuthState(isAuthenticated: false, isInitialized: true);
+    
+    Logger.info('本地状态清理完成', tag: 'AuthStateNotifier');
   }
   
   /// 检查是否已登录

@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../../entities/auth_login/auth_login_request.dart';
 import '../../entities/auth_login/auth_login_response.dart';
+import '../../entities/auth_logout/auth_logout_request.dart';
+import '../../entities/auth_logout/auth_logout_response.dart';
 import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
@@ -106,6 +108,33 @@ class LoginRepositoryImpl implements LoginRepository {
       return Failure(NetworkException.fromDio(e));
     } catch (e) {
       return Failure(AuthException('登录失败: $e'));
+    }
+  }
+
+  @override
+  Future<Result<AuthLogoutResponse>> authLogout({
+    required String sessionId,
+  }) async {
+    try {
+      final apiInfo = QuickConnectApiInfo();
+      final request = AuthLogoutRequest(sid: sessionId);
+      final response = await _dataSourceRemote.authLogout(
+        api: apiInfo.auth,
+        method: 'logout',
+        session: sessionId,
+        format: 'sid',
+        version: apiInfo.authVersion,
+        request: request,
+      );
+      return Success(response);
+    } on DioException catch (e) {
+      // 根据状态码判断是网络还是认证错误
+      if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
+        return Failure(AuthException('会话已过期或无效'));
+      }
+      return Failure(NetworkException.fromDio(e));
+    } catch (e) {
+      return Failure(AuthException('登出失败: $e'));
     }
   }
 }

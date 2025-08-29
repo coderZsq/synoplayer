@@ -61,6 +61,27 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
     ref.read(audioPlayerNotifierProvider.notifier).playSong(songId, songTitle);
   }
 
+  /// 显示登出错误信息
+  void _showLogoutError(String message) {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: const Text('登出失败'),
+          content: Text(message),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('确定'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // 监听歌曲列表状态
@@ -86,9 +107,28 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
             // 登出按钮
             CupertinoButton(
               padding: EdgeInsets.zero,
-              onPressed: () {
-                ref.read(authStateNotifierProvider.notifier).logout();
-                context.go('/login');
+              onPressed: () async {
+                try {
+                  // 等待登出操作完成
+                  final result = await ref.read(authStateNotifierProvider.notifier).logout();
+                  
+                  if (result.isSuccess) {
+                    // 登出成功，跳转到登录页
+                    if (mounted) {
+                      context.go('/login');
+                    }
+                  } else {
+                    // 登出失败，显示错误信息
+                    if (mounted) {
+                      _showLogoutError(result.error.message);
+                    }
+                  }
+                } catch (e) {
+                  // 处理异常情况
+                  if (mounted) {
+                    _showLogoutError('登出过程中发生异常: $e');
+                  }
+                }
               },
               child: const Text('登出'),
             ),

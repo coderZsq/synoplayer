@@ -9,6 +9,7 @@ import '../network/network_config.dart';
 import '../network/global_dio_manager.dart';
 import '../../components/login/data/repositories/login_repository_impl.dart';
 import '../../components/login/domain/usecases/login_usecase.dart';
+import '../../components/login/domain/usecases/logout_usecase.dart';
 import '../../components/audio/domain/usecases/get_audio_list_usecase.dart';
 import '../../components/login/presentation/services/login_service.dart';
 import '../../components/audio/presentation/services/audio_service.dart';
@@ -77,6 +78,12 @@ final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
   return LoginUseCase(repository, connectionManager);
 });
 
+final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
+  final repository = ref.watch(loginRepositoryProvider);
+  final connectionManager = ref.watch(connectionManagerProvider);
+  return LogoutUseCase(repository, connectionManager);
+});
+
 final getSongListUseCaseProvider = Provider<GetAudioListUseCase>((ref) {
   final repository = ref.watch(audioRepositoryProvider);
   final authStorage = ref.watch(authStorageServiceProvider);
@@ -85,9 +92,10 @@ final getSongListUseCaseProvider = Provider<GetAudioListUseCase>((ref) {
 });
 
 /// 服务层依赖
-final quickConnectServiceProvider = Provider<LoginService>((ref) {
+final loginServiceProvider = Provider<LoginService>((ref) {
   final loginUseCase = ref.watch(loginUseCaseProvider);
-  return LoginService(loginUseCase);
+  final logoutUseCase = ref.watch(logoutUseCaseProvider);
+  return LoginService(loginUseCase, logoutUseCase);
 });
 
 /// 音频播放服务依赖 - 确保单例

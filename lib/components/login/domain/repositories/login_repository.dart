@@ -1,5 +1,6 @@
 import '../../../../base/error/result.dart';
 import '../../entities/auth_login/auth_login_response.dart';
+import '../../entities/auth_logout/auth_logout_response.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 
 abstract class LoginRepository {
@@ -17,5 +18,9 @@ abstract class LoginRepository {
     required String account,
     required String passwd,
     String? otp_code,
+  });
+
+  Future<Result<AuthLogoutResponse>> authLogout({
+    required String sessionId,
   });
 }

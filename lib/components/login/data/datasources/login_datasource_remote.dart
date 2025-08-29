@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../entities/auth_login/auth_login_request.dart';
 import '../../entities/auth_login/auth_login_response.dart';
+import '../../entities/auth_logout/auth_logout_request.dart';
+import '../../entities/auth_logout/auth_logout_response.dart';
 import '../../entities/get_server_info/get_server_info_request.dart';
 import '../../entities/get_server_info/get_server_info_response.dart';
 import '../../entities/query_api_info/query_api_info_request.dart';
@@ -37,5 +39,15 @@ abstract class LoginDataSourceRemote {
     @Query('otp_code') String? otp_code,
     @Query('version') required String version,
     @Body() required AuthLoginRequest request
+  });
+
+  @POST('/webapi/auth.cgi')
+  Future<AuthLogoutResponse> authLogout({
+    @Query('api') required String api,
+    @Query('method') required String method,
+    @Query('session') required String session,
+    @Query('format') required String format,
+    @Query('version') required String version,
+    @Body() required AuthLogoutRequest request
   });
 }
