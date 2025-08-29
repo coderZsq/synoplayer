@@ -14,18 +14,12 @@ class ConnectionManager {
   /// 建立与服务器的连接
   Future<Result<void>> establishConnection(String quickConnectId) async {
     final serverInfoResult = await repository.getServerInfo(serverID: quickConnectId);
-    
-    if (serverInfoResult.isFailure) {
-      return serverInfoResult.mapError((_) => serverInfoResult.error);
-    }
-    
     final r1 = serverInfoResult.value;
     final sites = r1.sites;
-    if (sites == null || sites.isEmpty) {
-      return Failure(BusinessException('未找到可用的连接站点'));
+    var site = 'cnc.quickconnect.cn';
+    if (sites != null && sites.isNotEmpty) {
+      site = sites.first;
     }
-    
-    final site = sites.first;
     final siteResult = await repository.getServerInfo(
       serverID: quickConnectId,
       site: site,
