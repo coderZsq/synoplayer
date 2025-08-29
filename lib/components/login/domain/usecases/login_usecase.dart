@@ -1,6 +1,7 @@
 import '../../entities/auth_login/auth_login_response.dart';
 import '../../../../base/error/exceptions.dart';
 import '../../../../base/error/result.dart';
+import '../../../../base/utils/logger.dart';
 import '../repositories/login_repository.dart';
 import '../services/connection_manager.dart';
 
@@ -43,32 +44,32 @@ class LoginUseCase {
     final authResult = await repository.authLogin(account: username, passwd: password, otp_code: otpCode);
     
     if (authResult.isFailure) {
-      print('🔍 LoginUseCase: 认证失败 - ${authResult.error.message}');
+      Logger.info('认证失败 - ${authResult.error.message}', tag: 'LoginUseCase');
       return Failure(authResult.error);
     }
     
     final res = authResult.value;
-    print('🔍 LoginUseCase: 认证响应 - success: ${res.success}, needOtp: ${res.needOtp}, sid: ${res.data?.sid}');
+    Logger.info('认证响应 - success: ${res.success}, needOtp: ${res.needOtp}, sid: ${res.data?.sid}', tag: 'LoginUseCase');
     
     // 检查是否需要二次验证
     if (res.needOtp) {
-      print('🔍 LoginUseCase: 需要二次验证');
+      Logger.info('需要二次验证', tag: 'LoginUseCase');
       return Failure(BusinessException('请输入二次验证码'));
     }
     
     // 检查登录是否成功
     if (!res.isLoginSuccess) {
-      print('🔍 LoginUseCase: 登录失败 - isLoginSuccess: ${res.isLoginSuccess}');
+      Logger.info('登录失败 - isLoginSuccess: ${res.isLoginSuccess}', tag: 'LoginUseCase');
       return Failure(BusinessException('登录失败，请检查用户名和密码'));
     }
     
     // 检查数据是否为空
     if (res.data == null) {
-      print('🔍 LoginUseCase: 登录数据为空');
+      Logger.info('登录数据为空', tag: 'LoginUseCase');
       return Failure(BusinessException('登录失败，请稍后重试'));
     }
     
-    print('🔍 LoginUseCase: 登录成功 - sid: ${res.data!.sid}');
+    Logger.info('登录成功 - sid: ${res.data!.sid}', tag: 'LoginUseCase');
     return Success(res.data!);
   }
 }

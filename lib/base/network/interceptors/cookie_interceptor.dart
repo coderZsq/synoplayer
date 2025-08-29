@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../../utils/logger.dart';
 
 class CookieInterceptor extends Interceptor {
   static String? _sessionId;
@@ -12,13 +13,13 @@ class CookieInterceptor extends Interceptor {
   /// 设置sessionId，在登录成功后调用
   static void setSessionId(String sessionId) {
     _sessionId = sessionId;
-    print('🔍 CookieInterceptor: 设置sessionId: $sessionId');
+    Logger.network('设置sessionId: $sessionId', tag: 'CookieInterceptor');
   }
 
   /// 清除sessionId，在登出时调用
   static void clearSessionId() {
     _sessionId = null;
-    print('🔍 CookieInterceptor: 清除sessionId');
+    Logger.network('清除sessionId', tag: 'CookieInterceptor');
   }
 
   @override
@@ -34,7 +35,7 @@ class CookieInterceptor extends Interceptor {
     if (_sessionId != null && _sessionId!.isNotEmpty) {
       // 设置cookie: id=sid
       options.headers['Cookie'] = 'id=$_sessionId';
-      print('🔍 CookieInterceptor: 设置Cookie: id=$_sessionId');
+      Logger.network('设置Cookie: id=$_sessionId', tag: 'CookieInterceptor');
     }
   }
 
@@ -44,7 +45,7 @@ class CookieInterceptor extends Interceptor {
     final setCookie = response.headers.map['set-cookie'];
     if (setCookie != null && setCookie.isNotEmpty) {
       // 可以在这里处理服务器返回的cookie
-      print('🔍 CookieInterceptor: 收到Set-Cookie: $setCookie');
+      Logger.network('收到Set-Cookie: $setCookie', tag: 'CookieInterceptor');
     }
     
     handler.next(response);

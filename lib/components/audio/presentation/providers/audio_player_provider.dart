@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../base/di/providers.dart';
 import '../services/audio_service.dart';
 import '../../entities/audio_player/audio_player_info.dart';
+import '../../../../base/utils/logger.dart';
 
 part 'audio_player_provider.g.dart';
 
@@ -48,7 +49,7 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
     final result = await _audioService.playSong(songId, songTitle);
     if (result.isFailure) {
       // 处理错误状态
-      print('播放歌曲失败: ${result.error}');
+      Logger.error('播放歌曲失败: ${result.error}', tag: 'AudioPlayerProvider');
       state = AsyncValue.error(result.error, StackTrace.current);
     } else {
       // 播放成功后启动定时器

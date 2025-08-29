@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'exceptions.dart';
 import 'error_mapper.dart';
+import '../utils/logger.dart';
 
 /// 全局错误处理服务
 class GlobalErrorHandler {
@@ -35,7 +36,7 @@ class GlobalErrorHandler {
     };
     
     _initialized = true;
-    debugPrint('GlobalErrorHandler initialized');
+    Logger.info('GlobalErrorHandler initialized', tag: 'GlobalErrorHandler');
   }
 
   /// 添加错误处理器
@@ -67,7 +68,7 @@ class GlobalErrorHandler {
       try {
         listener.onError(error, trace);
       } catch (e) {
-        debugPrint('Error in error listener: $e');
+        Logger.error('Error in error listener: $e', tag: 'GlobalErrorHandler');
       }
     }
     
@@ -76,7 +77,7 @@ class GlobalErrorHandler {
       try {
         handler.handleError(error, trace);
       } catch (e) {
-        debugPrint('Error in error handler: $e');
+        Logger.error('Error in error handler: $e', tag: 'GlobalErrorHandler');
       }
     }
     
@@ -86,16 +87,16 @@ class GlobalErrorHandler {
 
   /// 处理 Flutter 错误
   void _handleFlutterError(FlutterErrorDetails details) {
-    debugPrint('Flutter Error: ${details.exception}');
-    debugPrint('Stack Trace: ${details.stack}');
+    Logger.error('Flutter Error: ${details.exception}', tag: 'GlobalErrorHandler');
+    Logger.error('Stack Trace: ${details.stack}', tag: 'GlobalErrorHandler');
     
     handleError(details.exception, details.stack);
   }
 
   /// 处理 Zone 错误
   void _handleZoneError(dynamic error, StackTrace stackTrace) {
-    debugPrint('Zone Error: $error');
-    debugPrint('Stack Trace: $stackTrace');
+    Logger.error('Zone Error: $error', tag: 'GlobalErrorHandler');
+    Logger.error('Stack Trace: $stackTrace', tag: 'GlobalErrorHandler');
     
     handleError(error, stackTrace);
   }
@@ -103,12 +104,12 @@ class GlobalErrorHandler {
   /// 记录错误
   void _logError(dynamic error, StackTrace stackTrace) {
     // TODO: 集成日志系统
-    debugPrint('=== Global Error Handler ===');
-    debugPrint('Error: $error');
-    debugPrint('Type: ${error.runtimeType}');
-    debugPrint('Message: ${ErrorMapper.mapToUserMessage(error)}');
-    debugPrint('Stack Trace: $stackTrace');
-    debugPrint('===========================');
+    Logger.error('=== Global Error Handler ===', tag: 'GlobalErrorHandler');
+    Logger.error('Error: $error', tag: 'GlobalErrorHandler');
+    Logger.error('Type: ${error.runtimeType}', tag: 'GlobalErrorHandler');
+    Logger.error('Message: ${ErrorMapper.mapToUserMessage(error)}', tag: 'GlobalErrorHandler');
+    Logger.error('Stack Trace: $stackTrace', tag: 'GlobalErrorHandler');
+    Logger.error('===========================', tag: 'GlobalErrorHandler');
   }
 
   /// 清理资源
@@ -133,8 +134,8 @@ abstract class ErrorListener {
 class ConsoleErrorHandler implements ErrorHandler {
   @override
   void handleError(dynamic error, StackTrace stackTrace) {
-    debugPrint('ConsoleErrorHandler: $error');
-    debugPrint('Stack Trace: $stackTrace');
+    Logger.error('ConsoleErrorHandler: $error', tag: 'ConsoleErrorHandler');
+    Logger.error('Stack Trace: $stackTrace', tag: 'ConsoleErrorHandler');
   }
 }
 
@@ -143,7 +144,7 @@ class NetworkErrorHandler implements ErrorHandler {
   @override
   void handleError(dynamic error, StackTrace stackTrace) {
     if (ErrorMapper.isNetworkError(error)) {
-      debugPrint('Network Error Handler: $error');
+      Logger.network('Network Error Handler: $error', tag: 'NetworkErrorHandler');
       // TODO: 可以在这里添加网络状态检查、重连逻辑等
     }
   }
@@ -154,7 +155,7 @@ class AuthErrorHandler implements ErrorHandler {
   @override
   void handleError(dynamic error, StackTrace stackTrace) {
     if (ErrorMapper.isAuthError(error)) {
-      debugPrint('Auth Error Handler: $error');
+      Logger.error('Auth Error Handler: $error', tag: 'AuthErrorHandler');
       // TODO: 可以在这里添加自动登出、重新认证等逻辑
     }
   }
@@ -165,7 +166,7 @@ class BusinessErrorHandler implements ErrorHandler {
   @override
   void handleError(dynamic error, StackTrace stackTrace) {
     if (error is BusinessException) {
-      debugPrint('Business Error Handler: $error');
+      Logger.error('Business Error Handler: $error', tag: 'BusinessErrorHandler');
       // TODO: 可以在这里添加业务错误统计、上报等逻辑
     }
   }

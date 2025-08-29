@@ -6,7 +6,7 @@ part of 'auth_state_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authStateNotifierHash() => r'33c9054ffcc4cbac1425a8553c82729f1c0311e2';
+String _$authStateNotifierHash() => r'aed1538b62185b105ca4c72d1314fc9b2b2e3bb4';
 
 /// 全局认证状态管理
 ///

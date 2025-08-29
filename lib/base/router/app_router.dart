@@ -6,6 +6,7 @@ import '../auth/auth_state_notifier.dart';
 import '../router/route_names.dart';
 import 'navigation_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../utils/logger.dart';
 
 /// 应用路由配置
 class AppRouter {
@@ -63,28 +64,28 @@ class _LoadingPageState extends ConsumerState<LoadingPage> {
   }
 
   Future<void> _checkAutoLogin() async {
-    print('🔍 LoadingPage: 开始检查自动登录');
+    Logger.info('开始检查自动登录', tag: 'LoadingPage');
     final result = await ref.read(authStateNotifierProvider.notifier).checkAutoLogin();
-    print('🔍 LoadingPage: 自动登录检查完成，结果: $result');
+    Logger.info('自动登录检查完成，结果: $result', tag: 'LoadingPage');
 
     if (result) {
       // 自动登录成功，跳转到主页
-      print('🔍 LoadingPage: 自动登录成功，跳转到主页');
+      Logger.info('自动登录成功，跳转到主页', tag: 'LoadingPage');
       Future.delayed(const Duration(milliseconds: 100), () {
         try {
           NavigationService.replaceWithHome();
         } catch (e) {
-          print('⚠️ LoadingPage: 导航到主页失败: $e');
+          Logger.warning('导航到主页失败: $e', tag: 'LoadingPage');
         }
       });
     } else {
       // 自动登录失败，跳转到登录页
-      print('🔍 LoadingPage: 自动登录失败，跳转到登录页');
+      Logger.info('自动登录失败，跳转到登录页', tag: 'LoadingPage');
       Future.delayed(const Duration(milliseconds: 100), () {
         try {
           NavigationService.replaceWithLogin();
         } catch (e) {
-          print('⚠️ LoadingPage: 导航到登录页失败: $e');
+          Logger.warning('导航到登录页失败: $e', tag: 'LoadingPage');
         }
       });
     }

@@ -50,7 +50,7 @@ class SharedPreferencesStorageService implements StorageService {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 StorageService storageService(StorageServiceRef ref) {
   return SharedPreferencesStorageService();
 }

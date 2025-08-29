@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GlobalDioManager {
   static final GlobalDioManager _instance = GlobalDioManager._internal();

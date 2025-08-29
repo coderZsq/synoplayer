@@ -7,6 +7,7 @@ import '../../../../base/error/exceptions.dart';
 import '../../../../base/error/result.dart';
 import '../../../../base/network/interceptors/cookie_interceptor.dart';
 import '../../../../base/router/navigation_service.dart';
+import '../../../../base/utils/logger.dart';
 import '../../entities/auth_login/auth_login_response.dart';
 
 part 'login_provider.g.dart';
@@ -26,7 +27,7 @@ class LoginNotifier extends _$LoginNotifier {
     required bool rememberPassword,
   }) async {
     state = const AsyncValue.loading();
-    print('🔍 LoginProvider: 开始登录流程');
+    Logger.info('开始登录流程', tag: 'LoginProvider');
 
     try {
       final quickConnectService = ref.read(quickConnectServiceProvider);
@@ -41,11 +42,11 @@ class LoginNotifier extends _$LoginNotifier {
         otpCode: otpCode,
       );
       
-      print('🔍 LoginProvider: 登录结果 - isSuccess: ${result.isSuccess}');
+      Logger.info('登录结果 - isSuccess: ${result.isSuccess}', tag: 'LoginProvider');
       
       if (result.isSuccess) {
         final data = result.value;
-        print('🔍 LoginProvider: 登录数据 - sid: ${data.sid}');
+        Logger.info('登录数据 - sid: ${data.sid}', tag: 'LoginProvider');
         
         if (data.sid != null) {
           // 保存登录凭证和会话ID
@@ -66,16 +67,16 @@ class LoginNotifier extends _$LoginNotifier {
           state = AsyncValue.data(data);
         } else {
           // 登录失败 - 没有 sid
-          print('❌ LoginProvider: 登录失败 - 没有会话ID');
+          Logger.error('登录失败 - 没有会话ID', tag: 'LoginProvider');
           state = AsyncValue.error('登录失败：未获取到会话ID', StackTrace.current);
         }
       } else {
         // 登录失败 - 返回错误信息
-        print('❌ LoginProvider: 登录失败 - ${result.error.message}');
+        Logger.error('登录失败 - ${result.error.message}', tag: 'LoginProvider');
         state = AsyncValue.error(result.error.message, StackTrace.current);
       }
     } catch (e, stackTrace) {
-      print('❌ LoginProvider: 登录异常 - $e');
+      Logger.error('登录异常 - $e', tag: 'LoginProvider');
       final errorMessage = ErrorMapper.mapToUserMessage(e);
       state = AsyncValue.error(errorMessage, stackTrace);
     }

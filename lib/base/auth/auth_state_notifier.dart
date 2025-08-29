@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../components/login/entities/auth_login/auth_login_response.dart';
 import '../di/providers.dart';
 import '../network/interceptors/cookie_interceptor.dart';
+import '../utils/logger.dart';
 
 part 'auth_state_notifier.g.dart';
 
@@ -72,14 +73,14 @@ class AuthStateNotifier extends _$AuthStateNotifier {
   
   /// 自动登录检查
   Future<bool> checkAutoLogin() async {
-    print('🔍 开始检查自动登录...');
+    Logger.info('开始检查自动登录...', tag: 'AuthStateNotifier');
     final authStorage = ref.read(authStorageServiceProvider);
     final sessionId = await authStorage.getSessionId();
     
-    print('🔍 获取到的 SID: $sessionId');
+    Logger.info('获取到的 SID: $sessionId', tag: 'AuthStateNotifier');
     
     if (sessionId != null) {
-      print('🔍 找到保存的 SID，设置为已登录状态');
+      Logger.info('找到保存的 SID，设置为已登录状态', tag: 'AuthStateNotifier');
       final newState = AuthState(
         isAuthenticated: true,
         loginData: LoginData(
@@ -98,10 +99,10 @@ class AuthStateNotifier extends _$AuthStateNotifier {
       // 设置cookie拦截器的sessionId
       CookieInterceptor.setSessionId(sessionId);
       
-      print('✅ 自动登录成功，状态已更新');
+      Logger.info('自动登录成功，状态已更新', tag: 'AuthStateNotifier');
       return true;
     } else {
-      print('🔍 没有找到保存的 SID，设置为未登录状态');
+      Logger.info('没有找到保存的 SID，设置为未登录状态', tag: 'AuthStateNotifier');
       final newState = const AuthState(isAuthenticated: false, isInitialized: true);
       state = newState;
       return false;

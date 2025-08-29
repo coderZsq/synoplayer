@@ -6,11 +6,11 @@ part of 'storage_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$storageServiceHash() => r'a79b603608e19c39370d8877a4063a05532fceb2';
+String _$storageServiceHash() => r'caddc7b78875d51a9188ca4966f70e69a80308e5';
 
 /// See also [storageService].
 @ProviderFor(storageService)
-final storageServiceProvider = AutoDisposeProvider<StorageService>.internal(
+final storageServiceProvider = Provider<StorageService>.internal(
   storageService,
   name: r'storageServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -20,6 +20,6 @@ final storageServiceProvider = AutoDisposeProvider<StorageService>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef StorageServiceRef = AutoDisposeProviderRef<StorageService>;
+typedef StorageServiceRef = ProviderRef<StorageService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
