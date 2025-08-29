@@ -30,7 +30,7 @@ class LoginNotifier extends _$LoginNotifier {
     Logger.info('开始登录流程', tag: 'LoginProvider');
 
     try {
-      final quickConnectService = ref.read(quickConnectServiceProvider);
+      final quickConnectService = ref.read(loginServiceProvider);
       final authStorage = ref.read(authStorageServiceProvider);
       
       // 使用重试机制执行登录
