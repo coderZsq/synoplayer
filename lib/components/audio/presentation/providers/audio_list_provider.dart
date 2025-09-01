@@ -22,7 +22,6 @@ class SongListNotifier extends _$SongListNotifier {
     try {
       final audioRepository = ref.read(audioRepositoryProvider);
       
-      // 使用音频仓库，它会先返回缓存数据
       final result = await audioRepository.getAudioStationSongListAll(
         offset: 0, 
         limit: _pageSize
@@ -71,14 +70,11 @@ class SongListNotifier extends _$SongListNotifier {
   }
 
   Future<void> refresh() async {
-    // 强制刷新，忽略缓存
+    // 强制刷新
     try {
       state = const AsyncValue.loading();
       
       final audioRepository = ref.read(audioRepositoryProvider);
-      // 先清除缓存，然后重新请求
-      await audioRepository.clearCache();
-      
       final result = await audioRepository.getAudioStationSongListAll(
         offset: 0,
         limit: _pageSize,
@@ -91,26 +87,6 @@ class SongListNotifier extends _$SongListNotifier {
       }
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
-    }
-  }
-
-  /// 检查是否有缓存数据
-  Future<bool> hasCachedData() async {
-    try {
-      final audioRepository = ref.read(audioRepositoryProvider);
-      return await audioRepository.hasValidCache();
-    } catch (e) {
-      return false;
-    }
-  }
-
-  /// 清除缓存
-  Future<void> clearCache() async {
-    try {
-      final audioRepository = ref.read(audioRepositoryProvider);
-      await audioRepository.clearCache();
-    } catch (e) {
-      // 清除缓存失败不影响主流程
     }
   }
 

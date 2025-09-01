@@ -9,13 +9,4 @@ abstract class AudioRepository {
   });
 
   Future<Result<AudioStreamInfo>> getAudioStreamUrl(String songId);
-
-  /// 获取缓存的音频列表（不进行网络请求）
-  Future<Result<SongListAllResponse?>> getCachedAudioList();
-
-  /// 检查是否有有效的缓存
-  Future<bool> hasValidCache();
-
-  /// 清除缓存
-  Future<void> clearCache();
 }
