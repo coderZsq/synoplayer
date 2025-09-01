@@ -18,7 +18,7 @@ class AudioPlayerControls extends ConsumerWidget {
         final position = audioPlayerState.position;
         final duration = audioPlayerState.duration;
         final error = audioPlayerState.error;
-        final displayTitle = currentSongTitle ?? '未选择歌曲';
+        final displayTitle = currentSongTitle ?? '未选择音频';
         final displayStatus = isPlaying ? '播放中' : (isLoading ? '加载中' : '已停止');
 
         return Container(
@@ -113,14 +113,6 @@ class AudioPlayerControls extends ConsumerWidget {
               // 倍速选择器
               Column(
                 children: [
-                  const Text(
-                    '倍速: ',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: CupertinoColors.systemGrey,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
                   Wrap(
                     alignment: WrapAlignment.center,
                     spacing: 4,
