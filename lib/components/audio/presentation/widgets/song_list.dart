@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../base/theme/theme.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
 import '../providers/audio_list_provider.dart';
 import 'song_item.dart';
@@ -25,11 +26,13 @@ class SongList extends ConsumerWidget {
     final hasMoreData = songs.length < (songList.total ?? 0);
     final notifier = ref.read(songListNotifierProvider.notifier);
 
-    return CupertinoScrollbar(
-      controller: scrollController,
-      child: CustomScrollView(
+    return Container(
+      color: context.backgroundColor,
+      child: CupertinoScrollbar(
         controller: scrollController,
-        slivers: [
+        child: CustomScrollView(
+          controller: scrollController,
+          slivers: [
           if (onRefresh != null)
             CupertinoSliverRefreshControl(
               onRefresh: onRefresh!,
@@ -58,6 +61,7 @@ class SongList extends ConsumerWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }

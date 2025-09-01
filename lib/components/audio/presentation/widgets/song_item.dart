@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../base/theme/theme.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
 import '../providers/audio_player_provider.dart';
 
@@ -40,18 +41,18 @@ class SongItem extends ConsumerWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: isCurrentSong 
-                  ? CupertinoColors.systemBlue.withOpacity(0.1)
-                  : CupertinoColors.systemBackground,
+                  ? context.accentColor.withValues(alpha: 0.1)
+                  : context.cardBackgroundColor,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: isCurrentSong 
-                    ? CupertinoColors.systemBlue
-                    : CupertinoColors.systemGrey4,
+                    ? context.accentColor
+                    : context.borderColor,
                 width: isCurrentSong ? 2 : 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: CupertinoColors.systemGrey.withOpacity(0.1),
+                  color: context.shadowColor.withValues(alpha: 0.1),
                   blurRadius: 2,
                   offset: const Offset(0, 1),
                 ),
@@ -63,8 +64,8 @@ class SongItem extends ConsumerWidget {
                   isPlaying ? CupertinoIcons.pause_circle_fill : CupertinoIcons.music_note,
                   size: 20,
                   color: isCurrentSong 
-                      ? CupertinoColors.systemBlue
-                      : CupertinoColors.systemGrey,
+                      ? context.accentColor
+                      : context.tertiaryTextColor,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -73,9 +74,10 @@ class SongItem extends ConsumerWidget {
                     children: [
                       Text(
                         song.title ?? '未知标题',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
+                          color: context.textColor,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -83,9 +85,9 @@ class SongItem extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         song.path ?? '未知路径',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: CupertinoColors.systemGrey,
+                          color: context.secondaryTextColor,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -99,14 +101,14 @@ class SongItem extends ConsumerWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: CupertinoColors.systemGrey5,
+                    color: context.quaternaryBackgroundColor,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     song.type ?? 'unknown',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: CupertinoColors.systemGrey,
+                      color: context.tertiaryTextColor,
                     ),
                   ),
                 ),
@@ -116,7 +118,10 @@ class SongItem extends ConsumerWidget {
         );
       },
       loading: () => const CupertinoActivityIndicator(),
-      error: (error, stack) => Text('Error: $error'),
+      error: (error, stack) => Text(
+        'Error: $error',
+        style: TextStyle(color: context.errorColor),
+      ),
     );
   }
 }

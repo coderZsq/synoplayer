@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../base/auth/auth_state_notifier.dart';
+import '../../../../../base/theme/theme.dart';
 import '../providers/audio_list_provider.dart';
 import '../providers/audio_player_provider.dart';
 import '../widgets/audio_list_state.dart';
@@ -110,9 +111,19 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
     final isSortedByName = ref.watch(songListNotifierProvider.notifier).isSortedByName;
 
     return CupertinoPageScaffold(
+      backgroundColor: context.backgroundColor,
       navigationBar: CupertinoNavigationBar(
-        middle: const Text('音频'),
-        backgroundColor: CupertinoColors.systemBackground,
+        middle: Text(
+          '音频',
+          style: TextStyle(
+            color: context.textColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        backgroundColor: context.primaryBackgroundColor,
+        // iOS 设置样式的导航栏配置
+        automaticallyImplyLeading: false,
+        automaticallyImplyMiddle: false,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -126,7 +137,7 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
                 isSortedByName ? CupertinoIcons.sort_down : CupertinoIcons.sort_up,
                 size: 20,
                 color: isSortedByName 
-                    ? CupertinoColors.systemBlue
+                    ? context.primaryColor
                     : CupertinoColors.systemGrey,
               ),
             ),
@@ -134,10 +145,10 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
             CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: _onRefresh,
-              child: const Icon(
+              child: Icon(
                 CupertinoIcons.refresh,
                 size: 20,
-                color: CupertinoColors.systemBlue,
+                color: context.primaryColor,
               ),
             ),
             // 登出按钮
@@ -166,24 +177,47 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
                   }
                 }
               },
-              child: const Text('登出'),
+              child: Text(
+                '登出',
+                style: TextStyle(color: context.primaryColor),
+              ),
             ),
           ],
         ),
       ),
       child: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: AudioList(
-                songListState: songListState,
-                scrollController: _scrollController,
-                onRetry: _onRetry,
-                onSongTap: _onSongTap,
+        child: Container(
+          color: context.backgroundColor,
+          child: Column(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: AudioList(
+                        songListState: songListState,
+                        scrollController: _scrollController,
+                        onRetry: _onRetry,
+                        onSongTap: _onSongTap,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const AudioPlayerControls(),
-          ],
+              Container(
+                decoration: BoxDecoration(
+                  color: context.secondaryBackgroundColor,
+                  border: Border(
+                    top: BorderSide(
+                      color: context.separatorColor,
+                      width: 0.5,
+                    ),
+                  ),
+                ),
+                child: const AudioPlayerControls(),
+              ),
+            ],
+          ),
         ),
       ),
     );

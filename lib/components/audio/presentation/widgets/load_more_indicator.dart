@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import '../../../../../base/theme/theme.dart';
 
 class LoadMoreIndicator extends StatelessWidget {
   final bool isLoading;
@@ -15,11 +16,11 @@ class LoadMoreIndicator extends StatelessWidget {
     if (!hasMoreData) {
       return Container(
         padding: const EdgeInsets.all(16),
-        child: const Center(
+        child: Center(
           child: Text(
             '没有更多数据了',
             style: TextStyle(
-              color: CupertinoColors.systemGrey,
+              color: context.tertiaryTextColor,
               fontSize: 14,
             ),
           ),
@@ -32,10 +33,10 @@ class LoadMoreIndicator extends StatelessWidget {
       child: Center(
         child: isLoading
             ? const CupertinoActivityIndicator()
-            : const Text(
+            : Text(
                 '上拉加载更多',
                 style: TextStyle(
-                  color: CupertinoColors.systemGrey,
+                  color: context.tertiaryTextColor,
                   fontSize: 14,
                 ),
               ),

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import '../../../../../base/theme/theme.dart';
 import '../providers/audio_player_provider.dart';
 
 class AudioPlayerControls extends ConsumerWidget {
@@ -24,10 +24,10 @@ class AudioPlayerControls extends ConsumerWidget {
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: CupertinoColors.systemBackground,
+            color: context.secondaryBackgroundColor,
             border: Border(
               top: BorderSide(
-                color: CupertinoColors.systemGrey4,
+                color: context.separatorColor,
                 width: 1,
               ),
             ),
@@ -44,26 +44,27 @@ class AudioPlayerControls extends ConsumerWidget {
                       children: [
                         Text(
                           displayTitle,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
+                            color: context.textColor,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
                           displayStatus,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: CupertinoColors.systemGrey,
+                            color: context.secondaryTextColor,
                           ),
                         ),
                         if (error != null)
                           Text(
                             error,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: CupertinoColors.systemRed,
+                              color: context.errorColor,
                             ),
                           ),
                       ],
@@ -91,16 +92,16 @@ class AudioPlayerControls extends ConsumerWidget {
                       children: [
                         Text(
                           _formatDuration(position),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: CupertinoColors.systemGrey,
+                            color: context.secondaryTextColor,
                           ),
                         ),
                         Text(
                           _formatDuration(duration),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: CupertinoColors.systemGrey,
+                            color: context.secondaryTextColor,
                           ),
                         ),
                       ],
@@ -130,8 +131,8 @@ class AudioPlayerControls extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 11,
                             color: isSelected 
-                                ? CupertinoColors.systemBlue 
-                                : CupertinoColors.systemGrey,
+                                ? context.accentColor 
+                                : context.tertiaryTextColor,
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),
@@ -152,10 +153,10 @@ class AudioPlayerControls extends ConsumerWidget {
                     onPressed: isLoading ? null : () {
                       ref.read(audioPlayerNotifierProvider.notifier).stop();
                     },
-                    child: const Icon(
+                    child: Icon(
                       CupertinoIcons.stop_fill,
                       size: 24,
-                      color: CupertinoColors.systemRed,
+                      color: context.errorColor,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -165,10 +166,10 @@ class AudioPlayerControls extends ConsumerWidget {
                       // 播放上一首
                       ref.read(audioPlayerNotifierProvider.notifier).playPrevious();
                     },
-                    child: const Icon(
+                    child: Icon(
                       CupertinoIcons.backward_fill,
                       size: 24,
-                      color: CupertinoColors.systemBlue,
+                      color: context.accentColor,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -188,7 +189,7 @@ class AudioPlayerControls extends ConsumerWidget {
                               ? CupertinoIcons.pause_fill
                               : CupertinoIcons.play_fill,
                       size: 32,
-                      color: CupertinoColors.systemBlue,
+                      color: context.accentColor,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -198,10 +199,10 @@ class AudioPlayerControls extends ConsumerWidget {
                       // 播放下一首
                       ref.read(audioPlayerNotifierProvider.notifier).playNext();
                     },
-                    child: const Icon(
+                    child: Icon(
                       CupertinoIcons.forward_fill,
                       size: 24,
-                      color: CupertinoColors.systemBlue,
+                      color: context.accentColor,
                     ),
                   ),
                 ],
@@ -211,7 +212,10 @@ class AudioPlayerControls extends ConsumerWidget {
         );
       },
       loading: () => const CupertinoActivityIndicator(),
-      error: (error, stack) => Text('Error: $error'),
+      error: (error, stack) => Text(
+        'Error: $error',
+        style: TextStyle(color: context.errorColor),
+      ),
     );
   }
 

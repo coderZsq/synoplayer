@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../base/theme/theme.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
 import 'loading_state.dart';
 import 'error_state.dart';
@@ -28,7 +29,15 @@ class AudioList extends ConsumerWidget {
         onRetry: onRetry,
       ),
       data: (songList) => songList == null
-          ? const Center(child: Text('暂无数据'))
+          ? Container(
+              color: context.backgroundColor,
+              child: Center(
+                child: Text(
+                  '暂无数据',
+                  style: TextStyle(color: context.tertiaryTextColor),
+                ),
+              ),
+            )
           : AudioListContent(
               songList: songList,
               scrollController: scrollController,
