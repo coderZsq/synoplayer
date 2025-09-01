@@ -50,10 +50,6 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
     await notifier.loadMore();
   }
 
-  Future<void> _onRefresh() async {
-    ref.read(songListNotifierProvider.notifier).refresh();
-  }
-
   void _onRetry() {
     ref.read(songListNotifierProvider.notifier).getSongList(isRefresh: true);
   }
@@ -107,101 +103,20 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
   Widget build(BuildContext context) {
     // 监听歌曲列表状态
     final songListState = ref.watch(songListNotifierProvider);
-    // 监听排序状态
-    final isSortedByName = ref.watch(songListNotifierProvider.notifier).isSortedByName;
 
     return CupertinoPageScaffold(
       backgroundColor: context.backgroundColor,
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(
-          '音频',
-          style: TextStyle(
-            color: context.textColor,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: context.primaryBackgroundColor,
-        // iOS 设置样式的导航栏配置
-        automaticallyImplyLeading: false,
-        automaticallyImplyMiddle: false,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // 排序按钮
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                ref.read(songListNotifierProvider.notifier).toggleSortByName();
-              },
-              child: Icon(
-                isSortedByName ? CupertinoIcons.sort_down : CupertinoIcons.sort_up,
-                size: 20,
-                color: isSortedByName 
-                    ? context.primaryColor
-                    : CupertinoColors.systemGrey,
-              ),
-            ),
-            // 刷新按钮
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: _onRefresh,
-              child: Icon(
-                CupertinoIcons.refresh,
-                size: 20,
-                color: context.primaryColor,
-              ),
-            ),
-            // 登出按钮
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () async {
-                try {
-                  // 等待登出操作完成
-                  final result = await ref.read(authStateNotifierProvider.notifier).logout();
-                  
-                  if (result.isSuccess) {
-                    // 登出成功，跳转到登录页
-                    if (mounted) {
-                      context.go('/login');
-                    }
-                  } else {
-                    // 登出失败，显示错误信息
-                    if (mounted) {
-                      _showLogoutError(result.error.message);
-                    }
-                  }
-                } catch (e) {
-                  // 处理异常情况
-                  if (mounted) {
-                    _showLogoutError('登出过程中发生异常: $e');
-                  }
-                }
-              },
-              child: Text(
-                '登出',
-                style: TextStyle(color: context.primaryColor),
-              ),
-            ),
-          ],
-        ),
-      ),
       child: SafeArea(
         child: Container(
           color: context.backgroundColor,
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: AudioList(
-                        songListState: songListState,
-                        scrollController: _scrollController,
-                        onRetry: _onRetry,
-                        onSongTap: _onSongTap,
-                      ),
-                    ),
-                  ],
+                child: AudioList(
+                  songListState: songListState,
+                  scrollController: _scrollController,
+                  onRetry: _onRetry,
+                  onSongTap: _onSongTap,
                 ),
               ),
               Container(
