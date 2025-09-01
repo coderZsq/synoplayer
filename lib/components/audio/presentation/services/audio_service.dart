@@ -72,6 +72,11 @@ class AudioService {
     await _audioPlayerService.seekTo(position);
   }
 
+  /// 设置播放倍速
+  Future<void> setPlaybackSpeed(double speed) async {
+    await _audioPlayerService.setPlaybackSpeed(speed);
+  }
+
   /// 获取当前播放状态
   AudioPlayerInfo getCurrentState() {
     return _audioPlayerService.currentState;

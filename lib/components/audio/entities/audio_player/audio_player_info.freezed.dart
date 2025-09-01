@@ -26,6 +26,7 @@ mixin _$AudioPlayerInfo {
   bool get isLoading => throw _privateConstructorUsedError;
   Duration get position => throw _privateConstructorUsedError;
   Duration get duration => throw _privateConstructorUsedError;
+  double get playbackSpeed => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $AudioPlayerInfoCopyWith<$Res> {
       bool isLoading,
       Duration position,
       Duration duration,
+      double playbackSpeed,
       String? error});
 }
 
@@ -69,6 +71,7 @@ class _$AudioPlayerInfoCopyWithImpl<$Res, $Val extends AudioPlayerInfo>
     Object? isLoading = null,
     Object? position = null,
     Object? duration = null,
+    Object? playbackSpeed = null,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
@@ -96,6 +99,10 @@ class _$AudioPlayerInfoCopyWithImpl<$Res, $Val extends AudioPlayerInfo>
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
               as Duration,
+      playbackSpeed: null == playbackSpeed
+          ? _value.playbackSpeed
+          : playbackSpeed // ignore: cast_nullable_to_non_nullable
+              as double,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -119,6 +126,7 @@ abstract class _$$AudioPlayerInfoImplCopyWith<$Res>
       bool isLoading,
       Duration position,
       Duration duration,
+      double playbackSpeed,
       String? error});
 }
 
@@ -139,6 +147,7 @@ class __$$AudioPlayerInfoImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? position = null,
     Object? duration = null,
+    Object? playbackSpeed = null,
     Object? error = freezed,
   }) {
     return _then(_$AudioPlayerInfoImpl(
@@ -166,6 +175,10 @@ class __$$AudioPlayerInfoImplCopyWithImpl<$Res>
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
               as Duration,
+      playbackSpeed: null == playbackSpeed
+          ? _value.playbackSpeed
+          : playbackSpeed // ignore: cast_nullable_to_non_nullable
+              as double,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -184,6 +197,7 @@ class _$AudioPlayerInfoImpl implements _AudioPlayerInfo {
       this.isLoading = false,
       this.position = Duration.zero,
       this.duration = Duration.zero,
+      this.playbackSpeed = 1.0,
       this.error});
 
   factory _$AudioPlayerInfoImpl.fromJson(Map<String, dynamic> json) =>
@@ -206,11 +220,14 @@ class _$AudioPlayerInfoImpl implements _AudioPlayerInfo {
   @JsonKey()
   final Duration duration;
   @override
+  @JsonKey()
+  final double playbackSpeed;
+  @override
   final String? error;
 
   @override
   String toString() {
-    return 'AudioPlayerInfo(currentSongId: $currentSongId, currentSongTitle: $currentSongTitle, isPlaying: $isPlaying, isLoading: $isLoading, position: $position, duration: $duration, error: $error)';
+    return 'AudioPlayerInfo(currentSongId: $currentSongId, currentSongTitle: $currentSongTitle, isPlaying: $isPlaying, isLoading: $isLoading, position: $position, duration: $duration, playbackSpeed: $playbackSpeed, error: $error)';
   }
 
   @override
@@ -230,13 +247,15 @@ class _$AudioPlayerInfoImpl implements _AudioPlayerInfo {
                 other.position == position) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
+            (identical(other.playbackSpeed, playbackSpeed) ||
+                other.playbackSpeed == playbackSpeed) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, currentSongId, currentSongTitle,
-      isPlaying, isLoading, position, duration, error);
+      isPlaying, isLoading, position, duration, playbackSpeed, error);
 
   @JsonKey(ignore: true)
   @override
@@ -261,6 +280,7 @@ abstract class _AudioPlayerInfo implements AudioPlayerInfo {
       final bool isLoading,
       final Duration position,
       final Duration duration,
+      final double playbackSpeed,
       final String? error}) = _$AudioPlayerInfoImpl;
 
   factory _AudioPlayerInfo.fromJson(Map<String, dynamic> json) =
@@ -278,6 +298,8 @@ abstract class _AudioPlayerInfo implements AudioPlayerInfo {
   Duration get position;
   @override
   Duration get duration;
+  @override
+  double get playbackSpeed;
   @override
   String? get error;
   @override

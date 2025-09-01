@@ -172,6 +172,19 @@ class AudioPlayerService {
     await _audioPlayer.seek(position);
   }
 
+  /// 设置播放倍速
+  Future<void> setPlaybackSpeed(double speed) async {
+    // 限制倍速范围在 0.5 到 5.0 之间
+    final clampedSpeed = speed.clamp(0.5, 5.0);
+    await _audioPlayer.setSpeed(clampedSpeed);
+    
+    // 更新状态
+    _updateState(_currentState.copyWith(playbackSpeed: clampedSpeed));
+  }
+
+  /// 获取当前播放倍速
+  double get currentPlaybackSpeed => _audioPlayer.speed;
+
   /// 清理资源
   void dispose() {
     _playerStateSubscription.cancel();

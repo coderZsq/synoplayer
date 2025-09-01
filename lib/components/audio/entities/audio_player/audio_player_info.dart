@@ -12,6 +12,7 @@ class AudioPlayerInfo with _$AudioPlayerInfo {
     @Default(false) bool isLoading,
     @Default(Duration.zero) Duration position,
     @Default(Duration.zero) Duration duration,
+    @Default(1.0) double playbackSpeed,
     String? error,
   }) = _AudioPlayerInfo;
 

@@ -19,6 +19,7 @@ _$AudioPlayerInfoImpl _$$AudioPlayerInfoImplFromJson(
       duration: json['duration'] == null
           ? Duration.zero
           : Duration(microseconds: (json['duration'] as num).toInt()),
+      playbackSpeed: (json['playbackSpeed'] as num?)?.toDouble() ?? 1.0,
       error: json['error'] as String?,
     );
 
@@ -31,5 +32,6 @@ Map<String, dynamic> _$$AudioPlayerInfoImplToJson(
       'isLoading': instance.isLoading,
       'position': instance.position.inMicroseconds,
       'duration': instance.duration.inMicroseconds,
+      'playbackSpeed': instance.playbackSpeed,
       'error': instance.error,
     };

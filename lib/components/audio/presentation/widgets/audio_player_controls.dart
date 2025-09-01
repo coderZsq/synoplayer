@@ -110,6 +110,47 @@ class AudioPlayerControls extends ConsumerWidget {
               
               const SizedBox(height: 12),
               
+              // 倍速选择器
+              Column(
+                children: [
+                  const Text(
+                    '倍速: ',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: CupertinoColors.systemGrey,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 4,
+                    runSpacing: 4,
+                    children: [1.0, 1.25, 1.5, 2.0, 3.0, 4.0, 5.0].map((speed) {
+                      final isSelected = (audioPlayerState.playbackSpeed - speed).abs() < 0.01;
+                      return CupertinoButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                        minimumSize: Size.zero,
+                        onPressed: isLoading ? null : () {
+                          ref.read(audioPlayerNotifierProvider.notifier).setPlaybackSpeed(speed);
+                        },
+                        child: Text(
+                          '${speed}x',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: isSelected 
+                                ? CupertinoColors.systemBlue 
+                                : CupertinoColors.systemGrey,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+              
+              const SizedBox(height: 12),
+              
               // 控制按钮
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -82,6 +82,11 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
     await _audioService.seekTo(position);
   }
 
+  /// 设置播放倍速
+  Future<void> setPlaybackSpeed(double speed) async {
+    await _audioService.setPlaybackSpeed(speed);
+  }
+
   // 更新状态 - 从 AudioService 获取当前状态
   void _updateState() {
     final currentState = _audioService.getCurrentState();
