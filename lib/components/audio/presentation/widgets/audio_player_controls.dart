@@ -168,6 +168,19 @@ class AudioPlayerControls extends ConsumerWidget {
                   ),
                   const SizedBox(width: 16),
                   CupertinoButton(
+                    padding: const EdgeInsets.all(12),
+                    onPressed: isLoading ? null : () {
+                      // 播放上一首
+                      ref.read(audioPlayerNotifierProvider.notifier).playPrevious();
+                    },
+                    child: const Icon(
+                      CupertinoIcons.backward_fill,
+                      size: 24,
+                      color: CupertinoColors.systemBlue,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  CupertinoButton(
                     padding: const EdgeInsets.all(16),
                     onPressed: isLoading ? null : () {
                       if (isPlaying) {
@@ -183,6 +196,19 @@ class AudioPlayerControls extends ConsumerWidget {
                               ? CupertinoIcons.pause_fill
                               : CupertinoIcons.play_fill,
                       size: 32,
+                      color: CupertinoColors.systemBlue,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(12),
+                    onPressed: isLoading ? null : () {
+                      // 播放下一首
+                      ref.read(audioPlayerNotifierProvider.notifier).playNext();
+                    },
+                    child: const Icon(
+                      CupertinoIcons.forward_fill,
+                      size: 24,
                       color: CupertinoColors.systemBlue,
                     ),
                   ),

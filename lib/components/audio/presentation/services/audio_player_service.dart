@@ -6,6 +6,9 @@ import '../../entities/audio_player/audio_player_info.dart';
 /// 音频播放器状态变化回调
 typedef AudioPlayerStateCallback = void Function(AudioPlayerInfo state);
 
+/// 音频播放完成回调
+typedef AudioPlayerCompletedCallback = void Function(String songId);
+
 /// 音频播放器服务
 /// 负责管理音频播放器的状态和操作
 class AudioPlayerService {
@@ -16,6 +19,12 @@ class AudioPlayerService {
   
   // 状态变化回调
   AudioPlayerStateCallback? _onStateChanged;
+  
+  // 播放完成回调
+  AudioPlayerCompletedCallback? _onCompleted;
+  
+  // 防止重复触发播放完成回调
+  bool _hasCompletedCallbackTriggered = false;
   
   // 流订阅管理
   late final StreamSubscription<PlayerState> _playerStateSubscription;
@@ -33,9 +42,19 @@ class AudioPlayerService {
     _notifyStateChanged();
   }
 
+  /// 设置播放完成回调
+  void setCompletedCallback(AudioPlayerCompletedCallback callback) {
+    _onCompleted = callback;
+  }
+
   /// 移除状态变化回调
   void removeStateChangedCallback() {
     _onStateChanged = null;
+  }
+
+  /// 移除播放完成回调
+  void removeCompletedCallback() {
+    _onCompleted = null;
   }
 
   /// 获取当前状态
@@ -65,11 +84,36 @@ class AudioPlayerService {
     
     // 处理播放完成状态
     if (state.processingState == ProcessingState.completed) {
-      _updateState(newState.copyWith(
-        isPlaying: false,
-        isLoading: false,
-      ));
+      print('🎵 AudioPlayerService: 播放完成状态检测到');
+      
+      // 只有在真正播放完成时才触发回调（不是刚停止就立即开始新播放的情况）
+      if (_currentState.currentSongId != null && !_currentState.isLoading) {
+        _updateState(newState.copyWith(
+          isPlaying: false,
+          isLoading: false,
+        ));
+        
+        // 防止重复触发播放完成回调
+        if (!_hasCompletedCallbackTriggered && _onCompleted != null) {
+          print('✅ AudioPlayerService: 触发播放完成回调, songId=${_currentState.currentSongId}');
+          _hasCompletedCallbackTriggered = true;
+          _onCompleted!(_currentState.currentSongId!);
+        } else {
+          print('⚠️ AudioPlayerService: 播放完成回调被跳过, _hasCompletedCallbackTriggered=$_hasCompletedCallbackTriggered, _onCompleted=${_onCompleted != null}');
+        }
+      } else {
+        print('🔄 AudioPlayerService: 忽略播放完成状态（可能是刚停止准备播放新歌曲）');
+        _updateState(newState.copyWith(
+          isPlaying: false,
+          isLoading: false,
+        ));
+      }
       return;
+    }
+    
+    // 重置播放完成标志（当开始新的播放时）
+    if (state.processingState == ProcessingState.loading || state.processingState == ProcessingState.buffering) {
+      _hasCompletedCallbackTriggered = false;
     }
     
     // 只有在状态真正发生变化时才更新
@@ -114,6 +158,12 @@ class AudioPlayerService {
     {String? authHeaders}
   ) async {
     try {
+      print('🎵 AudioPlayerService: 开始播放歌曲, songId=$songId, songTitle=$songTitle');
+      
+      // 重置播放完成标志
+      _hasCompletedCallbackTriggered = false;
+      print('🔄 AudioPlayerService: 重置播放完成标志');
+      
       // 更新状态为加载中
       _updateState(_currentState.copyWith(
         currentSongId: songId,
@@ -134,8 +184,10 @@ class AudioPlayerService {
       await _audioPlayer.setUrl(audioUrl, headers: headers);
       await _audioPlayer.play();
       
+      print('✅ AudioPlayerService: 歌曲播放启动成功');
       // 播放成功后，状态会通过监听器自动更新
     } catch (e) {
+      print('❌ AudioPlayerService: 播放失败: $e');
       _updateState(_currentState.copyWith(
         isLoading: false,
         error: '播放出错: $e',

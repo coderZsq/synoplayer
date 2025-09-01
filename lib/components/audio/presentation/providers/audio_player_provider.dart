@@ -87,12 +87,35 @@ class AudioPlayerNotifier extends _$AudioPlayerNotifier {
     await _audioService.setPlaybackSpeed(speed);
   }
 
+  /// 设置播放列表
+  void setPlaylist(List<String> songIds) {
+    _audioService.setPlaylist(songIds);
+  }
+
+  /// 设置播放列表（包含歌曲标题）
+  void setPlaylistWithTitles(Map<String, String> songTitles) {
+    _audioService.setPlaylistWithTitles(songTitles);
+  }
+
+  /// 播放下一首歌曲
+  Future<void> playNext() async {
+    await _audioService.playNext();
+  }
+
+  /// 播放上一首歌曲
+  Future<void> playPrevious() async {
+    await _audioService.playPrevious();
+  }
+
   // 更新状态 - 从 AudioService 获取当前状态
   void _updateState() {
     final currentState = _audioService.getCurrentState();
     
+    print('🔄 AudioPlayerProvider: 状态更新 - isPlaying=${currentState.isPlaying}, isLoading=${currentState.isLoading}, currentSongId=${currentState.currentSongId}');
+    
     // 如果播放完成且没有在加载，停止定时器
     if (!currentState.isPlaying && !currentState.isLoading && currentState.currentSongId != null) {
+      print('⏹️ AudioPlayerProvider: 检测到播放完成，停止状态更新定时器');
       _stopStateUpdateTimer();
     }
     

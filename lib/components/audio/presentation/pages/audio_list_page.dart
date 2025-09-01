@@ -58,6 +58,26 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
   }
 
   void _onSongTap(String songId, String songTitle) {
+    // 获取当前歌曲列表并设置为播放列表
+    final songListState = ref.read(songListNotifierProvider);
+    songListState.whenData((songList) {
+      if (songList != null && songList.songs != null) {
+        // 创建歌曲ID到标题的映射
+        final songMap = <String, String>{};
+        for (final song in songList.songs!) {
+          if (song.id != null && song.id!.isNotEmpty && song.title != null) {
+            songMap[song.id!] = song.title!;
+          }
+        }
+        
+        if (songMap.isNotEmpty) {
+          // 设置播放列表（包含标题信息）
+          ref.read(audioPlayerNotifierProvider.notifier).setPlaylistWithTitles(songMap);
+        }
+      }
+    });
+    
+    // 播放选中的歌曲
     ref.read(audioPlayerNotifierProvider.notifier).playSong(songId, songTitle);
   }
 
