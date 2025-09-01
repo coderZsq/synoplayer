@@ -8,6 +8,7 @@ part 'audio_list_provider.g.dart';
 @riverpod
 class SongListNotifier extends _$SongListNotifier {
   static const int _pageSize = 20;
+  bool _isSortedByName = true; // 默认按名称排序
   
   @override
   FutureOr<SongListData?> build() {
@@ -28,7 +29,15 @@ class SongListNotifier extends _$SongListNotifier {
       );
       
       if (result.isSuccess) {
-        state = AsyncValue.data(result.value.data);
+        final songListData = result.value.data;
+        if (songListData != null && _isSortedByName) {
+          // 如果启用了按名称排序，则对歌曲列表进行排序
+          final sortedSongs = _sortSongsByName(songListData.songs ?? []);
+          final sortedSongListData = songListData.copyWith(songs: sortedSongs);
+          state = AsyncValue.data(sortedSongListData);
+        } else {
+          state = AsyncValue.data(songListData);
+        }
       } else {
         state = AsyncValue.error(result.error, StackTrace.current);
       }
@@ -58,8 +67,13 @@ class SongListNotifier extends _$SongListNotifier {
         final newSongs = result.value.data?.songs ?? [];
         final updatedSongs = [...currentSongs, ...newSongs];
         
+        // 如果启用了按名称排序，则对合并后的歌曲列表进行排序
+        final finalSongs = _isSortedByName 
+            ? _sortSongsByName(updatedSongs)
+            : updatedSongs;
+        
         state = AsyncValue.data(currentState.copyWith(
-          songs: updatedSongs,
+          songs: finalSongs,
           offset: currentSongs.length,
         ));
       }
@@ -81,7 +95,15 @@ class SongListNotifier extends _$SongListNotifier {
       );
       
       if (result.isSuccess) {
-        state = AsyncValue.data(result.value.data);
+        final songListData = result.value.data;
+        if (songListData != null && _isSortedByName) {
+          // 如果启用了按名称排序，则对歌曲列表进行排序
+          final sortedSongs = _sortSongsByName(songListData.songs ?? []);
+          final sortedSongListData = songListData.copyWith(songs: sortedSongs);
+          state = AsyncValue.data(sortedSongListData);
+        } else {
+          state = AsyncValue.data(songListData);
+        }
       } else {
         state = AsyncValue.error(result.error, StackTrace.current);
       }
@@ -89,6 +111,37 @@ class SongListNotifier extends _$SongListNotifier {
       state = AsyncValue.error(error, stackTrace);
     }
   }
+
+  /// 切换按名称排序
+  void toggleSortByName() {
+    _isSortedByName = !_isSortedByName;
+    
+    final currentState = state.value;
+    if (currentState != null && currentState.songs != null) {
+      if (_isSortedByName) {
+        // 启用排序，对当前歌曲列表进行排序
+        final sortedSongs = _sortSongsByName(currentState.songs!);
+        state = AsyncValue.data(currentState.copyWith(songs: sortedSongs));
+      } else {
+        // 禁用排序，重新获取原始顺序的歌曲列表
+        getSongList(isRefresh: true);
+      }
+    }
+  }
+
+  /// 按名称对歌曲列表进行排序
+  List<Song> _sortSongsByName(List<Song> songs) {
+    final sortedSongs = List<Song>.from(songs);
+    sortedSongs.sort((a, b) {
+      final titleA = (a.title ?? '').toLowerCase();
+      final titleB = (b.title ?? '').toLowerCase();
+      return titleA.compareTo(titleB);
+    });
+    return sortedSongs;
+  }
+
+  /// 获取当前排序状态
+  bool get isSortedByName => _isSortedByName;
 
   bool get hasMoreData {
     final currentState = state.value;

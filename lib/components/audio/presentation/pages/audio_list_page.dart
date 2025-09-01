@@ -106,6 +106,8 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
   Widget build(BuildContext context) {
     // 监听歌曲列表状态
     final songListState = ref.watch(songListNotifierProvider);
+    // 监听排序状态
+    final isSortedByName = ref.watch(songListNotifierProvider.notifier).isSortedByName;
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -114,6 +116,20 @@ class _AudioListPageState extends ConsumerState<AudioListPage> {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // 排序按钮
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                ref.read(songListNotifierProvider.notifier).toggleSortByName();
+              },
+              child: Icon(
+                isSortedByName ? CupertinoIcons.sort_down : CupertinoIcons.sort_up,
+                size: 20,
+                color: isSortedByName 
+                    ? CupertinoColors.systemBlue
+                    : CupertinoColors.systemGrey,
+              ),
+            ),
             // 刷新按钮
             CupertinoButton(
               padding: EdgeInsets.zero,
