@@ -17,6 +17,7 @@ import '../../components/audio/domain/repositories/audio_repository.dart';
 import '../../components/audio/data/repositories/audio_repository_impl.dart';
 import '../../components/audio/data/datasources/audio_datasource_local.dart';
 import '../../components/audio/data/datasources/audio_datasource_remote.dart';
+import '../../components/audio/data/datasources/audio_datasource_cache.dart';
 import '../../components/audio/domain/usecases/play_audio_usecase.dart';
 
 /// 网络层依赖
@@ -62,13 +63,19 @@ final audioDataSourceRemoteProvider = Provider<AudioDataSourceRemote>((ref) {
   return AudioDataSourceRemote(globalDioManager.dio);
 });
 
+/// 音频缓存数据源依赖
+final audioDataSourceCacheProvider = Provider<AudioDataSourceCache>((ref) {
+  return AudioDataSourceCache();
+});
+
 /// 音频仓库依赖
 final audioRepositoryProvider = Provider<AudioRepository>((ref) {
   final authStorage = ref.watch(authStorageServiceProvider);
   final connectionManager = ref.watch(connectionManagerProvider);
   final dataSourceRemote = ref.watch(audioDataSourceRemoteProvider);
   final dataSourceLocal = ref.watch(audioDataSourceLocalProvider);
-  return AudioRepositoryImpl(authStorage, connectionManager, dataSourceRemote, dataSourceLocal);
+  final dataSourceCache = ref.watch(audioDataSourceCacheProvider);
+  return AudioRepositoryImpl(authStorage, connectionManager, dataSourceRemote, dataSourceLocal, dataSourceCache);
 });
 
 /// 用例层依赖

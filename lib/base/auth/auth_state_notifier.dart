@@ -144,6 +144,30 @@ class AuthStateNotifier extends _$AuthStateNotifier {
       // 设置cookie拦截器的sessionId
       CookieInterceptor.setSessionId(sessionId);
       
+      // 尝试建立与服务器的连接
+      try {
+        final credentials = await authStorage.getLoginCredentials();
+        final quickConnectId = credentials['quickConnectId'];
+        
+        if (quickConnectId != null && quickConnectId.isNotEmpty) {
+          Logger.info('尝试建立与服务器的连接...', tag: 'AuthStateNotifier');
+          final connectionManager = ref.read(connectionManagerProvider);
+          final connectionResult = await connectionManager.establishConnection(quickConnectId);
+          
+          if (connectionResult.isSuccess) {
+            Logger.info('自动登录后连接建立成功', tag: 'AuthStateNotifier');
+          } else {
+            Logger.warning('自动登录后连接建立失败: ${connectionResult.error.message}', tag: 'AuthStateNotifier');
+            // 连接失败不影响登录状态，只是后续操作可能需要重新连接
+          }
+        } else {
+          Logger.warning('未找到 quickConnectId，无法建立连接', tag: 'AuthStateNotifier');
+        }
+      } catch (e) {
+        Logger.warning('建立连接过程中发生异常: $e', tag: 'AuthStateNotifier');
+        // 连接异常不影响登录状态
+      }
+      
       Logger.info('自动登录成功，状态已更新', tag: 'AuthStateNotifier');
       return true;
     } else {

@@ -18,9 +18,16 @@ class SongListNotifier extends _$SongListNotifier {
     if (isRefresh) {
       state = const AsyncValue.loading();
     }
+    
     try {
-      final audioService = ref.read(audioServiceProvider);
-      final result = await audioService.getSongList(offset: 0, limit: _pageSize);
+      final audioRepository = ref.read(audioRepositoryProvider);
+      
+      // 使用音频仓库，它会先返回缓存数据
+      final result = await audioRepository.getAudioStationSongListAll(
+        offset: 0, 
+        limit: _pageSize
+      );
+      
       if (result.isSuccess) {
         state = AsyncValue.data(result.value.data);
       } else {
@@ -42,13 +49,14 @@ class SongListNotifier extends _$SongListNotifier {
     if (currentSongs.length >= total) return;
     
     try {
-      final audioService = ref.read(audioServiceProvider);
-      final result = await audioService.getSongList(
+      final audioRepository = ref.read(audioRepositoryProvider);
+      final result = await audioRepository.getAudioStationSongListAll(
         offset: currentSongs.length,
         limit: _pageSize,
       );
-      if (result.isSuccess && result.value.data != null) {
-        final newSongs = result.value.data!.songs ?? [];
+      
+      if (result.isSuccess) {
+        final newSongs = result.value.data?.songs ?? [];
         final updatedSongs = [...currentSongs, ...newSongs];
         
         state = AsyncValue.data(currentState.copyWith(
@@ -63,7 +71,47 @@ class SongListNotifier extends _$SongListNotifier {
   }
 
   Future<void> refresh() async {
-    await getSongList(isRefresh: true);
+    // 强制刷新，忽略缓存
+    try {
+      state = const AsyncValue.loading();
+      
+      final audioRepository = ref.read(audioRepositoryProvider);
+      // 先清除缓存，然后重新请求
+      await audioRepository.clearCache();
+      
+      final result = await audioRepository.getAudioStationSongListAll(
+        offset: 0,
+        limit: _pageSize,
+      );
+      
+      if (result.isSuccess) {
+        state = AsyncValue.data(result.value.data);
+      } else {
+        state = AsyncValue.error(result.error, StackTrace.current);
+      }
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
+
+  /// 检查是否有缓存数据
+  Future<bool> hasCachedData() async {
+    try {
+      final audioRepository = ref.read(audioRepositoryProvider);
+      return await audioRepository.hasValidCache();
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// 清除缓存
+  Future<void> clearCache() async {
+    try {
+      final audioRepository = ref.read(audioRepositoryProvider);
+      await audioRepository.clearCache();
+    } catch (e) {
+      // 清除缓存失败不影响主流程
+    }
   }
 
   bool get hasMoreData {

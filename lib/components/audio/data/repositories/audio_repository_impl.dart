@@ -8,6 +8,7 @@ import '../../../../base/network/quick_connect_api_info.dart';
 import '../../../login/domain/services/connection_manager.dart';
 import '../../entities/song_list_all/song_list_all_response.dart';
 import '../datasources/audio_datasource_local.dart';
+import '../datasources/audio_datasource_cache.dart';
 import '../../domain/repositories/audio_repository.dart';
 import '../../entities/audio_stream/audio_stream_info.dart';
 
@@ -16,8 +17,15 @@ class AudioRepositoryImpl implements AudioRepository {
   final ConnectionManager _connectionManager;
   final AudioDataSourceRemote _dataSourceRemote;
   final AudioDataSourceLocal _dataSourceLocal;
+  final AudioDataSourceCache _dataSourceCache;
 
-  AudioRepositoryImpl(this._authStorage, this._connectionManager, this._dataSourceRemote, this._dataSourceLocal);
+  AudioRepositoryImpl(
+    this._authStorage, 
+    this._connectionManager, 
+    this._dataSourceRemote, 
+    this._dataSourceLocal,
+    this._dataSourceCache,
+  );
 
   @override
   Future<Result<SongListAllResponse>> getAudioStationSongListAll({
@@ -25,6 +33,17 @@ class AudioRepositoryImpl implements AudioRepository {
     required int limit
   }) async {
     try {
+      // 首先尝试从缓存获取数据（像remote一样自然调用）
+      final cachedResponse = await _dataSourceCache.getAudioStationSongListAll(
+        offset: offset,
+        limit: limit,
+      );
+      if (cachedResponse != null) {
+        print('返回缓存的音频列表数据');
+        return Success(cachedResponse);
+      }
+
+      // 缓存不存在或已过期，从网络获取
       final apiInfo = QuickConnectApiInfo();
       final sessionId = await _authStorage.getSessionId();
       if (sessionId == null || sessionId.isEmpty) {
@@ -46,6 +65,15 @@ class AudioRepositoryImpl implements AudioRepository {
           sid: sessionId,
           version: apiInfo.songVersion
       );
+      
+      // 将获取到的数据保存到缓存（像remote一样自然调用）
+      await _dataSourceCache.saveAudioStationSongListAll(
+        response: response,
+        offset: offset,
+        limit: limit,
+      );
+      print('音频列表数据已缓存到本地');
+      
       return Success(response);
     } on DioException catch (e) {
       return Failure(NetworkException.fromDio(e));
@@ -69,5 +97,31 @@ class AudioRepositoryImpl implements AudioRepository {
     } catch (e) {
       return Failure(BusinessException('获取音频流地址失败: $e'));
     }
+  }
+
+  /// 获取缓存的音频列表（不进行网络请求）
+  @override
+  Future<Result<SongListAllResponse?>> getCachedAudioList() async {
+    try {
+      final cachedResponse = await _dataSourceCache.getAudioStationSongListAll(
+        offset: 0,
+        limit: 20,
+      );
+      return Success(cachedResponse);
+    } catch (e) {
+      return Failure(ServerException('获取缓存音频列表失败: $e'));
+    }
+  }
+
+  /// 检查是否有有效的缓存
+  @override
+  Future<bool> hasValidCache() async {
+    return await _dataSourceCache.hasValidCache();
+  }
+
+  /// 清除缓存
+  @override
+  Future<void> clearCache() async {
+    await _dataSourceCache.clearCache();
   }
 }
